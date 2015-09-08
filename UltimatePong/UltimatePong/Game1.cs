@@ -32,8 +32,8 @@ namespace UltimatePong
             bar = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
 
-            xpos = (GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2;
-            ypos = (GraphicsDevice.Viewport.Bounds.Height - bar.Height) / 2;
+            xpos = (GraphicsDevice.Viewport.Bounds.Width - ball.Width) / 2;
+            ypos = (GraphicsDevice.Viewport.Bounds.Height - ball.Height) / 2;
 
             xbarpos = (GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2;
 
