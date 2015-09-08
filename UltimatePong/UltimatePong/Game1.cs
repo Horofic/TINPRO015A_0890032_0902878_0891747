@@ -26,6 +26,8 @@ namespace UltimatePong
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 800;
             Content.RootDirectory = "Content";
         }
 
@@ -37,17 +39,14 @@ namespace UltimatePong
             bar2 = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
 
+            base.Window.AllowUserResizing = false;
+
             ballspeed = 10;
-            barspeed = 10;
+            barspeed = 5;
             xpos = (GraphicsDevice.Viewport.Bounds.Width - ball.Width) / 2;
             ypos = (GraphicsDevice.Viewport.Bounds.Height - ball.Height) / 2;
 
             xbarpos = (GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2;
-
-           // barPosition = new Vector2((GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2 , 0.0f);
-
-
-
             base.Initialize();
         }
 
@@ -56,8 +55,6 @@ namespace UltimatePong
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-
         }
 
 
@@ -130,7 +127,6 @@ namespace UltimatePong
                 xpos = prevxBallPos;
                 ypos = prevyBallPos;
             }
-
 
 
             ballPosition = new Vector2(xpos, ypos);
