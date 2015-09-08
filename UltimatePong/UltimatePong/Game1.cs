@@ -10,13 +10,16 @@ namespace UltimatePong
         SpriteBatch spriteBatch;
         Vector2 ballPosition;
         Vector2 barPosition;
+        Vector2 bar2Position;
         Texture2D ball;
         Texture2D bar;
+        Texture2D bar2;
 
         float xpos;
         float ypos;
 
         float xbarpos;
+        float xbar2pos;
         int barspeed;
         int ballspeed;
 
@@ -31,6 +34,7 @@ namespace UltimatePong
         {
             // TODO: Add your initialization logic here
             bar = Content.Load<Texture2D>("bar.png");
+            bar2 = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
 
             ballspeed = 10;
@@ -39,10 +43,6 @@ namespace UltimatePong
             ypos = (GraphicsDevice.Viewport.Bounds.Height - ball.Height) / 2;
 
             xbarpos = (GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2;
-
-            
-         
-
 
            // barPosition = new Vector2((GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2 , 0.0f);
 
@@ -92,12 +92,23 @@ namespace UltimatePong
                 xbarpos = xbarpos - barspeed;
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 xbarpos = xbarpos + barspeed;
+            //bar2 controls
+            if (keyBoardstate.IsKeyDown(Keys.End))
+                xbar2pos = xbar2pos - barspeed;
+            if (keyBoardstate.IsKeyDown(Keys.PageDown))
+                xbar2pos = xbar2pos + barspeed;
+
 
             //bar boundries
             if (xbarpos <= 0)
                 xbarpos = 0;
             if (xbarpos > GraphicsDevice.Viewport.Bounds.Width - bar.Width)
                 xbarpos = GraphicsDevice.Viewport.Bounds.Width - bar.Width;
+
+            if (xbar2pos <= 0)
+                xbar2pos = 0;
+            if (xbar2pos > GraphicsDevice.Viewport.Bounds.Width - bar2.Width)
+                xbar2pos = GraphicsDevice.Viewport.Bounds.Width - bar2.Width;
 
             //ball boundries
             if (xpos <= 0)
@@ -112,6 +123,7 @@ namespace UltimatePong
 
             ballPosition = new Vector2(xpos, ypos);
             barPosition = new Vector2(xbarpos, 0.0f);
+            bar2Position = new Vector2(xbar2pos, GraphicsDevice.Viewport.Bounds.Height-bar.Height);
 
             base.Update(gameTime);
         }
@@ -123,6 +135,7 @@ namespace UltimatePong
             
             spriteBatch.Begin();
             spriteBatch.Draw(bar, barPosition, Color.White);
+            spriteBatch.Draw(bar2, bar2Position, Color.White);
             spriteBatch.Draw(ball, ballPosition, Color.White);
             spriteBatch.End();
 
