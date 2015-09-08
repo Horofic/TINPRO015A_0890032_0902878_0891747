@@ -100,10 +100,10 @@ namespace UltimatePong
             if (xpos >= GraphicsDevice.Viewport.Bounds.Width -ball.Width)
                 xpos = GraphicsDevice.Viewport.Bounds.Width - ball.Width;
 
-            if (ypos > 0)
+            if (ypos < 0)
                 ypos = 0;
-            if (ypos < GraphicsDevice.Viewport.Bounds.Height)
-                ypos = GraphicsDevice.Viewport.Bounds.Height;
+            if (ypos > GraphicsDevice.Viewport.Bounds.Height-ball.Height)
+                ypos = GraphicsDevice.Viewport.Bounds.Height-ball.Height;
 
 
             ballPosition = new Vector2(xpos, ypos);
