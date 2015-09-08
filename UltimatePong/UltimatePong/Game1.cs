@@ -17,7 +17,8 @@ namespace UltimatePong
         float ypos;
 
         float xbarpos;
-
+        int barspeed;
+        int ballspeed;
 
         public Game1()
         {
@@ -32,6 +33,8 @@ namespace UltimatePong
             bar = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
 
+            ballspeed = 10;
+            barspeed = 10;
             xpos = (GraphicsDevice.Viewport.Bounds.Width - ball.Width) / 2;
             ypos = (GraphicsDevice.Viewport.Bounds.Height - ball.Height) / 2;
 
@@ -74,32 +77,33 @@ namespace UltimatePong
                 Exit();
 
 
-            //ball controlls
-            // TODO: Add your update logic here
+            //ball controls
             if (keyBoardstate.IsKeyDown(Keys.W))
-                ypos = ypos - 10;
+                ypos = ypos - ballspeed;
             if (keyBoardstate.IsKeyDown(Keys.S))
-                ypos = ypos + 10;
+                ypos = ypos + ballspeed;
             if (keyBoardstate.IsKeyDown(Keys.A))
-                xpos = xpos - 10;
+                xpos = xpos - ballspeed;
             if (keyBoardstate.IsKeyDown(Keys.D))
-                xpos = xpos + 10;
+                xpos = xpos + ballspeed;
+
+            //bar controls
             if (keyBoardstate.IsKeyDown(Keys.Left))
-                xbarpos = xbarpos - 10;
-
+                xbarpos = xbarpos - barspeed;
             if (keyBoardstate.IsKeyDown(Keys.Right))
-                xbarpos = xbarpos + 10;
+                xbarpos = xbarpos + barspeed;
 
+            //bar boundries
             if (xbarpos <= 0)
                 xbarpos = 0;
             if (xbarpos > GraphicsDevice.Viewport.Bounds.Width - bar.Width)
                 xbarpos = GraphicsDevice.Viewport.Bounds.Width - bar.Width;
 
+            //ball boundries
             if (xpos <= 0)
                 xpos = 0;
             if (xpos >= GraphicsDevice.Viewport.Bounds.Width -ball.Width)
                 xpos = GraphicsDevice.Viewport.Bounds.Width - ball.Width;
-
             if (ypos < 0)
                 ypos = 0;
             if (ypos > GraphicsDevice.Viewport.Bounds.Height-ball.Height)
@@ -108,18 +112,6 @@ namespace UltimatePong
 
             ballPosition = new Vector2(xpos, ypos);
             barPosition = new Vector2(xbarpos, 0.0f);
-            //bar controlls
-
-            
-
-            
-
-
-
-            
-
-
-
 
             base.Update(gameTime);
         }
