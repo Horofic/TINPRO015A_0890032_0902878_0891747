@@ -90,6 +90,21 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 xbarpos = xbarpos + 10;
 
+            if (xbarpos <= 0)
+                xbarpos = 0;
+            if (xbarpos > GraphicsDevice.Viewport.Bounds.Width - bar.Width)
+                xbarpos = GraphicsDevice.Viewport.Bounds.Width - bar.Width;
+
+            if (xpos <= 0)
+                xpos = 0;
+            if (xpos >= GraphicsDevice.Viewport.Bounds.Width -ball.Width)
+                xpos = GraphicsDevice.Viewport.Bounds.Width - ball.Width;
+
+            if (ypos > 0)
+                ypos = 0;
+            if (ypos < GraphicsDevice.Viewport.Bounds.Height)
+                ypos = GraphicsDevice.Viewport.Bounds.Height;
+
 
             ballPosition = new Vector2(xpos, ypos);
             barPosition = new Vector2(xbarpos, 0.0f);
