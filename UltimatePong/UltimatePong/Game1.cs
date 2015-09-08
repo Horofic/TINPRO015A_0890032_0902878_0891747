@@ -4,9 +4,6 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UltimatePong
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
@@ -39,6 +36,11 @@ namespace UltimatePong
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            spriteBatch.Begin();
+
+
+            spriteBatch.End();
 
             // TODO: use this.Content to load your game content here
         }
