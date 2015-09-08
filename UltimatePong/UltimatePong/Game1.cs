@@ -10,7 +10,8 @@ namespace UltimatePong
         SpriteBatch spriteBatch;
         Vector2 ballPosition;
         Texture2D ball;
-
+        float xpos;
+        float ypos;
 
         public Game1()
         {
@@ -22,7 +23,9 @@ namespace UltimatePong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            ballPosition = new Vector2(400.0f, 300.0f);
+            xpos = 300.0f;
+            ypos = 400.0f;
+            ballPosition = new Vector2(xpos, ypos);
             ball = Content.Load<Texture2D>("ball1.png");
             base.Initialize();
         }
@@ -48,6 +51,18 @@ namespace UltimatePong
                 Exit();
 
             // TODO: Add your update logic here
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                ypos = ypos - 10;
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                ypos = ypos + 10;
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                xpos = xpos - 10;
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                xpos = xpos + 10;
+
+            ballPosition = new Vector2(xpos, ypos);
+
+
 
             base.Update(gameTime);
         }
