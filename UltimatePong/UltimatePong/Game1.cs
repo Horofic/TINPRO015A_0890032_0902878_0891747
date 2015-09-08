@@ -38,7 +38,7 @@ namespace UltimatePong
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             spriteBatch.Begin();
-
+            
             //asdfasdfsdfssadfasdfasdf
             spriteBatch.End();
 
