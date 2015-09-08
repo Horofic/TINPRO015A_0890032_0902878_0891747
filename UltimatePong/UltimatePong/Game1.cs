@@ -8,6 +8,8 @@ namespace UltimatePong
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D ball;
+
 
         public Game1()
         {
@@ -36,10 +38,9 @@ namespace UltimatePong
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
             spriteBatch.Begin();
 
-            //asdfasdfsdfssadfasdfasdf
+
             spriteBatch.End();
 
             // TODO: use this.Content to load your game content here
@@ -75,7 +76,9 @@ namespace UltimatePong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            
             GraphicsDevice.Clear(Color.TransparentBlack);
+            ball = Content.Load<Texture2D>("ball1.png");
 
             // TODO: Add your drawing code here
 
