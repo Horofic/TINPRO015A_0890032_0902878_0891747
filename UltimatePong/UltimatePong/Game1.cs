@@ -9,7 +9,9 @@ namespace UltimatePong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Vector2 ballPosition;
+        Vector2 barPosition;
         Texture2D ball;
+        Texture2D bar;
 
 
         public Game1()
@@ -22,8 +24,15 @@ namespace UltimatePong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            ballPosition = new Vector2(400.0f, 300.0f);
+            bar = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
+
+
+            ballPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2);
+            barPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2, 0.0f);
+
+  
+
             base.Initialize();
         }
 
@@ -44,8 +53,20 @@ namespace UltimatePong
 
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+
+            var keyBoardstate = Keyboard.GetState();
+
+
+            if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
+
+
+            //ball controlls
+            if (keyBoardstate.IsKeyDown(Keys.W))
+
+
+
+
 
             // TODO: Add your update logic here
 
@@ -58,6 +79,7 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
+            spriteBatch.Draw(bar, barPosition, Color.White);
             spriteBatch.Draw(ball, ballPosition, Color.White);
             spriteBatch.End();
 
