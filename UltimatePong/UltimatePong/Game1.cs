@@ -11,8 +11,6 @@ namespace UltimatePong
         Vector2 ballPosition;
         Vector2 barPosition;
         Texture2D ball;
-        Texture2D bar;
-
 
         public Game1()
         {
@@ -24,7 +22,7 @@ namespace UltimatePong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            bar = Content.Load<Texture2D>("bar.png");
+            ballPosition = new Vector2(400.0f, 300.0f);
             ball = Content.Load<Texture2D>("ball1.png");
 
 
@@ -69,6 +67,18 @@ namespace UltimatePong
 
 
             // TODO: Add your update logic here
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                ypos = ypos - 10;
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                ypos = ypos + 10;
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                xpos = xpos - 10;
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                xpos = xpos + 10;
+
+            ballPosition = new Vector2(xpos, ypos);
+
+
 
             base.Update(gameTime);
         }
