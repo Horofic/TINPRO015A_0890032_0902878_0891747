@@ -70,8 +70,10 @@ namespace UltimatePong
         {
 
             var keyBoardstate = Keyboard.GetState();
-
-
+            var prevxBarPos = xbarpos;
+            var prevxBar2Pos = xbar2pos;
+            var prevxBallPos = xpos;
+            var prevyBallPos = ypos;
 
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
@@ -100,30 +102,40 @@ namespace UltimatePong
 
 
             //bar boundries
-            if (xbarpos <= 0)
-                xbarpos = 0;
-            if (xbarpos > GraphicsDevice.Viewport.Bounds.Width - bar.Width)
-                xbarpos = GraphicsDevice.Viewport.Bounds.Width - bar.Width;
+            /* if (xbarpos <= 0)
+                 xbarpos = 0;
+             if (xbarpos > GraphicsDevice.Viewport.Bounds.Width - bar.Width)
+                 xbarpos = GraphicsDevice.Viewport.Bounds.Width - bar.Width;*/
+            if (xbarpos <= 0 || xbarpos > GraphicsDevice.Viewport.Bounds.Width - bar.Width)
+                xbarpos = prevxBarPos;
 
-            if (xbar2pos <= 0)
-                xbar2pos = 0;
-            if (xbar2pos > GraphicsDevice.Viewport.Bounds.Width - bar2.Width)
-                xbar2pos = GraphicsDevice.Viewport.Bounds.Width - bar2.Width;
+            /* if (xbar2pos <= 0)
+                 xbar2pos = 0;
+             if (xbar2pos > GraphicsDevice.Viewport.Bounds.Width - bar2.Width)
+                 xbar2pos = GraphicsDevice.Viewport.Bounds.Width - bar2.Width;*/
+            if (xbar2pos <= 0 || xbar2pos > GraphicsDevice.Viewport.Bounds.Width - bar2.Width)
+                xbar2pos = prevxBar2Pos;
 
             //ball boundries
-            if (xpos <= 0)
-                xpos = 0;
-            if (xpos >= GraphicsDevice.Viewport.Bounds.Width -ball.Width)
-                xpos = GraphicsDevice.Viewport.Bounds.Width - ball.Width;
-            if (ypos < 0)
-                ypos = 0;
-            if (ypos > GraphicsDevice.Viewport.Bounds.Height-ball.Height)
-                ypos = GraphicsDevice.Viewport.Bounds.Height-ball.Height;
+            /* if (xpos <= 0)
+                 xpos = 0;
+             if (xpos >= GraphicsDevice.Viewport.Bounds.Width -ball.Width)
+                 xpos = GraphicsDevice.Viewport.Bounds.Width - ball.Width;
+             if (ypos < 0)
+                 ypos = 0;
+             if (ypos > GraphicsDevice.Viewport.Bounds.Height-ball.Height)
+                 ypos = GraphicsDevice.Viewport.Bounds.Height-ball.Height;*/
+            if (xpos <= 0 || xpos >= GraphicsDevice.Viewport.Bounds.Width - ball.Width || ypos < 0 || ypos > GraphicsDevice.Viewport.Bounds.Height - ball.Height)
+            {
+                xpos = prevxBallPos;
+                ypos = prevyBallPos;
+            }
+
 
 
             ballPosition = new Vector2(xpos, ypos);
             barPosition = new Vector2(xbarpos, 0.0f);
-            bar2Position = new Vector2(xbar2pos, GraphicsDevice.Viewport.Bounds.Height-bar.Height);
+            bar2Position = new Vector2(xbar2pos, GraphicsDevice.Viewport.Bounds.Height - bar.Height);
 
             base.Update(gameTime);
         }
