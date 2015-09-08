@@ -16,6 +16,9 @@ namespace UltimatePong
         float xpos;
         float ypos;
 
+        float xbarpos;
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -28,13 +31,19 @@ namespace UltimatePong
             // TODO: Add your initialization logic here
             bar = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
-            xpos = 300.0f;
-            ypos = 400.0f;
 
-            ballPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2);
-            barPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2, 0.0f);
+            xpos = (GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2;
+            ypos = (GraphicsDevice.Viewport.Bounds.Height - bar.Height) / 2;
 
-  
+            xbarpos = (GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2;
+
+            
+         
+
+
+           // barPosition = new Vector2((GraphicsDevice.Viewport.Bounds.Width - bar.Width) / 2 , 0.0f);
+
+
 
             base.Initialize();
         }
@@ -60,29 +69,40 @@ namespace UltimatePong
             var keyBoardstate = Keyboard.GetState();
 
 
+
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
 
             //ball controlls
-            if (keyBoardstate.IsKeyDown(Keys.W))
-
-
-
-
-
             // TODO: Add your update logic here
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            if (keyBoardstate.IsKeyDown(Keys.W))
                 ypos = ypos - 10;
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
+            if (keyBoardstate.IsKeyDown(Keys.S))
                 ypos = ypos + 10;
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            if (keyBoardstate.IsKeyDown(Keys.A))
                 xpos = xpos - 10;
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
+            if (keyBoardstate.IsKeyDown(Keys.D))
                 xpos = xpos + 10;
+            if (keyBoardstate.IsKeyDown(Keys.Left))
+                xbarpos = xbarpos - 10;
+
+            if (keyBoardstate.IsKeyDown(Keys.Right))
+                xbarpos = xbarpos + 10;
 
 
             ballPosition = new Vector2(xpos, ypos);
+            barPosition = new Vector2(xbarpos, 0.0f);
+            //bar controlls
+
+            
+
+            
+
+
+
+            
+
 
 
 
