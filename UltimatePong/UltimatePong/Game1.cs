@@ -13,6 +13,9 @@ namespace UltimatePong
         Texture2D ball;
         Texture2D bar;
 
+        float xpos;
+        float ypos;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -25,7 +28,8 @@ namespace UltimatePong
             // TODO: Add your initialization logic here
             bar = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
-
+            xpos = 300.0f;
+            ypos = 400.0f;
 
             ballPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2, GraphicsDevice.Viewport.Bounds.Height / 2);
             barPosition = new Vector2(GraphicsDevice.Viewport.Bounds.Width / 2, 0.0f);
@@ -76,6 +80,7 @@ namespace UltimatePong
                 xpos = xpos - 10;
             if (Keyboard.GetState().IsKeyDown(Keys.D))
                 xpos = xpos + 10;
+
 
             ballPosition = new Vector2(xpos, ypos);
 
