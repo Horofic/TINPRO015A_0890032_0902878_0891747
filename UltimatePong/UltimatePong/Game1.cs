@@ -9,27 +9,13 @@ namespace UltimatePong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Vector2 ballPosition;
-        Vector2 topBarPosition;
-        Vector2 bottomBarPosition;
+        Texture2D spriteTexture;
+        Rectangle ball;
+        Rectangle topBar;
+        Rectangle bottomBar;
 
-        Texture2D ball;
-        Texture2D topBar;
-        Texture2D bottomBar;
-        Texture2D leftBar;
-        Texture2D rightBar;
-
-        Rectangle ballCollision;
-
-        float ballXPos;
-        float ballYPos;
-
-        float topBarXPos;
-        float bottomBarXPos;
-        float leftBarYPos;
-        float rightBarYPos;
-
-        int barSpeed;
+        int topBarSpeed;
+        int bottomBarSpeed;
         int ballSpeed;
 
         SpriteFont font;
@@ -48,21 +34,18 @@ namespace UltimatePong
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: Add your initialization logic here
-            topBar = Content.Load<Texture2D>("bar.png");
-            bottomBar = Content.Load<Texture2D>("bar.png");
-            ball = Content.Load<Texture2D>("ball1.png");
-
+            spriteTexture = Content.Load<Texture2D>("bar.png");
 
             base.Window.AllowUserResizing = false;
 
-            ballSpeed = 10;
-            barSpeed = 5;
+            ballSpeed = 400;
+            topBarSpeed = 400;
+            bottomBarSpeed = 400;
 
-            ballXPos = (GraphicsDevice.Viewport.Bounds.Width - ball.Width) / 2;
-            ballYPos = (GraphicsDevice.Viewport.Bounds.Height - ball.Height) / 2;
-
-            topBarXPos = (GraphicsDevice.Viewport.Bounds.Width - topBar.Width) / 2;
-            bottomBarXPos = (GraphicsDevice.Viewport.Bounds.Width - bottomBar.Width) / 2;
+            //positions need some cleaning up
+            ball = new Rectangle(256, 256, 16, 16);
+            topBar = new Rectangle(0, 0, 64, 8);
+            bottomBar = new Rectangle(0, 794, 64, 8);
             base.Initialize();
         }
 
@@ -72,42 +55,46 @@ namespace UltimatePong
         {
 
             var keyBoardstate = Keyboard.GetState();
-            var prev_topBarXPos = topBarXPos;
-            var prev_bottomBarXPos = bottomBarXPos;
-            var prev_ballXPos = ballXPos;
-            var prev_ballYPos = ballYPos;
-
-
-            
+                      
 
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
 
-            //ball controls
-            if (keyBoardstate.IsKeyDown(Keys.W))
-                ballYPos = ballYPos - ballSpeed;
-            if (keyBoardstate.IsKeyDown(Keys.S))
-                ballYPos = ballYPos + ballSpeed;
-            if (keyBoardstate.IsKeyDown(Keys.A))
-                ballXPos = ballXPos - ballSpeed;
-            if (keyBoardstate.IsKeyDown(Keys.D))
-                ballXPos = ballXPos + ballSpeed;
+            //ball controls, just for testing
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                ball.Offset(0, ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+
 
             //Top bar controls
-            if (keyBoardstate.IsKeyDown(Keys.Left))
-                topBarXPos = topBarXPos - barSpeed;
-            if (keyBoardstate.IsKeyDown(Keys.Right))
-                topBarXPos = topBarXPos + barSpeed;
+            if (keyBoardstate.IsKeyDown(Keys.Z))
+                topBar.Offset(-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+
+            if (keyBoardstate.IsKeyDown(Keys.X))
+                topBar.Offset(topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+
+
+
             //Bottom bar controls
-            if (keyBoardstate.IsKeyDown(Keys.B))
-                bottomBarXPos = bottomBarXPos - barSpeed;
-            if (keyBoardstate.IsKeyDown(Keys.N))
-                bottomBarXPos = bottomBarXPos + barSpeed;
+            if (keyBoardstate.IsKeyDown(Keys.Left))
+                bottomBar.Offset(-bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+
+            if (keyBoardstate.IsKeyDown(Keys.Right))
+                bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
 
+            /*
             //bar boundries
-         
+
             if (topBarXPos <= 0 || topBarXPos > GraphicsDevice.Viewport.Bounds.Width - topBar.Width)
                 topBarXPos = prev_topBarXPos;
 
@@ -128,6 +115,7 @@ namespace UltimatePong
             topBarPosition = new Vector2(topBarXPos, 0.0f);
             bottomBarPosition = new Vector2(bottomBarXPos, GraphicsDevice.Viewport.Bounds.Height - bottomBar.Height);
 
+    */
             base.Update(gameTime);
         }
 
@@ -137,9 +125,9 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
-            spriteBatch.Draw(topBar, topBarPosition, Color.White);
-            spriteBatch.Draw(bottomBar, bottomBarPosition, Color.White);
-            spriteBatch.Draw(ball, ballPosition, Color.White);
+            spriteBatch.Draw(spriteTexture, ball, Color.White);
+            spriteBatch.Draw(spriteTexture, topBar, Color.White);
+            spriteBatch.Draw(spriteTexture, bottomBar, Color.White);
 
             spriteBatch.End();
 
