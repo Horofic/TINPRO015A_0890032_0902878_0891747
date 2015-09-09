@@ -16,12 +16,17 @@ namespace UltimatePong
         Texture2D ball;
         Texture2D topBar;
         Texture2D bottomBar;
+        Texture2D leftBar;
+        Texture2D rightBar;
+        Rectangle Ball;
 
         float ballXPos;
         float ballYPos;
 
         float topBarXPos;
         float bottomBarXPos;
+        float leftBarYPos;
+        float rightBarYPos;
 
         int barSpeed;
         int ballSpeed;
@@ -100,36 +105,23 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 topBarXPos = topBarXPos + barSpeed;
             //Bottom bar controls
-            if (keyBoardstate.IsKeyDown(Keys.End))
+            if (keyBoardstate.IsKeyDown(Keys.B))
                 bottomBarXPos = bottomBarXPos - barSpeed;
-            if (keyBoardstate.IsKeyDown(Keys.PageDown))
+            if (keyBoardstate.IsKeyDown(Keys.N))
                 bottomBarXPos = bottomBarXPos + barSpeed;
 
 
             //bar boundries
-            /* if (xbarpos <= 0)
-                 xbarpos = 0;
-             if (xbarpos > GraphicsDevice.Viewport.Bounds.Width - bar.Width)
-                 xbarpos = GraphicsDevice.Viewport.Bounds.Width - bar.Width;*/
+         
             if (topBarXPos <= 0 || topBarXPos > GraphicsDevice.Viewport.Bounds.Width - topBar.Width)
                 topBarXPos = prev_topBarXPos;
 
-            /* if (xbar2pos <= 0)
-                 xbar2pos = 0;
-             if (xbar2pos > GraphicsDevice.Viewport.Bounds.Width - bar2.Width)
-                 xbar2pos = GraphicsDevice.Viewport.Bounds.Width - bar2.Width;*/
+    
             if (bottomBarXPos <= 0 || bottomBarXPos > GraphicsDevice.Viewport.Bounds.Width - bottomBar.Width)
                 bottomBarXPos = prev_bottomBarXPos;
 
             //ball boundries
-            /* if (xpos <= 0)
-                 xpos = 0;
-             if (xpos >= GraphicsDevice.Viewport.Bounds.Width -ball.Width)
-                 xpos = GraphicsDevice.Viewport.Bounds.Width - ball.Width;
-             if (ypos < 0)
-                 ypos = 0;
-             if (ypos > GraphicsDevice.Viewport.Bounds.Height-ball.Height)
-                 ypos = GraphicsDevice.Viewport.Bounds.Height-ball.Height;*/
+          
             if (ballXPos <= 0 || ballXPos >= GraphicsDevice.Viewport.Bounds.Width - ball.Width || ballYPos < 0 || ballYPos > GraphicsDevice.Viewport.Bounds.Height - ball.Height)
             {
                 ballXPos = prev_ballXPos;
