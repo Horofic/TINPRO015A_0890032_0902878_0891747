@@ -44,6 +44,8 @@ namespace UltimatePong
 
         protected override void Initialize()
         {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+
             // TODO: Add your initialization logic here
             topBar = Content.Load<Texture2D>("bar.png");
             bottomBar = Content.Load<Texture2D>("bar.png");
@@ -63,19 +65,7 @@ namespace UltimatePong
         }
 
 
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        }
-
-
-        protected override void UnloadContent()
-        {
-          
-        }
-
+  
         protected override void Update(GameTime gameTime)
         {
 
