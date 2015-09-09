@@ -18,7 +18,8 @@ namespace UltimatePong
         Texture2D bottomBar;
         Texture2D leftBar;
         Texture2D rightBar;
-        Rectangle Ball;
+
+        Rectangle ballCollision;
 
         float ballXPos;
         float ballYPos;
@@ -51,6 +52,7 @@ namespace UltimatePong
             bottomBar = Content.Load<Texture2D>("bar.png");
             ball = Content.Load<Texture2D>("ball1.png");
 
+
             base.Window.AllowUserResizing = false;
 
             ballSpeed = 10;
@@ -74,6 +76,9 @@ namespace UltimatePong
             var prev_bottomBarXPos = bottomBarXPos;
             var prev_ballXPos = ballXPos;
             var prev_ballYPos = ballYPos;
+
+
+            
 
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
