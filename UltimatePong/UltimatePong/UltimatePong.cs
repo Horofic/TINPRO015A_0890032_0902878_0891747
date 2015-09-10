@@ -73,6 +73,9 @@ namespace UltimatePong
         int leftPlayerLives;
         int rightPlayerLives;
 
+        int players;
+        int lives;
+        bool powerups;
         
 
         SpriteFont font;
@@ -83,6 +86,13 @@ namespace UltimatePong
             graphics.PreferredBackBufferWidth = fieldSize;
             graphics.PreferredBackBufferHeight = fieldSize;
             Content.RootDirectory = "Content";
+        }
+
+        public void setGameSettings(int players, int lives, bool powerups)
+        {
+            this.players = players;
+            this.lives = lives;
+            this.powerups = powerups;
         }
 
 

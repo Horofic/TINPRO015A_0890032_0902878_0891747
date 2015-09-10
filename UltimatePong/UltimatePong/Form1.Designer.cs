@@ -34,7 +34,7 @@
             // 
             // Start
             // 
-            Start.Location = new System.Drawing.Point(63, 109);
+            Start.Location = new System.Drawing.Point(73, 152);
             Start.Name = "Start";
             Start.Size = new System.Drawing.Size(132, 77);
             Start.TabIndex = 0;

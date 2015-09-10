@@ -18,6 +18,7 @@ namespace UltimatePong
 
         private void button1_Click(object sender, EventArgs e)
         {
+           
             using (var game = new UltimatePong())
             {
                 game.setGameSettings(1,1,true);
