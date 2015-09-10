@@ -28,26 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.Button Start;
-            Start = new System.Windows.Forms.Button();
+            this.StartButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // Start
+            // StartButton
             // 
-            Start.Location = new System.Drawing.Point(73, 152);
-            Start.Name = "Start";
-            Start.Size = new System.Drawing.Size(132, 77);
-            Start.TabIndex = 0;
-            Start.Text = "Start";
-            Start.UseVisualStyleBackColor = true;
-            Start.Click += new System.EventHandler(this.button1_Click);
+            this.StartButton.Location = new System.Drawing.Point(80, 67);
+            this.StartButton.Name = "StartButton";
+            this.StartButton.Size = new System.Drawing.Size(121, 97);
+            this.StartButton.TabIndex = 1;
+            this.StartButton.Text = "Start game";
+            this.StartButton.UseVisualStyleBackColor = true;
+            this.StartButton.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(Start);
+            this.Controls.Add(this.StartButton);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -55,5 +54,7 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.Button StartButton;
     }
 }
