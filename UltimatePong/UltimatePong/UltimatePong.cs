@@ -86,6 +86,7 @@ namespace UltimatePong
             graphics.PreferredBackBufferWidth = fieldSize;
             graphics.PreferredBackBufferHeight = fieldSize;
             Content.RootDirectory = "Content";
+            
         }
 
         public void setGameSettings(int players, int lives, bool powerups)
@@ -164,7 +165,7 @@ namespace UltimatePong
             //ball logic
 
 
-            Rectangle collidedRectangle = checkBallCollision();
+          //  Rectangle collidedRectangle = checkBallCollision();
             if (ball.Intersects(topBar))
             {
                 if (collision==false)
