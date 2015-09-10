@@ -60,17 +60,10 @@ namespace UltimatePong
         float rightBarSpeed;
         int rightBarLength;
 
-        int players;
-        int lives;
-        bool powerups;
+             
+        
 
         SpriteFont font;
-        public void setGameSettings(int players, int lives, bool powerups )
-        {
-            this.players = players;
-            this.lives = lives;
-            this.powerups = powerups;
-        }
 
         public UltimatePong()
         {
