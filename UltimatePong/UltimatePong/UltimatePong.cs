@@ -324,14 +324,12 @@ namespace UltimatePong
 
                 return rightBorder;
             }
+                
 
-
-            else
-            {
+else{
                 collision = false;
                 return emptyRectangle;
-            }
-        }
+            }        }
 
 
         protected void ResetBall()
