@@ -36,6 +36,7 @@ namespace UltimatePong
         float ballYVelocity;
         int ballSize;
         bool collision;
+        int ballStartPos;
 
         //default bar properties
         const int barLength = 128;
@@ -119,7 +120,7 @@ namespace UltimatePong
             ballXVelocity = 200.0f;
             ballYVelocity = -300.0f;
             collision = false;
-            int ballStartPos = (fieldSize - ballSize) / 2;
+            ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
 
 
@@ -147,14 +148,23 @@ namespace UltimatePong
   
         protected override void Update(GameTime gameTime)
         {
+            checkInput(gameTime);
+            
+            // Collision detection and ball movement
+            checkBallCollision(gameTime);
 
+            base.Update(gameTime);
+        }
+
+        private void checkInput(GameTime gameTime)
+        {
             var keyBoardstate = Keyboard.GetState();
-                      
+
 
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
-      
+
             //ball controls, just for testing
             if (Keyboard.GetState().IsKeyDown(Keys.W))
                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -183,17 +193,7 @@ namespace UltimatePong
 
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-
-            // Collision detection and ball movement
-            checkBallCollision(gameTime);
-
-
-
-
-            base.Update(gameTime);
         }
-
-        
 
         protected override void Draw(GameTime gameTime)
         {
@@ -247,7 +247,6 @@ namespace UltimatePong
                 else
                 ResetBall(topBar);
             }
-
 
             else if (ball.Intersects(bottomBorder))
             {
@@ -322,9 +321,6 @@ namespace UltimatePong
                 default:
                     break;
             }
-        
-
-           
         }
 
         protected void ResetBall(Rectangle player)
@@ -335,7 +331,6 @@ namespace UltimatePong
 
                 if (topPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     topBar.Offset(-800, -800);
                 }
             }
@@ -346,7 +341,6 @@ namespace UltimatePong
 
                 if (bottomPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     bottomBar.Offset(-800, -800);
                 }
             }
@@ -357,7 +351,6 @@ namespace UltimatePong
 
                 if (leftPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     leftBar.Offset(-800, -800);
                 }
             }
@@ -368,12 +361,11 @@ namespace UltimatePong
 
                 if (rightPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     rightBar.Offset(-800, -800);
                 }
             }
 
-            ball.Offset((-ball.X + ((fieldSize - ball.Width) / 2)), (-ball.Y + ((fieldSize - ball.Width) / 2)));
+            ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
         }
     }
 }
