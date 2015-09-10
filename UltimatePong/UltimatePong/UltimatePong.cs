@@ -41,6 +41,7 @@ namespace UltimatePong
         float ballXVelocity;
         float ballYVelocity;
         int ballSize;
+        int ballStartPos;
         bool collision;
 
         //default bar properties
@@ -132,7 +133,7 @@ namespace UltimatePong
             ballXVelocity = 200.0f;
             ballYVelocity = -300.0f;
             collision = false;
-            int ballStartPos = (fieldSize - ballSize) / 2;
+            ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
 
 
@@ -160,7 +161,16 @@ namespace UltimatePong
   
         protected override void Update(GameTime gameTime)
         {
+            checkInput(gameTime);
 
+            // Collision detection and ball movement
+            checkBallCollision(gameTime);
+
+            base.Update(gameTime);
+        }
+
+        private void checkInput(GameTime gameTime)
+        {
             var keyBoardstate = Keyboard.GetState();
                       
 
@@ -196,17 +206,7 @@ namespace UltimatePong
 
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-
-            // Collision detection and ball movement
-            checkBallCollision(gameTime);
-
-
-
-
-            base.Update(gameTime);
         }
-
-        
 
         protected override void Draw(GameTime gameTime)
         {
@@ -260,7 +260,6 @@ namespace UltimatePong
                 else
                 ResetBall(topBar);
             }
-
 
             else if (ball.Intersects(bottomBorder))
             {
@@ -335,9 +334,6 @@ namespace UltimatePong
                 default:
                     break;
             }
-        
-
-           
         }
 
         protected void ResetBall(Rectangle player)
@@ -390,7 +386,7 @@ namespace UltimatePong
                 }
             }
 
-            ball.Offset((-ball.X + ((fieldSize - ball.Width) / 2)), (-ball.Y + ((fieldSize - ball.Width) / 2)));
+            ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
         }
     }
 }
