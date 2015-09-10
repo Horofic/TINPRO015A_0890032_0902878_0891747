@@ -17,11 +17,12 @@ namespace UltimatePong
 
         public Form1(UltimatePong game)
         {
+            InitializeComponent();
+
             pressed = false;
             this.game = game;
             PlayerAmountBox.SelectedIndex = 0;
 
-            InitializeComponent();
         }
 
         private void StartButton_Click(object sender, EventArgs e)
