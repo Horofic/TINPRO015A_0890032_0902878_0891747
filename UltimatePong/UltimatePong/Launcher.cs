@@ -13,6 +13,7 @@ namespace UltimatePong
     public partial class Launcher : Form
     {
         public bool StartPressed;
+
         public int playerAmount;
         public int livesAmount;
         public bool powerups;

@@ -90,6 +90,10 @@ namespace UltimatePong
             graphics.PreferredBackBufferHeight = fieldSize;
             Content.RootDirectory = "Content";
 
+            this.players = playerAmount;
+            this.lives = livesAmount;
+            this.powerups = powerups;
+
             //Printlines
             System.Console.WriteLine("players:" + players);
             System.Console.WriteLine("lives:" + lives);

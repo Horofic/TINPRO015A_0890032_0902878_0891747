@@ -31,6 +31,7 @@ namespace UltimatePong
 
         static void runLauncher()
         {
+            launcher = null;
             launcher = new Launcher();
             Application.Run(launcher);
             if (launcher.StartPressed == true) //check if StartButton is pressed
