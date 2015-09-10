@@ -218,34 +218,11 @@ namespace UltimatePong
                 bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             // Border collision detection
-            BorderCollision(ball);
+            checkBallCollision();
 
 
 
-            /*
-            //bar boundries
 
-            if (topBarXPos <= 0 || topBarXPos > GraphicsDevice.Viewport.Bounds.Width - topBar.Width)
-                topBarXPos = prev_topBarXPos;
-
-    
-            if (bottomBarXPos <= 0 || bottomBarXPos > GraphicsDevice.Viewport.Bounds.Width - bottomBar.Width)
-                bottomBarXPos = prev_bottomBarXPos;
-
-            //ball boundries
-          
-            if (ballXPos <= 0 || ballXPos >= GraphicsDevice.Viewport.Bounds.Width - ball.Width || ballYPos < 0 || ballYPos > GraphicsDevice.Viewport.Bounds.Height - ball.Height)
-            {
-                ballXPos = prev_ballXPos;
-                ballYPos = prev_ballYPos;
-            }
-
-
-            ballPosition = new Vector2(ballXPos, ballYPos);
-            topBarPosition = new Vector2(topBarXPos, 0.0f);
-            bottomBarPosition = new Vector2(bottomBarXPos, GraphicsDevice.Viewport.Bounds.Height - bottomBar.Height);
-
-    */
             base.Update(gameTime);
         }
 
@@ -275,14 +252,26 @@ namespace UltimatePong
 
             base.Draw(gameTime);
         }
-
-        protected void BorderCollision(Rectangle checkBall)
+        private Rectangle checkBallCollision()
         {
-            if (checkBall.Intersects(topBorder))
-            {
-                System.Console.WriteLine("Top border hit");
+            if (collision)
+                return emptyRectangle;
 
-                topPlayerLives = topPlayerLives- 1;
+            collision = true;
+            if (ball.Intersects(topBar))
+                return topBar;
+            else if (ball.Intersects(bottomBar))
+                return bottomBar;
+            else if (ball.Intersects(leftBar))
+                return leftBar;
+            else if (ball.Intersects(rightBar))
+                return rightBar;
+
+
+            // check if ball touches the border if does that player loses a life and ball is reset
+            else if (ball.Intersects(topBorder))
+            {
+                topPlayerLives = topPlayerLives - 1;
 
                 if (topPlayerLives == 0)
                 {
@@ -290,24 +279,58 @@ namespace UltimatePong
                 }
 
                 ResetBall();
+
+                return topBorder;
+            }
+               
+            else if (ball.Intersects(bottomBorder))
+            {
+                bottomPlayerLives = bottomPlayerLives - 1;
+
+                if (bottomPlayerLives == 0)
+                {
+                    bottomBar.Offset(800, 800);
+        }
+
+                ResetBall();
+
+
+                return bottomBorder;
+            }
+                
+            else if (ball.Intersects(leftBorder))
+            {
+                leftPlayerLives = leftPlayerLives - 1;
+
+                if (leftPlayerLives == 0)
+                {
+                    leftBar.Offset(800, 800);
+                }
+
+                ResetBall();
+
+                return leftBorder;
             }
 
-            if (checkBall.Intersects(rightBorder))
+            else if (ball.Intersects(rightBorder))
             {
-                System.Console.WriteLine("Right border hit");
-                ResetBall();
+                rightPlayerLives = rightPlayerLives - 1;
+
+                if (rightPlayerLives == 0)
+            {
+                    rightBar.Offset(800, 800);
             }
 
-            if (checkBall.Intersects(leftBorder))
-            {
-                System.Console.WriteLine("Left border hit");
                 ResetBall();
+
+                return rightBorder;
             }
 
-            if (checkBall.Intersects(bottomBorder))
+
+            else
             {
-                System.Console.WriteLine("Bottom border hit");
-                ResetBall();
+                collision = false;
+                return emptyRectangle;
             }
         }
 
