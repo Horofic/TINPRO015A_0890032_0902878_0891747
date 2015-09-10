@@ -217,11 +217,11 @@ namespace UltimatePong
                 bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             // Border collision detection
-            BorderCollision(ball);
+            checkBallCollision();
 
 
 
-           
+
             base.Update(gameTime);
         }
 
@@ -266,30 +266,11 @@ namespace UltimatePong
             else if (ball.Intersects(rightBar))
                 return rightBar;
 
+
+            // check if ball touches the border if does that player loses a life and ball is reset
             else if (ball.Intersects(topBorder))
-                return topBorder;
-            else if (ball.Intersects(bottomBorder))
-                return bottomBorder;
-            else if (ball.Intersects(leftBorder))
-                return leftBorder;
-            else if (ball.Intersects(rightBorder))
-                return rightBorder;
-
-            else{
-                collision = false;
-                return emptyRectangle;
-            }
-        }
-
-
-
-        protected void BorderCollision(Rectangle checkBall)
-        {
-            if (checkBall.Intersects(topBorder))
             {
-                System.Console.WriteLine("Top border hit");
-
-                topPlayerLives = topPlayerLives- 1;
+                topPlayerLives = topPlayerLives - 1;
 
                 if (topPlayerLives == 0)
                 {
@@ -297,24 +278,58 @@ namespace UltimatePong
                 }
 
                 ResetBall();
+
+                return topBorder;
+            }
+               
+            else if (ball.Intersects(bottomBorder))
+            {
+                bottomPlayerLives = bottomPlayerLives - 1;
+
+                if (bottomPlayerLives == 0)
+                {
+                    bottomBar.Offset(800, 800);
+        }
+
+                ResetBall();
+
+
+                return bottomBorder;
+            }
+                
+            else if (ball.Intersects(leftBorder))
+            {
+                leftPlayerLives = leftPlayerLives - 1;
+
+                if (leftPlayerLives == 0)
+                {
+                    leftBar.Offset(800, 800);
+                }
+
+                ResetBall();
+
+                return leftBorder;
             }
 
-            if (checkBall.Intersects(rightBorder))
+            else if (ball.Intersects(rightBorder))
             {
-                System.Console.WriteLine("Right border hit");
-                ResetBall();
+                rightPlayerLives = rightPlayerLives - 1;
+
+                if (rightPlayerLives == 0)
+            {
+                    rightBar.Offset(800, 800);
             }
 
-            if (checkBall.Intersects(leftBorder))
-            {
-                System.Console.WriteLine("Left border hit");
                 ResetBall();
+
+                return rightBorder;
             }
 
-            if (checkBall.Intersects(bottomBorder))
+
+            else
             {
-                System.Console.WriteLine("Bottom border hit");
-                ResetBall();
+                collision = false;
+                return emptyRectangle;
             }
         }
 
