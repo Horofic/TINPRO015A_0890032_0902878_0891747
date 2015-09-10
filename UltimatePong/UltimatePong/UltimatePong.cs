@@ -156,6 +156,9 @@ namespace UltimatePong
             leftBorder = new Rectangle(0, 0, borderWidth, fieldSize);
             rightBorder = new Rectangle(fieldSize - borderWidth, 0, borderWidth, fieldSize);
 
+            //initialize player lives
+            topPlayerLives = bottomPlayerLives = leftPlayerLives = rightPlayerLives = lives;
+
             base.Initialize();
         }
 
