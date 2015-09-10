@@ -29,7 +29,7 @@ namespace UltimatePong
         //playing field properties
         const int fieldSize = 800;
         const int barToBorderDist = 16;
-        const int borderWeight = 4;
+        const int borderWidth = 16;
 
         //ball properties
         float ballSpeed;
@@ -37,7 +37,7 @@ namespace UltimatePong
 
         //default bar properties
         const int barLength = 128;
-        const int barWeight = 8;
+        const int barWidth = 8;
         const float barSpeed = 400;
 
 
@@ -106,12 +106,13 @@ namespace UltimatePong
 
             //initialize bars
             int barStartPos = (fieldSize - barLength) / 2;
-            topBar = new Rectangle(barStartPos, barToBorderDist, barLength, barWeight);
-            bottomBar = new Rectangle(barStartPos, fieldSize-barToBorderDist-barWeight, barLength, barWeight);
-            leftBar = new Rectangle(barToBorderDist, barStartPos, barWeight, barLength);
-            rightBar = new Rectangle(fieldSize - barToBorderDist - barWeight, barStartPos, barWeight, barLength);
+            topBar = new Rectangle(barStartPos, barToBorderDist, barLength, barWidth);
+            bottomBar = new Rectangle(barStartPos, fieldSize-barToBorderDist-barWidth, barLength, barWidth);
+            leftBar = new Rectangle(barToBorderDist, barStartPos, barWidth, barLength);
+            rightBar = new Rectangle(fieldSize - barToBorderDist - barWidth, barStartPos, barWidth, barLength);
 
-
+            //initialize borders
+            topBorder = new Rectangle(0,0,fieldSize, borderWidth)
 
 
             base.Initialize();
