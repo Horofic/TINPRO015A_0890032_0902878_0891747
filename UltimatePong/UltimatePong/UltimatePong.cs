@@ -73,9 +73,9 @@ namespace UltimatePong
         int leftPlayerLives;
         int rightPlayerLives;
 
-        int players;
-        int lives;
-        bool powerups;
+        private int players;
+        private int lives;
+        private bool powerups;
         
 
         SpriteFont font;
@@ -86,6 +86,7 @@ namespace UltimatePong
             graphics.PreferredBackBufferWidth = fieldSize;
             graphics.PreferredBackBufferHeight = fieldSize;
             Content.RootDirectory = "Content";
+            
         }
 
         public void setGameSettings(int players, int lives, bool powerups)
@@ -164,7 +165,7 @@ namespace UltimatePong
             //ball logic
 
 
-            Rectangle collidedRectangle = checkBallCollision();
+          //  Rectangle collidedRectangle = checkBallCollision();
             if (ball.Intersects(topBar))
             {
                 if (collision==false)
@@ -270,57 +271,31 @@ namespace UltimatePong
             // check if ball touches the border if does that player loses a life and ball is reset
             else if (ball.Intersects(topBorder))
             {
-                topPlayerLives = topPlayerLives - 1;
-
-                if (topPlayerLives == 0)
-                {
-                    topBar.Offset(800, 800);
-                }
-
-                ResetBall();
+                ResetBall(topBar);
 
                 return topBorder;
             }
                
             else if (ball.Intersects(bottomBorder))
             {
-                bottomPlayerLives = bottomPlayerLives - 1;
 
-                if (bottomPlayerLives == 0)
-                {
-                    bottomBar.Offset(800, 800);
-        }
-
-                ResetBall();
-
+                ResetBall(bottomBar);
 
                 return bottomBorder;
             }
                 
             else if (ball.Intersects(leftBorder))
             {
-                leftPlayerLives = leftPlayerLives - 1;
 
-                if (leftPlayerLives == 0)
-                {
-                    leftBar.Offset(800, 800);
-                }
-
-                ResetBall();
+                ResetBall(leftBar);
 
                 return leftBorder;
             }
 
             else if (ball.Intersects(rightBorder))
             {
-                rightPlayerLives = rightPlayerLives - 1;
 
-                if (rightPlayerLives == 0)
-            {
-                    rightBar.Offset(800, 800);
-            }
-
-                ResetBall();
+                ResetBall(rightBar);
 
                 return rightBorder;
             }
@@ -332,8 +307,52 @@ else{
             }        }
 
 
-        protected void ResetBall()
+        protected void ResetBall(Rectangle player)
         {
+            if(player == topBar)
+            {
+                topPlayerLives = topPlayerLives - 1;
+
+                if (topPlayerLives == 0)
+                {
+                    //TODO make borders collidable
+                    topBar.Offset(-800, -800);
+                }
+            }
+
+           else if (player == bottomBar)
+            {
+                bottomPlayerLives = bottomPlayerLives - 1;
+
+                if (bottomPlayerLives == 0)
+                {
+                    //TODO make borders collidable
+                    bottomBar.Offset(-800, -800);
+                }
+            }
+
+            else if (player == leftBar)
+            {
+                leftPlayerLives = leftPlayerLives - 1;
+
+                if (leftPlayerLives == 0)
+                {
+                    //TODO make borders collidable
+                    leftBar.Offset(-800, -800);
+                }
+            }
+
+            else if (player == rightBar)
+            {
+                rightPlayerLives = rightPlayerLives - 1;
+
+                if (rightPlayerLives == 0)
+                {
+                    //TODO make borders collidable
+                    rightBar.Offset(-800, -800);
+                }
+            }
+
             ball.Offset((-ball.X + ((fieldSize - ball.Width) / 2)), (-ball.Y + ((fieldSize - ball.Width) / 2)));
         }
     }
