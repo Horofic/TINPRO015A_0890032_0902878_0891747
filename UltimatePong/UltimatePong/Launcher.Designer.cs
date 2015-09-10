@@ -125,14 +125,15 @@
             this.PlayerAmountBox.Size = new System.Drawing.Size(100, 21);
             this.PlayerAmountBox.TabIndex = 5;
             // 
-            // Form1
+            // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.StartButton);
-            this.Name = "Form1";
+            this.Name = "Launcher";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Ultimate Pong Launcher";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
