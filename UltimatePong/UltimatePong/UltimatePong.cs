@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -24,6 +25,9 @@ namespace UltimatePong
         Rectangle rightBorder;
 
         
+        Rectangle emptyRectangle;
+        
+
         
 
         //playing field properties
@@ -33,7 +37,10 @@ namespace UltimatePong
 
         //ball properties
         float ballSpeed;
+        float ballXVelocity;
+        float ballYVelocity;
         int ballSize;
+        bool collision;
 
         //default bar properties
         const int barLength = 128;
@@ -65,7 +72,7 @@ namespace UltimatePong
         int bottomPlayerLives;
         int leftPlayerLives;
         int rightPlayerLives;
-             
+
         
 
         SpriteFont font;
@@ -82,7 +89,7 @@ namespace UltimatePong
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            emptyRectangle = new Rectangle(0, 0, 0, 0);
             spriteTexture = Content.Load<Texture2D>("bar.png");
 
             base.Window.AllowUserResizing = false;
@@ -103,8 +110,10 @@ namespace UltimatePong
 
             //initialize ball
             ballSize = 16;
-            ballSpeed = 400;
-
+            ballSpeed = 100.0f;
+            ballXVelocity = 0.0f;
+            ballYVelocity = -200.0f;
+            collision = false;
             int ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
 
@@ -140,6 +149,30 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
+
+
+            //ball logic
+
+
+            Rectangle collidedRectangle = checkBallCollision();
+            if (ball.Intersects(topBar))
+            {
+                if (collision==false)
+                {
+                    ballYVelocity = -ballYVelocity;
+                    collision = true;
+                }
+                else
+                {
+                    ball.Offset((ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
+
+                }
+            }
+            else
+            {
+                ball.Offset((ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
+                collision = false;
+            }
 
             //ball controls, just for testing
             if (Keyboard.GetState().IsKeyDown(Keys.W))
@@ -204,6 +237,8 @@ namespace UltimatePong
     */
             base.Update(gameTime);
         }
+
+        
 
         protected override void Draw(GameTime gameTime)
         {
