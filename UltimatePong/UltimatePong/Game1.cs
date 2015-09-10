@@ -9,22 +9,67 @@ namespace UltimatePong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+
+        //sprites
         Texture2D spriteTexture;
         Rectangle ball;
         Rectangle topBar;
         Rectangle bottomBar;
+        Rectangle leftBar;
+        Rectangle rightBar;
 
-        int topBarSpeed;
-        int bottomBarSpeed;
-        int ballSpeed;
+        Rectangle topBorder;
+        Rectangle bottomBorder;
+        Rectangle leftBorder;
+        Rectangle rightBorder;
+
+        
+        
+
+        //playing field properties
+        const int fieldSize = 800;
+        const int barToBorderDist = 16;
+        const int borderWeight = 4;
+
+        //ball properties
+        float ballSpeed;
+        int ballSize;
+
+        //default bar properties
+        const int barLength = 128;
+        const int barWeight = 8;
+        const float barSpeed = 400;
+
+
+        //top bar properties
+        float topBarSpeed;
+        int topBarLength;
+
+
+        //bottom bar properties
+        float bottomBarSpeed;
+        int bottomBarLength;
+
+
+        //left bar properties
+        float leftBarSpeed;
+        int leftBarLength;
+
+
+        //right bar properties
+        float rightBarSpeed;
+        int rightBarLength;
+
+             
+        
 
         SpriteFont font;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 800;
+            graphics.PreferredBackBufferWidth = fieldSize;
+            graphics.PreferredBackBufferHeight = fieldSize;
             Content.RootDirectory = "Content";
         }
 
@@ -33,19 +78,42 @@ namespace UltimatePong
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: Add your initialization logic here
             spriteTexture = Content.Load<Texture2D>("bar.png");
 
             base.Window.AllowUserResizing = false;
 
-            ballSpeed = 400;
-            topBarSpeed = 400;
-            bottomBarSpeed = 400;
 
-            //positions need some cleaning up
-            ball = new Rectangle(256, 256, 16, 16);
-            topBar = new Rectangle(0, 0, 64, 8);
-            bottomBar = new Rectangle(0, 794, 64, 8);
+
+            //initialize bar properties
+            topBarSpeed = barSpeed;
+            bottomBarSpeed = barSpeed;
+            leftBarSpeed = barSpeed;
+            rightBarSpeed = barSpeed;
+
+            topBarLength = barLength;
+            bottomBarLength = barLength;
+            leftBarLength = barLength;
+            rightBarSpeed = barLength;
+
+
+            //initialize ball
+            ballSize = 16;
+            ballSpeed = 400;
+
+            int ballStartPos = (fieldSize - ballSize) / 2;
+            ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
+
+
+            //initialize bars
+            int barStartPos = (fieldSize - barLength) / 2;
+            topBar = new Rectangle(barStartPos, barToBorderDist, barLength, barWeight);
+            bottomBar = new Rectangle(barStartPos, fieldSize-barToBorderDist-barWeight, barLength, barWeight);
+            leftBar = new Rectangle(barToBorderDist, barStartPos, barWeight, barLength);
+            rightBar = new Rectangle(fieldSize - barToBorderDist - barWeight, barStartPos, barWeight, barLength);
+
+
+
+
             base.Initialize();
         }
 
@@ -91,7 +159,13 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
+            if(ball.Intersects(topBar))
+            {
+                System.Console.WriteLine(ball.X);
+                ball.Offset((-ball.X+394), (-ball.Y+394));
+                topBar.Width = topBar.Width / 2;
 
+            }
             /*
             //bar boundries
 
@@ -128,6 +202,9 @@ namespace UltimatePong
             spriteBatch.Draw(spriteTexture, ball, Color.White);
             spriteBatch.Draw(spriteTexture, topBar, Color.White);
             spriteBatch.Draw(spriteTexture, bottomBar, Color.White);
+            spriteBatch.Draw(spriteTexture, leftBar, Color.White);
+            spriteBatch.Draw(spriteTexture, rightBar, Color.White);
+
 
             spriteBatch.End();
 
