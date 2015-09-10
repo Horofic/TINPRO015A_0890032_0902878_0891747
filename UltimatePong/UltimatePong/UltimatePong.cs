@@ -131,7 +131,7 @@ namespace UltimatePong
 
 
             //ball controls, just for testing
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+           /* if (Keyboard.GetState().IsKeyDown(Keys.W))
                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (Keyboard.GetState().IsKeyDown(Keys.S))
@@ -141,7 +141,9 @@ namespace UltimatePong
                 ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
-                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);*/
+
+            //ball movemment
 
 
             //Top bar controls
@@ -165,6 +167,7 @@ namespace UltimatePong
                 System.Console.WriteLine(ball.X);
                 ball.Offset((-ball.X+394), (-ball.Y+394));
                 topBar.Width = topBar.Width / 2;
+                System.Console.WriteLine("TopbarW:"+topBar.Width);
 
             }
             /*

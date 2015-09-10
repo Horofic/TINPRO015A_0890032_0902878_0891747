@@ -2,9 +2,11 @@ Wat do:
 -Terry
 Ball movement (BOUNCE)
 Bar > collision(bounce) , speed up
+
 -Stefan
 Boundries > Collision (reset ball), if no lives create wall(make collision)
 Score board > lives
+
 -Chinji
 Power ups > all power up events
 Start screen / lose screen
