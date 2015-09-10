@@ -221,30 +221,7 @@ namespace UltimatePong
 
 
 
-            /*
-            //bar boundries
-
-            if (topBarXPos <= 0 || topBarXPos > GraphicsDevice.Viewport.Bounds.Width - topBar.Width)
-                topBarXPos = prev_topBarXPos;
-
-    
-            if (bottomBarXPos <= 0 || bottomBarXPos > GraphicsDevice.Viewport.Bounds.Width - bottomBar.Width)
-                bottomBarXPos = prev_bottomBarXPos;
-
-            //ball boundries
-          
-            if (ballXPos <= 0 || ballXPos >= GraphicsDevice.Viewport.Bounds.Width - ball.Width || ballYPos < 0 || ballYPos > GraphicsDevice.Viewport.Bounds.Height - ball.Height)
-            {
-                ballXPos = prev_ballXPos;
-                ballYPos = prev_ballYPos;
-            }
-
-
-            ballPosition = new Vector2(ballXPos, ballYPos);
-            topBarPosition = new Vector2(topBarXPos, 0.0f);
-            bottomBarPosition = new Vector2(bottomBarXPos, GraphicsDevice.Viewport.Bounds.Height - bottomBar.Height);
-
-    */
+           
             base.Update(gameTime);
         }
 
@@ -277,11 +254,10 @@ namespace UltimatePong
         private Rectangle checkBallCollision()
         {
             if (collision)
-            {
                 return emptyRectangle;
-            }
 
-            else if (ball.Intersects(topBar))
+            collision = true;
+            if (ball.Intersects(topBar))
                 return topBar;
             else if (ball.Intersects(bottomBar))
                 return bottomBar;
@@ -299,7 +275,10 @@ namespace UltimatePong
             else if (ball.Intersects(rightBorder))
                 return rightBorder;
 
-            else return emptyRectangle;
+            else{
+                collision = false;
+                return emptyRectangle;
+            }
         }
 
 
