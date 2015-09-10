@@ -12,6 +12,12 @@ namespace UltimatePong
 
         //sprites
         Texture2D spriteTexture;
+
+        Texture2D topBorderTexture;
+        Texture2D leftBorderTexture;
+        Texture2D rightBorderTexture;
+        Texture2D bottomBorderTexture;
+
         Rectangle ball;
         Rectangle topBar;
         Rectangle bottomBar;
@@ -35,8 +41,8 @@ namespace UltimatePong
         float ballXVelocity;
         float ballYVelocity;
         int ballSize;
-        bool collision;
         int ballStartPos;
+        bool collision;
 
         //default bar properties
         const int barLength = 128;
@@ -97,7 +103,14 @@ namespace UltimatePong
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            spriteTexture = Content.Load<Texture2D>("bar.png");
+
+            spriteTexture = Content.Load<Texture2D>("ball1.png");
+            //
+            topBorderTexture = Content.Load<Texture2D>("bar.png");
+            leftBorderTexture = Content.Load<Texture2D>("bar.png");
+            rightBorderTexture = Content.Load<Texture2D>("bar.png");
+            bottomBorderTexture = Content.Load<Texture2D>("bar.png");
+
 
             base.Window.AllowUserResizing = false;
 
@@ -151,7 +164,7 @@ namespace UltimatePong
         protected override void Update(GameTime gameTime)
         {
             checkInput(gameTime);
-            
+
             // Collision detection and ball movement
             checkBallCollision(gameTime);
 
@@ -161,12 +174,12 @@ namespace UltimatePong
         private void checkInput(GameTime gameTime)
         {
             var keyBoardstate = Keyboard.GetState();
-
+                      
 
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
-
+      
             //ball controls, just for testing
             if (Keyboard.GetState().IsKeyDown(Keys.W))
                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -226,10 +239,10 @@ namespace UltimatePong
             spriteBatch.Draw(spriteTexture, leftBar, Color.White);
             spriteBatch.Draw(spriteTexture, rightBar, Color.White);
             //borders
-            spriteBatch.Draw(spriteTexture, topBorder, Color.Black);
-            spriteBatch.Draw(spriteTexture, bottomBorder, Color.Black);
-            spriteBatch.Draw(spriteTexture, leftBorder, Color.Black);
-            spriteBatch.Draw(spriteTexture, rightBorder, Color.Black);
+            spriteBatch.Draw(topBorderTexture, topBorder, Color.White);
+            spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
+            spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
+            spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
 
 
             spriteBatch.End();
@@ -485,6 +498,8 @@ namespace UltimatePong
 
                 if (topPlayerLives == 0)
                 {
+                    //TODO make borders collidable
+                    topBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     topBar.Offset(-800, -800);
                 }
             }
@@ -495,6 +510,8 @@ namespace UltimatePong
 
                 if (bottomPlayerLives == 0)
                 {
+                    //TODO make borders collidable
+                    bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     bottomBar.Offset(-800, -800);
                 }
             }
@@ -505,6 +522,8 @@ namespace UltimatePong
 
                 if (leftPlayerLives == 0)
                 {
+                    //TODO make borders collidable
+                    leftBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     leftBar.Offset(-800, -800);
                 }
             }
@@ -515,6 +534,8 @@ namespace UltimatePong
 
                 if (rightPlayerLives == 0)
                 {
+                    //TODO make borders collidable
+                    rightBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     rightBar.Offset(-800, -800);
                 }
             }
