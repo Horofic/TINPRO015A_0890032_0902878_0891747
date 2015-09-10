@@ -22,11 +22,13 @@ namespace UltimatePong
 
         static void Main()
         {
-           // var game = new UltimatePong();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            var game = new UltimatePong();
             
+            Application.Run(new Form1(game));
+           
+
 
         }
 
