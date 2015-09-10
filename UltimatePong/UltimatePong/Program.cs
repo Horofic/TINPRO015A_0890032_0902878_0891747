@@ -14,7 +14,9 @@ namespace UltimatePong
     /// </summary>
     public static class Program
     {
-       
+
+        private static UltimatePong game;
+        private static Form1 launcher;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,17 +26,19 @@ namespace UltimatePong
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var game = new UltimatePong();
-            
-            Application.Run(new Form1(game));
-           
 
+            game = new UltimatePong();
+            launcher = new Form1(game);
+            Application.Run(launcher);
+
+            if (launcher.pressed==true)
+            game.Run();
 
         }
 
-        static void runGame()
+        public static void startPressed()
         {
-            
+            launcher.pressed = true;
         }
     }
 #endif

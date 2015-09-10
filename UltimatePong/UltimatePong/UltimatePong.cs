@@ -10,7 +10,6 @@ namespace UltimatePong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-
         //sprites
         Texture2D spriteTexture;
 
@@ -96,6 +95,9 @@ namespace UltimatePong
             this.players = players;
             this.lives = lives;
             this.powerups = powerups;
+            System.Console.WriteLine("players:" + players);
+            System.Console.WriteLine("lives:" + lives);
+            System.Console.WriteLine("powerups:" + powerups);
         }
 
 
