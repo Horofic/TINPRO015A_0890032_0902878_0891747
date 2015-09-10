@@ -29,7 +29,7 @@ namespace UltimatePong
         //playing field properties
         const int fieldSize = 800;
         const int barToBorderDist = 16;
-        const int borderWidth = 16;
+        const int borderWidth = 5;
 
         //ball properties
         float ballSpeed;
@@ -60,6 +60,11 @@ namespace UltimatePong
         float rightBarSpeed;
         int rightBarLength;
 
+        //Player lives
+        int topPlayerLives;
+        int bottomPlayerLives;
+        int leftPlayerLives;
+        int rightPlayerLives;
              
         
 
@@ -117,6 +122,10 @@ namespace UltimatePong
             leftBorder = new Rectangle(0, 0, borderWidth, fieldSize);
             rightBorder = new Rectangle(fieldSize - borderWidth, 0, borderWidth, fieldSize);
 
+
+            //initialize lives for now 3
+            topPlayerLives = bottomPlayerLives = leftPlayerLives = rightPlayerLives = 3;
+
             base.Initialize();
         }
 
@@ -133,7 +142,7 @@ namespace UltimatePong
 
 
             //ball controls, just for testing
-           /* if (Keyboard.GetState().IsKeyDown(Keys.W))
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (Keyboard.GetState().IsKeyDown(Keys.S))
@@ -143,7 +152,7 @@ namespace UltimatePong
                 ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
-                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);*/
+                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             //ball movemment
 
@@ -164,14 +173,11 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
-            if(ball.Intersects(topBar))
-            {
-                System.Console.WriteLine(ball.X);
-                ball.Offset((-ball.X+394), (-ball.Y+394));
-                topBar.Width = topBar.Width / 2;
-                System.Console.WriteLine("TopbarW:"+topBar.Width);
+            // Border collision detection
+            BorderCollision(ball);
 
-            }
+
+
             /*
             //bar boundries
 
@@ -205,20 +211,64 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
+            //ball
             spriteBatch.Draw(spriteTexture, ball, Color.White);
+            //bars
             spriteBatch.Draw(spriteTexture, topBar, Color.White);
             spriteBatch.Draw(spriteTexture, bottomBar, Color.White);
             spriteBatch.Draw(spriteTexture, leftBar, Color.White);
             spriteBatch.Draw(spriteTexture, rightBar, Color.White);
+            //borders
             spriteBatch.Draw(spriteTexture, topBorder, Color.Black);
-            spriteBatch.Draw(spriteTexture, bottomBorder, Color.White);
-            spriteBatch.Draw(spriteTexture, leftBorder, Color.White);
-            spriteBatch.Draw(spriteTexture, rightBorder, Color.White);
+            spriteBatch.Draw(spriteTexture, bottomBorder, Color.Black);
+            spriteBatch.Draw(spriteTexture, leftBorder, Color.Black);
+            spriteBatch.Draw(spriteTexture, rightBorder, Color.Black);
 
 
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        protected void BorderCollision(Rectangle checkBall)
+        {
+            if (checkBall.Intersects(topBorder))
+            {
+                System.Console.WriteLine("Top border hit");
+
+                topPlayerLives = topPlayerLives- 1;
+
+                if (topPlayerLives == 0)
+                {
+                    topBar.Offset(800, 800);
+                }
+
+                ResetBall();
+            }
+
+            if (checkBall.Intersects(rightBorder))
+            {
+                System.Console.WriteLine("Right border hit");
+                ResetBall();
+            }
+
+            if (checkBall.Intersects(leftBorder))
+            {
+                System.Console.WriteLine("Left border hit");
+                ResetBall();
+            }
+
+            if (checkBall.Intersects(bottomBorder))
+            {
+                System.Console.WriteLine("Bottom border hit");
+                ResetBall();
+            }
+        }
+
+
+        protected void ResetBall()
+        {
+            ball.Offset((-ball.X + ((fieldSize - ball.Width) / 2)), (-ball.Y + ((fieldSize - ball.Width) / 2)));
         }
     }
 }
