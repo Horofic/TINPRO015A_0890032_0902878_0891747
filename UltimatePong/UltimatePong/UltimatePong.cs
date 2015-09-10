@@ -37,6 +37,7 @@ namespace UltimatePong
 
         //ball properties
         float ballSpeed;
+        float ballSpeedLimit;
         float ballSpeedInc;
         float ballXVelocity;
         float ballYVelocity;
@@ -130,8 +131,9 @@ namespace UltimatePong
 
             //initialize ball
             ballSize = 16;
-            ballSpeed = 200.0f;
+            ballSpeed = 500.0f;
             ballSpeedInc = 20.0f;
+            ballSpeedLimit = 800f;
             ballXVelocity = -300.0f;
             ballYVelocity = 0.0f;
             collision = false;
@@ -193,35 +195,45 @@ namespace UltimatePong
             if (Keyboard.GetState().IsKeyDown(Keys.D))
                 ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
+
+
             //Top bar controls
             if (keyBoardstate.IsKeyDown(Keys.Z))
-                topBar.Offset(-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                if(!topBar.Intersects(leftBorder))
+                    topBar.Offset(-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             if (keyBoardstate.IsKeyDown(Keys.X))
-                topBar.Offset(topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                if (!topBar.Intersects(rightBorder))
+                    topBar.Offset(topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
 
 
             //Bottom bar controls
             if (keyBoardstate.IsKeyDown(Keys.Left))
-                bottomBar.Offset(-bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                if (!bottomBar.Intersects(leftBorder))
+                    bottomBar.Offset(-bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             if (keyBoardstate.IsKeyDown(Keys.Right))
-                bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                if (!bottomBar.Intersects(rightBorder))
+                    bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             //Left bar controls
             if (keyBoardstate.IsKeyDown(Keys.NumPad7))
-                leftBar.Offset(0, -leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                if (!leftBar.Intersects(topBorder))
+                    leftBar.Offset(0, -leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (keyBoardstate.IsKeyDown(Keys.NumPad4))
-                leftBar.Offset(0, leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                if (!leftBar.Intersects(bottomBorder))
+                    leftBar.Offset(0, leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             //Right bar controls
             if (keyBoardstate.IsKeyDown(Keys.NumPad9))
-                rightBar.Offset(0, -rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                if (!rightBar.Intersects(topBorder))
+                    rightBar.Offset(0, -rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (keyBoardstate.IsKeyDown(Keys.NumPad6))
-                rightBar.Offset(0, rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                if (!rightBar.Intersects(bottomBorder))
+                    rightBar.Offset(0, rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
         }
 
@@ -354,7 +366,9 @@ namespace UltimatePong
                     break;
             }
             */
-            ballSpeed += ballSpeedInc;
+            if(ballSpeed<ballSpeedLimit)
+                ballSpeed += ballSpeedInc;
+            Console.WriteLine(ballSpeed);
             int barCenter;
             int ballCenter;
             float maxOffset;
