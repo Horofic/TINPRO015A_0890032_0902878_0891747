@@ -112,8 +112,10 @@ namespace UltimatePong
             rightBar = new Rectangle(fieldSize - barToBorderDist - barWidth, barStartPos, barWidth, barLength);
 
             //initialize borders
-            topBorder = new Rectangle(0,0,fieldSize, borderWidth)
-
+            topBorder = new Rectangle(0, 0, fieldSize, borderWidth);
+            bottomBorder = new Rectangle(0, fieldSize - borderWidth, fieldSize, borderWidth);
+            leftBorder = new Rectangle(0, 0, borderWidth, fieldSize);
+            rightBorder = new Rectangle(fieldSize - borderWidth, 0, borderWidth, fieldSize);
 
             base.Initialize();
         }
@@ -205,6 +207,10 @@ namespace UltimatePong
             spriteBatch.Draw(spriteTexture, bottomBar, Color.White);
             spriteBatch.Draw(spriteTexture, leftBar, Color.White);
             spriteBatch.Draw(spriteTexture, rightBar, Color.White);
+            spriteBatch.Draw(spriteTexture, topBorder, Color.Black);
+            spriteBatch.Draw(spriteTexture, bottomBorder, Color.White);
+            spriteBatch.Draw(spriteTexture, leftBorder, Color.White);
+            spriteBatch.Draw(spriteTexture, rightBorder, Color.White);
 
 
             spriteBatch.End();
