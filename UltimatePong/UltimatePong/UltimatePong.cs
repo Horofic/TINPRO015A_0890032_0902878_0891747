@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace UltimatePong
 {
-    public class Game1 : Game
+    public class UltimatePong : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -65,7 +65,7 @@ namespace UltimatePong
 
         SpriteFont font;
 
-        public Game1()
+        public UltimatePong()
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = fieldSize;
