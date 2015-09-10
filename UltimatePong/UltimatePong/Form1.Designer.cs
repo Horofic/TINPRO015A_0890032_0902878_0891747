@@ -29,105 +29,101 @@
         private void InitializeComponent()
         {
             this.StartButton = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.PowerupsBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.lives = new System.Windows.Forms.NumericUpDown();
+            this.LivesAmountBox = new System.Windows.Forms.NumericUpDown();
+            this.PlayerAmountText = new System.Windows.Forms.Label();
+            this.LivesAmountText = new System.Windows.Forms.Label();
+            this.PlayerAmountBox = new System.Windows.Forms.ComboBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lives)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).BeginInit();
             this.SuspendLayout();
             // 
             // StartButton
             // 
-            this.StartButton.Location = new System.Drawing.Point(75, 170);
+            this.StartButton.Location = new System.Drawing.Point(79, 171);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(121, 65);
             this.StartButton.TabIndex = 1;
             this.StartButton.Text = "Start game";
             this.StartButton.UseVisualStyleBackColor = true;
-            this.StartButton.Click += new System.EventHandler(this.button2_Click);
+            this.StartButton.Click += new System.EventHandler(this.StartButton_Click);
             // 
-            // checkBox1
+            // PowerupsBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(18, 79);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(73, 17);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Powerups";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.PowerupsBox.AutoSize = true;
+            this.PowerupsBox.Checked = true;
+            this.PowerupsBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.PowerupsBox.Location = new System.Drawing.Point(18, 79);
+            this.PowerupsBox.Name = "PowerupsBox";
+            this.PowerupsBox.Size = new System.Drawing.Size(73, 17);
+            this.PowerupsBox.TabIndex = 2;
+            this.PowerupsBox.Text = "Powerups";
+            this.PowerupsBox.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.lives);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.comboBox1);
-            this.panel1.Controls.Add(this.checkBox1);
+            this.panel1.Controls.Add(this.LivesAmountBox);
+            this.panel1.Controls.Add(this.PlayerAmountText);
+            this.panel1.Controls.Add(this.LivesAmountText);
+            this.panel1.Controls.Add(this.PlayerAmountBox);
+            this.panel1.Controls.Add(this.PowerupsBox);
             this.panel1.Location = new System.Drawing.Point(28, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(226, 144);
             this.panel1.TabIndex = 3;
             // 
-            // label2
+            // LivesAmountBox
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 19);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Players Amount";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(15, 49);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Lives Amount";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "2 Players",
-            "3 Players",
-            "4 Players"});
-            this.comboBox1.Location = new System.Drawing.Point(103, 17);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(100, 21);
-            this.comboBox1.TabIndex = 5;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // lives
-            // 
-            this.lives.Location = new System.Drawing.Point(103, 47);
-            this.lives.Maximum = new decimal(new int[] {
+            this.LivesAmountBox.Location = new System.Drawing.Point(103, 47);
+            this.LivesAmountBox.Maximum = new decimal(new int[] {
             9,
             0,
             0,
             0});
-            this.lives.Minimum = new decimal(new int[] {
+            this.LivesAmountBox.Minimum = new decimal(new int[] {
             1,
             0,
             0,
             0});
-            this.lives.Name = "lives";
-            this.lives.Size = new System.Drawing.Size(100, 20);
-            this.lives.TabIndex = 4;
-            this.lives.Value = new decimal(new int[] {
+            this.LivesAmountBox.Name = "LivesAmountBox";
+            this.LivesAmountBox.Size = new System.Drawing.Size(100, 20);
+            this.LivesAmountBox.TabIndex = 1;
+            this.LivesAmountBox.Value = new decimal(new int[] {
             3,
             0,
             0,
             0});
-            this.lives.ValueChanged += new System.EventHandler(this.lives_ValueChanged);
+            // 
+            // PlayerAmountText
+            // 
+            this.PlayerAmountText.AutoSize = true;
+            this.PlayerAmountText.Location = new System.Drawing.Point(15, 19);
+            this.PlayerAmountText.Name = "PlayerAmountText";
+            this.PlayerAmountText.Size = new System.Drawing.Size(80, 13);
+            this.PlayerAmountText.TabIndex = 8;
+            this.PlayerAmountText.Text = "Players Amount";
+            // 
+            // LivesAmountText
+            // 
+            this.LivesAmountText.AutoSize = true;
+            this.LivesAmountText.Location = new System.Drawing.Point(15, 49);
+            this.LivesAmountText.Name = "LivesAmountText";
+            this.LivesAmountText.Size = new System.Drawing.Size(71, 13);
+            this.LivesAmountText.TabIndex = 7;
+            this.LivesAmountText.Text = "Lives Amount";
+            // 
+            // PlayerAmountBox
+            // 
+            this.PlayerAmountBox.FormattingEnabled = true;
+            this.PlayerAmountBox.Items.AddRange(new object[] {
+            "2 Players",
+            "3 Players",
+            "4 Players"});
+            this.PlayerAmountBox.Location = new System.Drawing.Point(103, 17);
+            this.PlayerAmountBox.Name = "PlayerAmountBox";
+            this.PlayerAmountBox.Size = new System.Drawing.Size(100, 21);
+            this.PlayerAmountBox.TabIndex = 5;
             // 
             // Form1
             // 
@@ -138,10 +134,9 @@
             this.Controls.Add(this.StartButton);
             this.Name = "Form1";
             this.Text = "Ultimate Pong Launcher";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lives)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -149,11 +144,11 @@
         #endregion
 
         private System.Windows.Forms.Button StartButton;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox PowerupsBox;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.NumericUpDown lives;
+        private System.Windows.Forms.ComboBox PlayerAmountBox;
+        private System.Windows.Forms.Label LivesAmountText;
+        private System.Windows.Forms.Label PlayerAmountText;
+        private System.Windows.Forms.NumericUpDown LivesAmountBox;
     }
 }

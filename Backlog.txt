@@ -8,4 +8,4 @@ Score board > lives
 
 -Chinji
 Power ups > all power up events
-Start screen / lose screen
+Start screen (DONE) / Victory screen

@@ -35,11 +35,7 @@ namespace UltimatePong
             game.Run();
 
         }
-
-        public static void startPressed()
-        {
-            launcher.pressed = true;
-        }
+        
     }
 #endif
 }
