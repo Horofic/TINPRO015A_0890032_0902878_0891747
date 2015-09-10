@@ -25,11 +25,6 @@ namespace UltimatePong
         Rectangle rightBorder;
 
         
-        Rectangle emptyRectangle;
-        
-
-        
-
         //playing field properties
         const int fieldSize = 800;
         const int barToBorderDist = 16;
@@ -100,7 +95,6 @@ namespace UltimatePong
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            emptyRectangle = new Rectangle(0, 0, 0, 0);
             spriteTexture = Content.Load<Texture2D>("bar.png");
 
             base.Window.AllowUserResizing = false;
@@ -122,8 +116,8 @@ namespace UltimatePong
             //initialize ball
             ballSize = 16;
             ballSpeed = 100.0f;
-            ballXVelocity = 0.0f;
-            ballYVelocity = -200.0f;
+            ballXVelocity = 200.0f;
+            ballYVelocity = -300.0f;
             collision = false;
             int ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
@@ -160,31 +154,7 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
-
-
-            //ball logic
-
-
-          //  Rectangle collidedRectangle = checkBallCollision();
-            if (ball.Intersects(topBar))
-            {
-                if (collision==false)
-                {
-                    ballYVelocity = -ballYVelocity;
-                    collision = true;
-                }
-                else
-                {
-                    ball.Offset((ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
-
-                }
-            }
-            else
-            {
-                ball.Offset((ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
-                collision = false;
-            }
-
+      
             //ball controls, just for testing
             if (Keyboard.GetState().IsKeyDown(Keys.W))
                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
@@ -197,9 +167,6 @@ namespace UltimatePong
 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
                 ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-
-            //ball movemment
-
 
             //Top bar controls
             if (keyBoardstate.IsKeyDown(Keys.Z))
@@ -217,8 +184,8 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Right))
                 bottomBar.Offset(bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
-            // Border collision detection
-            checkBallCollision();
+            // Collision detection and ball movement
+            checkBallCollision(gameTime);
 
 
 
@@ -252,60 +219,113 @@ namespace UltimatePong
 
             base.Draw(gameTime);
         }
-        private Rectangle checkBallCollision()
+
+        private void checkBallCollision(GameTime gameTime)
         {
             if (collision)
-                return emptyRectangle;
+                moveBall(gameTime);
+
 
             collision = true;
+
+            //barcollition
             if (ball.Intersects(topBar))
-                return topBar;
+                barBounce("top");
             else if (ball.Intersects(bottomBar))
-                return bottomBar;
+                barBounce("bottom");
             else if (ball.Intersects(leftBar))
-                return leftBar;
+                barBounce("left");
             else if (ball.Intersects(rightBar))
-                return rightBar;
+                barBounce("right");
 
 
             // check if ball touches the border if does that player loses a life and ball is reset
             else if (ball.Intersects(topBorder))
             {
+                if (topPlayerLives.Equals(0))
+                    simpleBounce("y");
+                else
                 ResetBall(topBar);
-
-                return topBorder;
             }
-               
+
+
             else if (ball.Intersects(bottomBorder))
             {
-
-                ResetBall(bottomBar);
-
-                return bottomBorder;
+                if (bottomPlayerLives.Equals(0))
+                    simpleBounce("y");
+                else
+                    ResetBall(bottomBar);
             }
-                
+
             else if (ball.Intersects(leftBorder))
             {
-
-                ResetBall(leftBar);
-
-                return leftBorder;
+                if (leftPlayerLives.Equals(0))
+                    simpleBounce("x");
+                else
+                    ResetBall(leftBar);
             }
 
             else if (ball.Intersects(rightBorder))
             {
-
-                ResetBall(rightBar);
-
-                return rightBorder;
+                if (rightPlayerLives.Equals(0))
+                    simpleBounce("x");
+                else
+                    ResetBall(rightBar);
             }
-                
 
-else{
+
+            else
+            {
                 collision = false;
-                return emptyRectangle;
-            }        }
+                moveBall(gameTime);
+            }
+        }
 
+        private void moveBall(GameTime gameTime)
+        {
+            ball.Offset((ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
+        }
+
+        private void simpleBounce(string v)
+        {
+            switch (v)
+            {
+                case "x":
+                    ballXVelocity = -ballXVelocity;
+                    break;
+                case "y":
+                    ballYVelocity = -ballYVelocity;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+       
+
+        private void barBounce(string v)
+        {
+            switch (v)
+            {
+                case "top":
+                    simpleBounce("y");
+                    break;
+                case "bottom":
+                    simpleBounce("y");
+                    break;
+                case "left":
+                    simpleBounce("x");
+                    break;
+                case "right":
+                    simpleBounce("x");
+                    break;
+                default:
+                    break;
+            }
+        
+
+           
+        }
 
         protected void ResetBall(Rectangle player)
         {
