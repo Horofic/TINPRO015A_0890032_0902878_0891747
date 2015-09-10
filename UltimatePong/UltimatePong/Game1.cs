@@ -112,7 +112,7 @@ namespace UltimatePong
             rightBar = new Rectangle(fieldSize - barToBorderDist - barWidth, barStartPos, barWidth, barLength);
 
             //initialize borders
-            topBorder = new Rectangle(0,0,fieldSize, borderWidth)
+            topBorder = new Rectangle(0, 0, fieldSize, borderWidth);
 
 
             base.Initialize();
