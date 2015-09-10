@@ -10,26 +10,29 @@ using UltimatePong;
 
 namespace UltimatePong
 {
-    public partial class Form1 : Form
+    public partial class Launcher : Form
     {
-        public UltimatePong game;
-        public bool pressed;
+        public bool StartPressed;
+        public int playerAmount;
+        public int livesAmount;
+        public bool powerups;
 
-        public Form1(UltimatePong game)
+        public Launcher()
         {
             InitializeComponent();
-
-            pressed = false;
-            this.game = game;
+            StartPressed = false;
             PlayerAmountBox.SelectedIndex = 0;
-
         }
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            game.setGameSettings(PlayerAmountBox.SelectedIndex + 2, Convert.ToInt32(LivesAmountBox.Value), PowerupsBox.Checked);
-            pressed = true;
+            playerAmount = PlayerAmountBox.SelectedIndex + 2;
+            livesAmount = Convert.ToInt32(LivesAmountBox.Value);
+            powerups = PowerupsBox.Checked;
+
+            StartPressed = true;
             Close();
         }
+
     }
 }

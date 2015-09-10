@@ -1,6 +1,6 @@
 ﻿namespace UltimatePong
 {
-    partial class Form1
+    partial class Launcher
     {
         /// <summary>
         /// Required designer variable.

@@ -83,25 +83,19 @@ namespace UltimatePong
 
         SpriteFont font;
 
-        public UltimatePong()
+        public UltimatePong(int playerAmount, int livesAmount, bool powerups)
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = fieldSize;
             graphics.PreferredBackBufferHeight = fieldSize;
             Content.RootDirectory = "Content";
-            
-        }
 
-        public void setGameSettings(int players, int lives, bool powerups)
-        {
-            this.players = players;
-            this.lives = lives;
-            this.powerups = powerups;
+            //Printlines
             System.Console.WriteLine("players:" + players);
             System.Console.WriteLine("lives:" + lives);
             System.Console.WriteLine("powerups:" + powerups);
-        }
 
+        }
 
         protected override void Initialize()
         {

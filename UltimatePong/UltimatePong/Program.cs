@@ -16,7 +16,7 @@ namespace UltimatePong
     {
 
         private static UltimatePong game;
-        private static Form1 launcher;
+        private static Launcher launcher;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -26,16 +26,22 @@ namespace UltimatePong
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-            game = new UltimatePong();
-            launcher = new Form1(game);
-            Application.Run(launcher);
-
-            if (launcher.pressed==true)
-            game.Run();
-
+            runLauncher();
         }
-        
+
+        static void runLauncher()
+        {
+            launcher = new Launcher();
+            Application.Run(launcher);
+            if (launcher.StartPressed == true) //check if StartButton is pressed
+            {
+                game = new UltimatePong(launcher.playerAmount, launcher.livesAmount, launcher.powerups);
+                game.Run();
+                runLauncher();
+            }
+        }
+
+
     }
 #endif
 }
