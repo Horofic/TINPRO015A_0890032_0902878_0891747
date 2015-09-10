@@ -264,6 +264,35 @@ namespace UltimatePong
 
             base.Draw(gameTime);
         }
+        private Rectangle checkBallCollision()
+        {
+            if (collision)
+            {
+                return emptyRectangle;
+            }
+
+            else if (ball.Intersects(topBar))
+                return topBar;
+            else if (ball.Intersects(bottomBar))
+                return bottomBar;
+            else if (ball.Intersects(leftBar))
+                return leftBar;
+            else if (ball.Intersects(rightBar))
+                return rightBar;
+
+            else if (ball.Intersects(topBorder))
+                return topBorder;
+            else if (ball.Intersects(bottomBorder))
+                return bottomBorder;
+            else if (ball.Intersects(leftBorder))
+                return leftBorder;
+            else if (ball.Intersects(rightBorder))
+                return rightBorder;
+
+            else return emptyRectangle;
+        }
+
+
 
         protected void BorderCollision(Rectangle checkBall)
         {
