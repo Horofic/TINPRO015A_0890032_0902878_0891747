@@ -112,6 +112,8 @@ namespace UltimatePong
             rightBorderTexture = Content.Load<Texture2D>("bar.png");
             bottomBorderTexture = Content.Load<Texture2D>("bar.png");
 
+            font = Content.Load<SpriteFont>("font");
+
 
             base.Window.AllowUserResizing = false;
 
@@ -254,6 +256,8 @@ namespace UltimatePong
             spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
             spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
             spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
+            //font
+            spriteBatch.DrawString(font, "asdfasdfasdf",new Vector2(100,100), Color.White);
 
 
             spriteBatch.End();
