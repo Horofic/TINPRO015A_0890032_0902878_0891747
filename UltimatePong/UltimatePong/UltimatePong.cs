@@ -76,9 +76,9 @@ namespace UltimatePong
         int leftPlayerLives;
         int rightPlayerLives;
 
-        private int players;
-        private int lives;
-        private bool powerups;
+        public int players;
+        public int lives;
+        public bool powerups;
         
 
         SpriteFont font;

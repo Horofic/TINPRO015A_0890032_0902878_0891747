@@ -18,11 +18,14 @@ namespace UltimatePong
         public int livesAmount;
         public bool powerups;
 
-        public Launcher()
+        public Launcher(int playerAmount, int livesAmount, bool powerups)
         {
             InitializeComponent();
             StartPressed = false;
-            PlayerAmountBox.SelectedIndex = 0;
+
+            PlayerAmountBox.SelectedIndex = playerAmount - 2;
+            LivesAmountBox.Value = livesAmount;
+            PowerupsBox.Checked = powerups;
         }
 
         private void StartButton_Click(object sender, EventArgs e)

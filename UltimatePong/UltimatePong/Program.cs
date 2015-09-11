@@ -26,18 +26,22 @@ namespace UltimatePong
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            launcher = new Launcher(2,3,true); //give default values
+            Application.Run(launcher); //start launcher first time
             runLauncher();
         }
 
-        static void runLauncher()
+        static void runLauncher() //this keeps looping until launcher is closed
         {
-            launcher = null;
-            launcher = new Launcher();
-            Application.Run(launcher);
-            if (launcher.StartPressed == true) //check if StartButton is pressed
+            
+            if (launcher.StartPressed == true) //check if StartButton is pressed > start game. Else exit program.
             {
                 game = new UltimatePong(launcher.playerAmount, launcher.livesAmount, launcher.powerups);
                 game.Run();
+
+                launcher = new Launcher(launcher.playerAmount, launcher.livesAmount, launcher.powerups);
+                Application.Run(launcher);
+
                 runLauncher();
             }
         }
