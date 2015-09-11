@@ -263,7 +263,7 @@ namespace UltimatePong
             spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
             spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
             //font
-            spriteBatch.DrawString(font, "asdfasdfasdf",new Vector2(100,100), Color.White);
+            spriteBatch.DrawString(font, rightPlayerLives.ToString(),new Vector2(100,100), Color.White);
 
 
             spriteBatch.End();
