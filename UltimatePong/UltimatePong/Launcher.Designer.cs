@@ -35,6 +35,7 @@
             this.PlayerAmountText = new System.Windows.Forms.Label();
             this.LivesAmountText = new System.Windows.Forms.Label();
             this.PlayerAmountBox = new System.Windows.Forms.ComboBox();
+            this.BounceTypeBox = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).BeginInit();
             this.SuspendLayout();
@@ -63,6 +64,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.BounceTypeBox);
             this.panel1.Controls.Add(this.LivesAmountBox);
             this.panel1.Controls.Add(this.PlayerAmountText);
             this.panel1.Controls.Add(this.LivesAmountText);
@@ -125,6 +127,17 @@
             this.PlayerAmountBox.Size = new System.Drawing.Size(100, 21);
             this.PlayerAmountBox.TabIndex = 5;
             // 
+            // BounceTypeBox
+            // 
+            this.BounceTypeBox.AutoSize = true;
+            this.BounceTypeBox.Location = new System.Drawing.Point(103, 79);
+            this.BounceTypeBox.Name = "BounceTypeBox";
+            this.BounceTypeBox.Size = new System.Drawing.Size(63, 17);
+            this.BounceTypeBox.TabIndex = 9;
+            this.BounceTypeBox.Text = "Bounce";
+            this.BounceTypeBox.UseVisualStyleBackColor = true;
+//            this.BounceTypeBox.CheckedChanged += new System.EventHandler(this.BounceTypeBox_CheckedChanged);
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,5 +164,6 @@
         private System.Windows.Forms.Label LivesAmountText;
         private System.Windows.Forms.Label PlayerAmountText;
         private System.Windows.Forms.NumericUpDown LivesAmountBox;
+        private System.Windows.Forms.CheckBox BounceTypeBox;
     }
 }

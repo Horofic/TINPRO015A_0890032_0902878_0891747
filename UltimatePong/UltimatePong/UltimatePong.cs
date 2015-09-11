@@ -79,11 +79,12 @@ namespace UltimatePong
         public int players;
         public int lives;
         public bool powerups;
+        public bool bounceType;
         
 
         SpriteFont font;
 
-        public UltimatePong(int playerAmount, int livesAmount, bool powerups)
+        public UltimatePong(int playerAmount, int livesAmount, bool powerups, bool bounceType)
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = fieldSize;
@@ -93,12 +94,13 @@ namespace UltimatePong
             this.players = playerAmount;
             this.lives = livesAmount;
             this.powerups = powerups;
+            this.bounceType = bounceType;
 
             //Printlines
             System.Console.WriteLine("players:" + players);
             System.Console.WriteLine("lives:" + lives);
             System.Console.WriteLine("powerups:" + powerups);
-
+            System.Console.WriteLine("bounceType:" + bounceType);
         }
 
         protected override void Initialize()
@@ -176,6 +178,8 @@ namespace UltimatePong
 
         private void checkInput(GameTime gameTime)
         {
+
+            
             var keyBoardstate = Keyboard.GetState();
                       
 
@@ -200,9 +204,11 @@ namespace UltimatePong
 
             //Top bar controls
             if (keyBoardstate.IsKeyDown(Keys.Z))
-                if(!topBar.Intersects(leftBorder))
+            {
+                Console.WriteLine("Z");
+                if (!topBar.Intersects(leftBorder))
                     topBar.Offset(-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-
+            }
             if (keyBoardstate.IsKeyDown(Keys.X))
                 if (!topBar.Intersects(rightBorder))
                     topBar.Offset(topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
