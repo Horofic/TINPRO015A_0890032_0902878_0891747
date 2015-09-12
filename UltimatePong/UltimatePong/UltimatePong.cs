@@ -163,8 +163,7 @@ namespace UltimatePong
             topPlayerLives = bottomPlayerLives = leftPlayerLives = rightPlayerLives = lives;
 
             //powerup
-            powerup = new Powerup(spriteBatch, spriteTexture);
-
+            powerup = new Powerup(spriteBatch, spriteTexture, bottomBar);
             base.Initialize();
         }
 
@@ -179,6 +178,7 @@ namespace UltimatePong
 
             //powerup
             powerup.timer(gameTime);
+            powerup.checkCollision(ball);
 
             base.Update(gameTime);
         }
