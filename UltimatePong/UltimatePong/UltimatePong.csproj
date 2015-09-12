@@ -59,6 +59,7 @@
     <Compile Include="Launcher.Designer.cs">
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
+    <Compile Include="Powerup.cs" />
     <Compile Include="UltimatePong.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

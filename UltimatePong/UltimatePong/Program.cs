@@ -43,12 +43,6 @@ namespace UltimatePong
                 // Restart the app passing "/restart [processId]" as cmd line args
                 Application.Exit();
                 Process.Start(Application.ExecutablePath, "/restart" + Process.GetCurrentProcess().Id);
-               
-                /*
-                launcher = new Launcher(launcher.playerAmount, launcher.livesAmount, launcher.powerups,launcher.bounceType);
-                Application.Run(launcher);
-
-                runLauncher();*/
             }
         }
 

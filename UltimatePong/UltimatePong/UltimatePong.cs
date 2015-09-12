@@ -80,7 +80,8 @@ namespace UltimatePong
         public int lives;
         public bool powerups;
         public bool bounceType;
-        
+
+        Powerup powerup;
 
         SpriteFont font;
 
@@ -161,6 +162,9 @@ namespace UltimatePong
             //initialize player lives
             topPlayerLives = bottomPlayerLives = leftPlayerLives = rightPlayerLives = lives;
 
+            //powerup
+            powerup = new Powerup(spriteBatch, spriteTexture);
+
             base.Initialize();
         }
 
@@ -172,6 +176,9 @@ namespace UltimatePong
 
             // Collision detection and ball movement
             checkBallCollision(gameTime);
+
+            //powerup
+            powerup.timer(gameTime);
 
             base.Update(gameTime);
         }
@@ -205,7 +212,6 @@ namespace UltimatePong
             //Top bar controls
             if (keyBoardstate.IsKeyDown(Keys.Z))
             {
-                Console.WriteLine("Z");
                 if (!topBar.Intersects(leftBorder))
                     topBar.Offset(-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
             }
@@ -264,7 +270,9 @@ namespace UltimatePong
             spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
             //font
             spriteBatch.DrawString(font, rightPlayerLives.ToString(),new Vector2(100,100), Color.White);
-
+            
+            //powerup
+            powerup.drawPowerup();
 
             spriteBatch.End();
 
