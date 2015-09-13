@@ -18,7 +18,7 @@ namespace UltimatePong
         int aliveTimer;
         bool alive;
 
-        Color[] type;
+        Color[] Colortype;
         int powerupType;
 
         int powerupX;
@@ -28,18 +28,26 @@ namespace UltimatePong
         public String lastHitBar;
         public bool hit;
 
-        public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture)
+        GraphicsDevice GraphicsDevice;
+        bool rekt;
+        int rektColor;
+
+        public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, GraphicsDevice graphicsDevice)
         {
             this.spriteTexture = spriteTexture;
             this.spriteBatch = spriteBatch;
             gameTime = 0;
             aliveTimer = 0;
-            type = new Color[3];
-            type[0] = Color.Red;
-            type[1] = Color.Blue;
-            type[2] = Color.Green;
+            Colortype = new Color[4];
+            Colortype[0] = Color.Red;
+            Colortype[1] = Color.Blue;
+            Colortype[2] = Color.Green;
+            Colortype[3] = Color.Gold;
             powerupX = 400;
             powerupY = 400;
+            this.GraphicsDevice = graphicsDevice;
+            rekt = false;
+            rektColor = 0;
         }
 
         //Counts the second of the powerup life
@@ -56,7 +64,7 @@ namespace UltimatePong
                         Console.WriteLine("POWERUP: Alive");
                        // rngPosition();
                         powerup = new Rectangle(powerupX,powerupY, 30, 30);
-                        powerupType = new Random().Next(0, 2);
+                        powerupType = new Random().Next(0, 4); 
                         alive = true;
                         break;
                     case 6: //despawns the powerup after X seconds
@@ -74,9 +82,14 @@ namespace UltimatePong
         public void drawPowerup()
         {
             if (alive == true)
-                spriteBatch.Draw(spriteTexture, powerup, type[powerupType]);
+                spriteBatch.Draw(spriteTexture, powerup, Colortype[powerupType]);
             else
                 powerup.Offset(-100, -100);
+
+            if (rekt == true)
+                GraphicsDevice.Clear(Colortype[rektColor++]);
+            if (rektColor == 3)
+                rektColor = 0;
         }
 
         //randomize the powerup spawn position
@@ -86,7 +99,6 @@ namespace UltimatePong
             powerupY = new Random().Next(175, 625);
             if(new Random().Next(1,2)==1)
             {
-                Console.WriteLine("Reverse");
                 powerupX = 175 + (625 - powerupX);
             }
 
@@ -101,14 +113,19 @@ namespace UltimatePong
 
                 switch(powerupType)
                 {
-                    case 0 :
+                    case 0:
                         redEvent();
                         break;
-                    case 1 :
+                    case 1:
                         blueEvent();
                         break;
-                    case 2 :
+                    case 2:
                         greenEvent();
+                        break;
+                    case 3:
+                        goldEvent();
+                        break;
+                    default:
                         break;
                 }
 
@@ -146,6 +163,13 @@ namespace UltimatePong
                 bar.Height = bar.Height + 50;
             else
                 bar.Width = bar.Width + 50;
+        }
+
+        public void goldEvent()
+        {
+            Console.WriteLine("goldEvent");
+            rekt = true;
+
         }
 
         //the last hit bar gets modified according to the hit powerup
