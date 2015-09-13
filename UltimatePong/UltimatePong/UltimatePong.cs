@@ -8,6 +8,7 @@ namespace UltimatePong
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Random random = new Random();
 
         //sprites
         Texture2D spriteTexture;
@@ -43,6 +44,10 @@ namespace UltimatePong
         int ballSize;
         int ballStartPos;
         bool collision;
+        float multiplier;
+        int ballCenter;
+        float maxOffset;
+        float offset;
 
         //default bar properties
         const int barLength = 128;
@@ -107,14 +112,14 @@ namespace UltimatePong
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            //Ball texture
             spriteTexture = Content.Load<Texture2D>("ball1.png");
-            //
+            //Bar(player) textures
             topBorderTexture = Content.Load<Texture2D>("bar.png");
             leftBorderTexture = Content.Load<Texture2D>("bar.png");
             rightBorderTexture = Content.Load<Texture2D>("bar.png");
             bottomBorderTexture = Content.Load<Texture2D>("bar.png");
-
+            //Font texture
             font = Content.Load<SpriteFont>("font");
 
 
@@ -304,8 +309,10 @@ namespace UltimatePong
             spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
             spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
             //font
-            spriteBatch.DrawString(font, rightPlayerLives.ToString(),new Vector2(100,100), Color.White);
-            
+            spriteBatch.DrawString(font, topPlayerLives.ToString(),new Vector2(390, 50), Color.White);
+            spriteBatch.DrawString(font, bottomPlayerLives.ToString(), new Vector2(390, 710), Color.White);
+            spriteBatch.DrawString(font, leftPlayerLives.ToString(), new Vector2(70, 390), Color.White);
+            spriteBatch.DrawString(font, leftPlayerLives.ToString(), new Vector2(700, 390), Color.White);
             //powerup
             powerup.drawPowerup();
 
@@ -422,10 +429,7 @@ namespace UltimatePong
                 ballSpeed += ballSpeedInc;
             Console.WriteLine(ballSpeed);
             int barCenter;
-            int ballCenter;
-            float maxOffset;
-            float offset;
-            float multiplier;
+            
             switch (v)
             {
                 case "top":
@@ -564,7 +568,6 @@ namespace UltimatePong
 
                 if (topPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     topBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     topBar.Offset(-800, -800);
                 }
@@ -576,7 +579,6 @@ namespace UltimatePong
 
                 if (bottomPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     bottomBar.Offset(-800, -800);
                 }
@@ -588,7 +590,6 @@ namespace UltimatePong
 
                 if (leftPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     leftBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     leftBar.Offset(-800, -800);
                 }
@@ -597,16 +598,19 @@ namespace UltimatePong
             else if (player == rightBar)
             {
                 rightPlayerLives = rightPlayerLives - 1;
+                
 
                 if (rightPlayerLives == 0)
                 {
-                    //TODO make borders collidable
                     rightBorderTexture = Content.Load<Texture2D>("deadBar.png");
                     rightBar.Offset(-800, -800);
                 }
             }
-
+            ballSpeed = 500.0f;
+            ballYVelocity = random.Next(-1,1) * ballSpeed;
+            ballXVelocity = (float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballYVelocity * ballYVelocity));
             ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
+
         }
     }
 }

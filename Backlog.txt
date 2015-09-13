@@ -5,6 +5,7 @@ Bar > collision(bounce) , speed up
 
 -Stefan
 Score board > lives
+Boundries (DONE) > Collision (reset ball) > if no lives create wall(DONE)(make collision)
 
 -Chinji
 Power ups > all power up events
