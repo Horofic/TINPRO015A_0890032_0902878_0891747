@@ -1,11 +1,11 @@
 Wat do:
 -Terry
-Ball movement (BOUNCE)
-Bar > collision(bounce) , speed up
+Ball movement (DONE)(BOUNCE)
+Bar > collision(DONE)(bounce) , speed up(DONE)
 
 -Stefan
 Score board > lives
-Boundries (DONE) > Collision (reset ball) > if no lives create wall(DONE)(make collision)
+Boundries (DONE) > Collision (DONE)(reset ball) > if no lives create wall(DONE)(make collision)
 
 -Chinji
 Power ups > all power up events
