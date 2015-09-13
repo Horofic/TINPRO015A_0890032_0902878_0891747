@@ -38,6 +38,8 @@ namespace UltimatePong
             type[0] = Color.Red;
             type[1] = Color.Blue;
             type[2] = Color.Green;
+            powerupX = 400;
+            powerupY = 400;
         }
 
         //Counts the second of the powerup life
@@ -52,7 +54,7 @@ namespace UltimatePong
                 {
                     case 3: //spawn a powerup after 3 seconds of the previous powerup death
                         Console.WriteLine("POWERUP: Alive");
-                        rngPosition();
+                       // rngPosition();
                         powerup = new Rectangle(powerupX,powerupY, 30, 30);
                         powerupType = new Random().Next(0, 2);
                         alive = true;
@@ -147,9 +149,15 @@ namespace UltimatePong
         }
 
         //the last hit bar gets modified according to the hit powerup
-        public Rectangle updateBar()
+        public Rectangle updateBar(Rectangle bar)
         {
-            return bar;
+            //fix the position of the bar
+            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
+                this.bar.Y = bar.Y - (this.bar.Height - bar.Height) / 2;
+            else
+                this.bar.X = bar.X - (this.bar.Width - bar.Width) / 2;
+
+            return this.bar;
         }
 
         //this.bar becomes the last hit bar. The program knows which bar get the powerup

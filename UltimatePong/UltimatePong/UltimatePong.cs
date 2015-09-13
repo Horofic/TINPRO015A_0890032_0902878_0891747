@@ -195,30 +195,22 @@ namespace UltimatePong
                 powerup.setBar(leftBar,"leftBar");
             else if (ball.Intersects(rightBar))
                 powerup.setBar(rightBar,"rightBar");
-
+            
             if (powerup.hit == true)
             {
                 switch (powerup.lastHitBar)
                 {
                     case "leftBar":
-                        int LBarY = leftBar.Y; int LBarH = leftBar.Height;
-                        leftBar = powerup.updateBar();
-                        leftBar.Y = LBarY - (leftBar.Height - LBarH) / 2;
+                        leftBar = powerup.updateBar(leftBar);
                         break;
                     case "rightBar":
-                        int RBarY = rightBar.Y; int RBarH = rightBar.Height;
-                        rightBar = powerup.updateBar();
-                        rightBar.Y = RBarY - (rightBar.Height - RBarH) / 2;
+                        rightBar = powerup.updateBar(rightBar);
                         break;
                     case "topBar":
-                        int TBarX = topBar.X; int TBarW = topBar.Width;
-                        topBar = powerup.updateBar();
-                        topBar.X = TBarX - (topBar.Width - TBarW) / 2;
+                        topBar = powerup.updateBar(topBar);
                         break;
                     case "bottomBar":
-                        int BBarX = bottomBar.X; int BBarW = bottomBar.Width;
-                        bottomBar = powerup.updateBar();
-                        bottomBar.X = BBarX - (bottomBar.Width - BBarW) / 2;
+                        bottomBar = powerup.updateBar(bottomBar);
                         break;
                 }
                 powerup.hit = false;
