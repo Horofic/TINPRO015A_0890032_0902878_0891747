@@ -14,7 +14,7 @@ namespace UltimatePong
         SpriteBatch spriteBatch;
         Texture2D spriteTexture;
         public Rectangle powerup;
-        double gameTime;
+        int gameTime;
         int aliveTimer;
         bool alive;
 
@@ -44,10 +44,12 @@ namespace UltimatePong
 
         public void timer(GameTime gameTime)
         {
-            if (this.gameTime < gameTime.TotalGameTime.Seconds)
+            Console.WriteLine((int)gameTime.TotalGameTime.TotalSeconds);
+            if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds)
             {
-                this.gameTime = gameTime.TotalGameTime.Seconds;
+                this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 aliveTimer++;
+               // Console.WriteLine("aliveTimer: " + aliveTimer);
 
                 switch (aliveTimer)
                 {
@@ -81,13 +83,18 @@ namespace UltimatePong
         {
             powerupX = new Random().Next(175, 625);
             powerupY = new Random().Next(175, 625);
-            if (new Random().Next(1, 3) == 1)
+            /*if (new Random().Next(1, 3) == 1)
             {
                 powerupX = 650 - powerupX;
             }
             if (new Random().Next(1, 3) == 2)
             {
                 powerupY = 650 - powerupY;
+            }*/
+            if(new Random().Next(1,2)==1)
+            {
+                Console.WriteLine("Reverse");
+                powerupX = 175 + (625 - powerupX);
             }
 
         }
