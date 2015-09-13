@@ -38,30 +38,26 @@ namespace UltimatePong
             type[0] = Color.Red;
             type[1] = Color.Blue;
             type[2] = Color.Green;
-
-            powerupX = 400;
-            powerupY = 400;
         }
 
-
+        //Counts the second of the powerup life
         public void timer(GameTime gameTime)
         {
             if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds)
             {
                 this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 aliveTimer++;
-               // Console.WriteLine("aliveTimer: " + aliveTimer);
 
                 switch (aliveTimer)
                 {
-                    case 3:
+                    case 3: //spawn a powerup after 3 seconds of the previous powerup death
                         Console.WriteLine("POWERUP: Alive");
-                        //rngPosition();
+                        rngPosition();
                         powerup = new Rectangle(powerupX,powerupY, 30, 30);
                         powerupType = new Random().Next(0, 2);
                         alive = true;
                         break;
-                    case 6:
+                    case 6: //despawns the powerup after X seconds
                         Console.WriteLine("POWERUP: Killed");
                         aliveTimer = 0;
                         alive = false;
@@ -72,6 +68,7 @@ namespace UltimatePong
 
         }
 
+        //draws the powerup
         public void drawPowerup()
         {
             if (alive == true)
@@ -80,18 +77,11 @@ namespace UltimatePong
                 powerup.Offset(-100, -100);
         }
 
+        //randomize the powerup spawn position
         public void rngPosition()
         {
             powerupX = new Random().Next(175, 625);
             powerupY = new Random().Next(175, 625);
-            /*if (new Random().Next(1, 3) == 1)
-            {
-                powerupX = 650 - powerupX;
-            }
-            if (new Random().Next(1, 3) == 2)
-            {
-                powerupY = 650 - powerupY;
-            }*/
             if(new Random().Next(1,2)==1)
             {
                 Console.WriteLine("Reverse");
@@ -100,6 +90,7 @@ namespace UltimatePong
 
         }
 
+        //check if powerup gets hit. Execute powerup event.
         public void checkCollision(Rectangle ball)
         {
             if(ball.Intersects(powerup))
@@ -125,7 +116,8 @@ namespace UltimatePong
             }
         }
 
-        public void redEvent() //Bad for the player
+        //Bad for the player
+        public void redEvent() 
         {
             Console.WriteLine("redEvent");
             if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
@@ -134,7 +126,8 @@ namespace UltimatePong
                 bar.Width = bar.Width - 50;
         }
 
-        public void blueEvent() //Neutral
+        //Neutral
+        public void blueEvent() 
         {
             Console.WriteLine("blueEvent");
             if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
@@ -143,7 +136,8 @@ namespace UltimatePong
                 bar.Width = 128;
         }
 
-        public void greenEvent()//good for the player
+        //good for the player
+        public void greenEvent()
         {
             Console.WriteLine("greenEvent");
             if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
@@ -152,12 +146,13 @@ namespace UltimatePong
                 bar.Width = bar.Width + 50;
         }
 
-        public Rectangle executeEvent()
+        //the last hit bar gets modified according to the hit powerup
+        public Rectangle updateBar()
         {
             return bar;
         }
 
-        //this.bar becomes the last hit bar
+        //this.bar becomes the last hit bar. The program knows which bar get the powerup
         public void setBar(Rectangle bar, String lastHitBar)
         {
             this.lastHitBar = lastHitBar;

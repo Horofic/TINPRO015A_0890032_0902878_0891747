@@ -202,22 +202,22 @@ namespace UltimatePong
                 {
                     case "leftBar":
                         int LBarY = leftBar.Y; int LBarH = leftBar.Height;
-                        leftBar = powerup.executeEvent();
+                        leftBar = powerup.updateBar();
                         leftBar.Y = LBarY - (leftBar.Height - LBarH) / 2;
                         break;
                     case "rightBar":
                         int RBarY = rightBar.Y; int RBarH = rightBar.Height;
-                        rightBar = powerup.executeEvent();
+                        rightBar = powerup.updateBar();
                         rightBar.Y = RBarY - (rightBar.Height - RBarH) / 2;
                         break;
                     case "topBar":
                         int TBarX = topBar.X; int TBarW = topBar.Width;
-                        topBar = powerup.executeEvent();
+                        topBar = powerup.updateBar();
                         topBar.X = TBarX - (topBar.Width - TBarW) / 2;
                         break;
                     case "bottomBar":
                         int BBarX = bottomBar.X; int BBarW = bottomBar.Width;
-                        bottomBar = powerup.executeEvent();
+                        bottomBar = powerup.updateBar();
                         bottomBar.X = BBarX - (bottomBar.Width - BBarW) / 2;
                         break;
                 }
