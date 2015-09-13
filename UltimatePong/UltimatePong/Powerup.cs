@@ -24,10 +24,11 @@ namespace UltimatePong
         int powerupX;
         int powerupY;
 
-        UltimatePong ulti;
-        Rectangle botbar;
+        Rectangle bar;
+        public String lastHitBar;
+        public bool hit;
 
-        public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, Rectangle botbar)
+        public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture)
         {
             this.spriteTexture = spriteTexture;
             this.spriteBatch = spriteBatch;
@@ -38,13 +39,13 @@ namespace UltimatePong
             type[1] = Color.Blue;
             type[2] = Color.Green;
 
-            this.botbar = botbar;
+            powerupX = 400;
+            powerupY = 400;
         }
 
 
         public void timer(GameTime gameTime)
         {
-            Console.WriteLine((int)gameTime.TotalGameTime.TotalSeconds);
             if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds)
             {
                 this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
@@ -55,7 +56,7 @@ namespace UltimatePong
                 {
                     case 3:
                         Console.WriteLine("POWERUP: Alive");
-                        rngPosition();
+                        //rngPosition();
                         powerup = new Rectangle(powerupX,powerupY, 30, 30);
                         powerupType = new Random().Next(0, 2);
                         alive = true;
@@ -120,30 +121,47 @@ namespace UltimatePong
 
                 alive = false;
                 aliveTimer = 0;
+                hit = true;
             }
         }
 
         public void redEvent() //Bad for the player
         {
             Console.WriteLine("redEvent");
-
-            botbar.Width /= 2;
+            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
+                bar.Height = bar.Height-50;
+            else
+                bar.Width = bar.Width - 50;
         }
 
         public void blueEvent() //Neutral
         {
             Console.WriteLine("blueEvent");
-
-            botbar.Width /= 2;
-
-
+            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
+                bar.Height = 128;
+            else
+                bar.Width = 128;
         }
 
         public void greenEvent()//good for the player
         {
             Console.WriteLine("greenEvent");
-            botbar.Width *= 2;
+            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
+                bar.Height = bar.Height + 50;
+            else
+                bar.Width = bar.Width + 50;
+        }
 
+        public Rectangle executeEvent()
+        {
+            return bar;
+        }
+
+        //this.bar becomes the last hit bar
+        public void setBar(Rectangle bar, String lastHitBar)
+        {
+            this.lastHitBar = lastHitBar;
+            this.bar = bar;
         }
 
     }

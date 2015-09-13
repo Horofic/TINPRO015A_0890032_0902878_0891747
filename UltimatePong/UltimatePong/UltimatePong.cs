@@ -163,7 +163,7 @@ namespace UltimatePong
             topPlayerLives = bottomPlayerLives = leftPlayerLives = rightPlayerLives = lives;
 
             //powerup
-            powerup = new Powerup(spriteBatch, spriteTexture, bottomBar);
+            powerup = new Powerup(spriteBatch, spriteTexture);
             base.Initialize();
         }
 
@@ -177,10 +177,53 @@ namespace UltimatePong
             checkBallCollision(gameTime);
 
             //powerup
+            powerupEvents(gameTime);
+
+            base.Update(gameTime);
+        }
+
+        public void powerupEvents(GameTime gameTime)
+        {
             powerup.timer(gameTime);
             powerup.checkCollision(ball);
 
-            base.Update(gameTime);
+            if (ball.Intersects(topBar))
+                powerup.setBar(topBar,"topBar");
+            else if (ball.Intersects(bottomBar))
+                powerup.setBar(bottomBar,"bottomBar");
+            else if (ball.Intersects(leftBar))
+                powerup.setBar(leftBar,"leftBar");
+            else if (ball.Intersects(rightBar))
+                powerup.setBar(rightBar,"rightBar");
+
+            if (powerup.hit == true)
+            {
+                switch (powerup.lastHitBar)
+                {
+                    case "leftBar":
+                        int LBarY = leftBar.Y; int LBarH = leftBar.Height;
+                        leftBar = powerup.executeEvent();
+                        leftBar.Y = LBarY - (leftBar.Height - LBarH) / 2;
+                        break;
+                    case "rightBar":
+                        int RBarY = rightBar.Y; int RBarH = rightBar.Height;
+                        rightBar = powerup.executeEvent();
+                        rightBar.Y = RBarY - (rightBar.Height - RBarH) / 2;
+                        break;
+                    case "topBar":
+                        int TBarX = topBar.X; int TBarW = topBar.Width;
+                        topBar = powerup.executeEvent();
+                        topBar.X = TBarX - (topBar.Width - TBarW) / 2;
+                        break;
+                    case "bottomBar":
+                        int BBarX = bottomBar.X; int BBarW = bottomBar.Width;
+                        bottomBar = powerup.executeEvent();
+                        bottomBar.X = BBarX - (bottomBar.Width - BBarW) / 2;
+                        break;
+                }
+                powerup.hit = false;
+            }
+
         }
 
         private void checkInput(GameTime gameTime)
