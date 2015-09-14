@@ -62,7 +62,7 @@ namespace UltimatePong
                 {
                     case 3: //spawn a powerup after 3 seconds of the previous powerup death
                         Console.WriteLine("POWERUP: Alive");
-                       // rngPosition();
+                        rngPosition();
                         powerup = new Rectangle(powerupX,powerupY, 30, 30);
                         powerupType = new Random().Next(0, 4); 
                         alive = true;

@@ -8,5 +8,5 @@ Score board > lives
 Boundries (DONE) > Collision (DONE)(reset ball) > if no lives create wall(DONE)(make collision)
 
 -Chinji
-Power ups > all power up events
+Power ups(DONE) > all power up events
 Start screen (DONE) / Victory screen
