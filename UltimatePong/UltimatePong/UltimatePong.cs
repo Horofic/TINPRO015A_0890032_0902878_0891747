@@ -314,7 +314,7 @@ namespace UltimatePong
             spriteBatch.DrawString(font, topPlayerLives.ToString(),new Vector2(390, 50), Color.White);
             spriteBatch.DrawString(font, bottomPlayerLives.ToString(), new Vector2(390, 710), Color.White);
             spriteBatch.DrawString(font, leftPlayerLives.ToString(), new Vector2(70, 390), Color.White);
-            spriteBatch.DrawString(font, leftPlayerLives.ToString(), new Vector2(700, 390), Color.White);
+            spriteBatch.DrawString(font, rightPlayerLives.ToString(), new Vector2(700, 390), Color.White);
             //powerup
             powerup.drawPowerup();
 
