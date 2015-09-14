@@ -217,6 +217,8 @@ namespace UltimatePong
                     case "bottomBar":
                         bottomBar = powerup.updateBar(bottomBar);
                         break;
+                    default:
+                        break;
                 }
                 powerup.hit = false;
             }
