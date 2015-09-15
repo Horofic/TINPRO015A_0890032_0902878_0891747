@@ -29,7 +29,6 @@ namespace UltimatePong
         Rectangle leftBorder;
         Rectangle rightBorder;
 
-        
         //playing field properties
         const int fieldSize = 800;
         const int barToBorderDist = 16;
@@ -54,31 +53,30 @@ namespace UltimatePong
         const int barWidth = 8;
         const float barSpeed = 400;
         const float bounceCorrection = 0.6f;
-       
-
 
         //top bar properties
         float topBarSpeed;
         int topBarLength;
         int topBarSpeedMultiplier = 1;
-
+        Keys[] topBarKeys = new Keys[3];
 
         //bottom bar properties
         float bottomBarSpeed;
         int bottomBarLength;
         int bottomBarSpeedMultiplier = 1;
-
+        Keys[] bottomBarKeys = new Keys[3];
 
         //left bar properties
         float leftBarSpeed;
         int leftBarLength;
         int leftBarSpeedMultiplier = 1;
-
+        Keys[] leftBarKeys = new Keys[3];
 
         //right bar properties
         float rightBarSpeed;
         int rightBarLength;
         int rightBarSpeedMultiplier = 1;
+        Keys[] rightBarKeys = new Keys[3];
 
         //Player lives
         int topPlayerLives;
@@ -131,7 +129,22 @@ namespace UltimatePong
 
             base.Window.AllowUserResizing = false;
 
+            //initialize bar controls
+            topBarKeys[0] = Keys.T; //LEFT
+            topBarKeys[1] = Keys.U; //RIGHT
+            topBarKeys[2] = Keys.Y; //BOOST
 
+            bottomBarKeys[0] = Keys.V; //LEFT
+            bottomBarKeys[1] = Keys.N; //RIGHT
+            bottomBarKeys[2] = Keys.B; //BOOST
+
+            leftBarKeys[0] = Keys.A; //UP
+            leftBarKeys[1] = Keys.D; //DOWN
+            leftBarKeys[2] = Keys.S; //BOOST
+
+            rightBarKeys[0] = Keys.L; //UP
+            rightBarKeys[1] = Keys.J; //DOWN
+            rightBarKeys[2] = Keys.K; //BOOST
 
             //initialize bar properties
             topBarSpeed = barSpeed;
@@ -248,77 +261,76 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
-      
+
             //ball controls, just for testing
-           /* if (Keyboard.GetState().IsKeyDown(Keys.W))
-                ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            /* if (Keyboard.GetState().IsKeyDown(Keys.W))
+                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.S))
-                ball.Offset(0, ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+             if (Keyboard.GetState().IsKeyDown(Keys.S))
+                 ball.Offset(0, ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.A))
-                ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+             if (Keyboard.GetState().IsKeyDown(Keys.A))
+                 ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);*/
-
+             if (Keyboard.GetState().IsKeyDown(Keys.D))
+                 ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);*/
 
 
             //Top bar controls
-            if (keyBoardstate.IsKeyDown(Keys.X))
+            if (keyBoardstate.IsKeyDown(topBarKeys[2]))
                 topBarSpeedMultiplier = 3;
             else
                 topBarSpeedMultiplier = 0;
 
-            if (keyBoardstate.IsKeyDown(Keys.Z))
+            if (keyBoardstate.IsKeyDown(topBarKeys[0]))
                 if (!topBar.Intersects(leftBorder))
                     topBar.Offset((-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - topBarSpeedMultiplier, 0);
           
-            if (keyBoardstate.IsKeyDown(Keys.C))
+            if (keyBoardstate.IsKeyDown(topBarKeys[1]))
                 if (!topBar.Intersects(rightBorder))
                     topBar.Offset((topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + topBarSpeedMultiplier, 0);
 
 
 
             //Bottom bar controlszcc n
-            if (keyBoardstate.IsKeyDown(Keys.B))
+            if (keyBoardstate.IsKeyDown(bottomBarKeys[2]))
                 bottomBarSpeedMultiplier = 3;
             else
                 bottomBarSpeedMultiplier = 0;
 
-            if (keyBoardstate.IsKeyDown(Keys.V))
+            if (keyBoardstate.IsKeyDown(bottomBarKeys[0]))
                 if (!bottomBar.Intersects(leftBorder))
                     bottomBar.Offset((-bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - bottomBarSpeedMultiplier, 0);
 
-            if (keyBoardstate.IsKeyDown(Keys.N))
+            if (keyBoardstate.IsKeyDown(bottomBarKeys[1]))
                 if (!bottomBar.Intersects(rightBorder))
                     bottomBar.Offset((bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + bottomBarSpeedMultiplier, 0);
 
             //Left bar controls
-            if (keyBoardstate.IsKeyDown(Keys.S))
+            if (keyBoardstate.IsKeyDown(leftBarKeys[2]))
                 leftBarSpeedMultiplier = 3;
             else
                 leftBarSpeedMultiplier = 0;
 
-            if (keyBoardstate.IsKeyDown(Keys.A))
+            if (keyBoardstate.IsKeyDown(leftBarKeys[0]))
                 if (!leftBar.Intersects(topBorder))
                     leftBar.Offset(0, (-leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - leftBarSpeedMultiplier);
 
-            if (keyBoardstate.IsKeyDown(Keys.D))
+            if (keyBoardstate.IsKeyDown(leftBarKeys[1]))
                 if (!leftBar.Intersects(bottomBorder))
                     leftBar.Offset(0, (leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + leftBarSpeedMultiplier);
 
             //Right bar controls
-            if (keyBoardstate.IsKeyDown(Keys.L))
+            if (keyBoardstate.IsKeyDown(rightBarKeys[2]))
                 rightBarSpeedMultiplier = 3;
             else
                 rightBarSpeedMultiplier = 0;
 
-            if (keyBoardstate.IsKeyDown(Keys.K))
+            if (keyBoardstate.IsKeyDown(rightBarKeys[0]))
                 if (!rightBar.Intersects(topBorder))
                     rightBar.Offset(0, (-rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - rightBarSpeedMultiplier);
 
-            if (keyBoardstate.IsKeyDown(Keys.OemSemicolon))
+            if (keyBoardstate.IsKeyDown(rightBarKeys[1]))
                 if (!rightBar.Intersects(bottomBorder))
                     rightBar.Offset(0, (rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + rightBarSpeedMultiplier);
 
