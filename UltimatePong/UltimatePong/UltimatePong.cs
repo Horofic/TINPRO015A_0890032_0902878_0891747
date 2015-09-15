@@ -250,7 +250,7 @@ namespace UltimatePong
 
       
             //ball controls, just for testing
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+           /* if (Keyboard.GetState().IsKeyDown(Keys.W))
                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
 
             if (Keyboard.GetState().IsKeyDown(Keys.S))
@@ -260,27 +260,27 @@ namespace UltimatePong
                 ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
             if (Keyboard.GetState().IsKeyDown(Keys.D))
-                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);*/
 
 
 
             //Top bar controls
-            if (keyBoardstate.IsKeyDown(Keys.Y))
+            if (keyBoardstate.IsKeyDown(Keys.X))
                 topBarSpeedMultiplier = 2;
             else
                 topBarSpeedMultiplier = 1;
 
-            if (keyBoardstate.IsKeyDown(Keys.T))
+            if (keyBoardstate.IsKeyDown(Keys.Z))
                 if (!topBar.Intersects(leftBorder))
                     topBar.Offset(-topBarSpeed * topBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
           
-            if (keyBoardstate.IsKeyDown(Keys.U))
+            if (keyBoardstate.IsKeyDown(Keys.C))
                 if (!topBar.Intersects(rightBorder))
                     topBar.Offset(topBarSpeed * topBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
 
 
 
-            //Bottom bar controls
+            //Bottom bar controlszcc n
             if (keyBoardstate.IsKeyDown(Keys.B))
                 bottomBarSpeedMultiplier = 2;
             else
