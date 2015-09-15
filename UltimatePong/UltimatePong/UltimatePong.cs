@@ -266,61 +266,61 @@ namespace UltimatePong
 
             //Top bar controls
             if (keyBoardstate.IsKeyDown(Keys.X))
-                topBarSpeedMultiplier = 2;
+                topBarSpeedMultiplier = 3;
             else
-                topBarSpeedMultiplier = 1;
+                topBarSpeedMultiplier = 0;
 
             if (keyBoardstate.IsKeyDown(Keys.Z))
                 if (!topBar.Intersects(leftBorder))
-                    topBar.Offset(-topBarSpeed * topBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                    topBar.Offset((-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - topBarSpeedMultiplier, 0);
           
             if (keyBoardstate.IsKeyDown(Keys.C))
                 if (!topBar.Intersects(rightBorder))
-                    topBar.Offset(topBarSpeed * topBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                    topBar.Offset((topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + topBarSpeedMultiplier, 0);
 
 
 
             //Bottom bar controlszcc n
             if (keyBoardstate.IsKeyDown(Keys.B))
-                bottomBarSpeedMultiplier = 2;
+                bottomBarSpeedMultiplier = 3;
             else
-                bottomBarSpeedMultiplier = 1;
+                bottomBarSpeedMultiplier = 0;
 
             if (keyBoardstate.IsKeyDown(Keys.V))
                 if (!bottomBar.Intersects(leftBorder))
-                    bottomBar.Offset(-bottomBarSpeed * bottomBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                    bottomBar.Offset((-bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - bottomBarSpeedMultiplier, 0);
 
             if (keyBoardstate.IsKeyDown(Keys.N))
                 if (!bottomBar.Intersects(rightBorder))
-                    bottomBar.Offset(bottomBarSpeed * bottomBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
+                    bottomBar.Offset((bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + bottomBarSpeedMultiplier, 0);
 
             //Left bar controls
             if (keyBoardstate.IsKeyDown(Keys.S))
-                leftBarSpeedMultiplier = 2;
+                leftBarSpeedMultiplier = 3;
             else
-                leftBarSpeedMultiplier = 1;
+                leftBarSpeedMultiplier = 0;
 
             if (keyBoardstate.IsKeyDown(Keys.A))
                 if (!leftBar.Intersects(topBorder))
-                    leftBar.Offset(0, -leftBarSpeed * leftBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    leftBar.Offset(0, (-leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - leftBarSpeedMultiplier);
 
             if (keyBoardstate.IsKeyDown(Keys.D))
                 if (!leftBar.Intersects(bottomBorder))
-                    leftBar.Offset(0, leftBarSpeed * leftBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    leftBar.Offset(0, (leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + leftBarSpeedMultiplier);
 
             //Right bar controls
             if (keyBoardstate.IsKeyDown(Keys.L))
-                rightBarSpeedMultiplier = 2;
+                rightBarSpeedMultiplier = 3;
             else
-                rightBarSpeedMultiplier = 1;
+                rightBarSpeedMultiplier = 0;
 
             if (keyBoardstate.IsKeyDown(Keys.K))
                 if (!rightBar.Intersects(topBorder))
-                    rightBar.Offset(0, -rightBarSpeed * rightBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    rightBar.Offset(0, (-rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - rightBarSpeedMultiplier);
 
             if (keyBoardstate.IsKeyDown(Keys.OemSemicolon))
                 if (!rightBar.Intersects(bottomBorder))
-                    rightBar.Offset(0, rightBarSpeed * rightBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds);
+                    rightBar.Offset(0, (rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + rightBarSpeedMultiplier);
 
         }
 
