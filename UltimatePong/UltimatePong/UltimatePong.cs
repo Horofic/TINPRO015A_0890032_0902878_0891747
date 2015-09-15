@@ -273,7 +273,7 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Z))
                 if (!topBar.Intersects(leftBorder))
                     topBar.Offset(-topBarSpeed * topBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-          cz
+          
             if (keyBoardstate.IsKeyDown(Keys.C))
                 if (!topBar.Intersects(rightBorder))
                     topBar.Offset(topBarSpeed * topBarSpeedMultiplier * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
@@ -310,9 +310,9 @@ namespace UltimatePong
 
             //Right bar controls
             if (keyBoardstate.IsKeyDown(Keys.L))
-                leftBarSpeedMultiplier = 2;
+                rightBarSpeedMultiplier = 2;
             else
-                leftBarSpeedMultiplier = 1;
+                rightBarSpeedMultiplier = 1;
 
             if (keyBoardstate.IsKeyDown(Keys.K))
                 if (!rightBar.Intersects(topBorder))
