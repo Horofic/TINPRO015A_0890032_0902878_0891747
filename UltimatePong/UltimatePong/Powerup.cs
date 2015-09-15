@@ -17,7 +17,8 @@ namespace UltimatePong
         int gameTime;
         int aliveTimer;
         bool alive;
-        Random rnd;
+        Random randomNumber;
+        int randomDeathTime;
 
         Color[] Colortype;
         int powerupType;
@@ -31,7 +32,7 @@ namespace UltimatePong
 
         GraphicsDevice GraphicsDevice;
 
-        public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, GraphicsDevice graphicsDevice)
+        public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, GraphicsDevice graphicsDevice,int  offset)
         {
             this.spriteTexture = spriteTexture;
             this.spriteBatch = spriteBatch;
@@ -48,7 +49,7 @@ namespace UltimatePong
 
             powerupX = 400;
             powerupY = 400;
-            rnd = new Random(DateTime.Now.Millisecond);
+            randomNumber = new Random(DateTime.Now.Millisecond+offset);
 
         }
 
@@ -59,22 +60,27 @@ namespace UltimatePong
             {
                 this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 aliveTimer++;
-
+              
                 switch (aliveTimer)
                 {
-                    case 3: //spawn a powerup after 3 seconds of the previous powerup death
+                    case 1: //spawn a powerup after 3 seconds of the previous powerup death
                         Console.WriteLine("POWERUP: Alive");
                         rngPosition();
                         powerup = new Rectangle(powerupX,powerupY, 30, 30);
                         powerupType = new Random().Next(0, 3); 
                         alive = true;
                         break;
-                    case 6: //despawns the powerup after X seconds
+                    case 3: //despawns the powerup after X seconds
                         Console.WriteLine("POWERUP: Killed");
-                        aliveTimer = 0;
+                        randomDeathTime = randomNumber.Next(1, 4);
                         alive = false;
                         break;
+                    default:
+                        break;
                 }
+                if (aliveTimer == 3 + randomDeathTime)
+                    aliveTimer = 0;
+
             }
         }
 
@@ -90,9 +96,9 @@ namespace UltimatePong
         //randomize the powerup spawn position
         public void rngPosition()
         {
-            powerupX = rnd.Next(175, 625);
-            powerupY = rnd.Next(175, 625);
-            if(rnd.Next(1,3)==1)
+            powerupX = randomNumber.Next(175, 625);
+            powerupY = randomNumber.Next(175, 625);
+            if(randomNumber.Next(1,3)==1)
             {
                 powerupX = 175 + (625 - powerupX);
                 powerupY = 175 + (625 - powerupY);
@@ -146,9 +152,9 @@ namespace UltimatePong
         {
             Console.WriteLine("blueEvent");
             if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
-                bar.Height = 128;
+                bar.Height = bar.Height + 50;
             else
-                bar.Width = 128;
+                bar.Width = bar.Width + 50;
         }
 
         //good for the player

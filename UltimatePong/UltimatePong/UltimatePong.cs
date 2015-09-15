@@ -86,7 +86,8 @@ namespace UltimatePong
         public bool powerups;
         public bool bounceType;
 
-        Powerup powerup;
+        Powerup[] powerup;
+        int powerupCount;
 
         SpriteFont font;
 
@@ -168,7 +169,11 @@ namespace UltimatePong
             topPlayerLives = bottomPlayerLives = leftPlayerLives = rightPlayerLives = lives;
 
             //powerup
-            powerup = new Powerup(spriteBatch, spriteTexture, GraphicsDevice);
+            powerup = new Powerup[3];
+            powerupCount = 0;
+            for(int i=0;i<powerup.Length;i++)
+            powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);
+
             base.Initialize();
         }
 
@@ -182,6 +187,7 @@ namespace UltimatePong
             checkBallCollision(gameTime);
 
             //powerup
+            
             powerupEvents(gameTime);
 
             base.Update(gameTime);
@@ -189,40 +195,43 @@ namespace UltimatePong
 
         public void powerupEvents(GameTime gameTime)
         {
-            powerup.timer(gameTime);
-            powerup.checkCollision(ball);
+            if (powerupCount > 2)
+                powerupCount = 0;
+
+            powerup[powerupCount].timer(gameTime);
+            powerup[powerupCount].checkCollision(ball);
 
             if (ball.Intersects(topBar))
-                powerup.setBar(topBar,"topBar");
+                powerup[powerupCount].setBar(topBar,"topBar");
             else if (ball.Intersects(bottomBar))
-                powerup.setBar(bottomBar,"bottomBar");
+                powerup[powerupCount].setBar(bottomBar,"bottomBar");
             else if (ball.Intersects(leftBar))
-                powerup.setBar(leftBar,"leftBar");
+                powerup[powerupCount].setBar(leftBar,"leftBar");
             else if (ball.Intersects(rightBar))
-                powerup.setBar(rightBar,"rightBar");
+                powerup[powerupCount].setBar(rightBar,"rightBar");
             
-            if (powerup.hit == true)
+            if (powerup[powerupCount].hit == true)
             {
-                switch (powerup.lastHitBar)
+                switch (powerup[powerupCount].lastHitBar)
                 {
                     case "leftBar":
-                        leftBar = powerup.updateBar(leftBar);
+                        leftBar = powerup[powerupCount].updateBar(leftBar);
                         break;
                     case "rightBar":
-                        rightBar = powerup.updateBar(rightBar);
+                        rightBar = powerup[powerupCount].updateBar(rightBar);
                         break;
                     case "topBar":
-                        topBar = powerup.updateBar(topBar);
+                        topBar = powerup[powerupCount].updateBar(topBar);
                         break;
                     case "bottomBar":
-                        bottomBar = powerup.updateBar(bottomBar);
+                        bottomBar = powerup[powerupCount].updateBar(bottomBar);
                         break;
                     default:
                         break;
                 }
-                powerup.hit = false;
+                powerup[powerupCount].hit = false;
             }
-
+            powerupCount++;
         }
 
         private void checkInput(GameTime gameTime)
@@ -316,6 +325,7 @@ namespace UltimatePong
             spriteBatch.DrawString(font, leftPlayerLives.ToString(), new Vector2(70, 390), Color.White);
             spriteBatch.DrawString(font, rightPlayerLives.ToString(), new Vector2(700, 390), Color.White);
             //powerup
+            foreach(Powerup powerup in powerup)
             powerup.drawPowerup();
 
             spriteBatch.End();
