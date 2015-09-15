@@ -54,26 +54,31 @@ namespace UltimatePong
         const int barWidth = 8;
         const float barSpeed = 400;
         const float bounceCorrection = 0.6f;
+       
 
 
         //top bar properties
         float topBarSpeed;
         int topBarLength;
+        double topBarSpeedMultiplier = 1;
 
 
         //bottom bar properties
         float bottomBarSpeed;
         int bottomBarLength;
+        double bottomBarSpeedMultiplier = 1;
 
 
         //left bar properties
         float leftBarSpeed;
         int leftBarLength;
+        double leftSpeedMultiplier = 1;
 
 
         //right bar properties
         float rightBarSpeed;
         int rightBarLength;
+        double rightSpeedMultiplier = 1;
 
         //Player lives
         int topPlayerLives;
@@ -137,7 +142,7 @@ namespace UltimatePong
             topBarLength = barLength;
             bottomBarLength = barLength;
             leftBarLength = barLength;
-            rightBarSpeed = barLength;
+            rightBarLength= barLength;
 
 
             //initialize ball

@@ -60,7 +60,7 @@ namespace UltimatePong
             {
                 this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 aliveTimer++;
-              
+
                 switch (aliveTimer)
                 {
                     case 1: //spawn a powerup after 3 seconds of the previous powerup death
