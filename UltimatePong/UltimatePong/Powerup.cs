@@ -69,7 +69,7 @@ namespace UltimatePong
                         powerupType = new Random().Next(0, 3); 
                         alive = true;
                         break;
-                    case 6: //despawns the powerup after X seconds
+                    case 13: //despawns the powerup after X seconds
                         Console.WriteLine("POWERUP: Killed");
                         aliveTimer = 0;
                         alive = false;
