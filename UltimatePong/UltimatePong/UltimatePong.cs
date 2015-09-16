@@ -232,25 +232,25 @@ namespace UltimatePong
                 switch (powerup[powerupCount].lastHitBar)
                 {
                     case "leftBar":
-                        if(powerup[powerupCount].powerupType < 4)
+                        if(powerup[powerupCount].powerupType < 3)
                             leftBar = powerup[powerupCount].updateBar(leftBar);
                         else if(powerup[powerupCount].powerupType==4)
                             leftBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "rightBar":
-                        if (powerup[powerupCount].powerupType < 4)
+                        if (powerup[powerupCount].powerupType < 3)
                             rightBar = powerup[powerupCount].updateBar(rightBar);
                         else if (powerup[powerupCount].powerupType == 4)
                             rightBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "topBar":
-                        if (powerup[powerupCount].powerupType < 4)
+                        if (powerup[powerupCount].powerupType < 3)
                             topBar = powerup[powerupCount].updateBar(topBar);
                         else if (powerup[powerupCount].powerupType == 4)
                             topBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "bottomBar":
-                        if (powerup[powerupCount].powerupType < 4)
+                        if (powerup[powerupCount].powerupType < 3)
                             bottomBar = powerup[powerupCount].updateBar(bottomBar);
                         else if (powerup[powerupCount].powerupType == 4)
                             bottomBarKeys = powerup[powerupCount].updateKeys();
