@@ -171,7 +171,7 @@ namespace UltimatePong
             lastHitBar = "ballEvent";
         }
 
-        //Special power
+        //+1 life
         public void goldEvent()
         {
             Console.WriteLine("goldEvent");
