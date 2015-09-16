@@ -14,6 +14,7 @@ namespace UltimatePong
         SpriteBatch spriteBatch;
         Texture2D spriteTexture;
         public Rectangle powerup;
+        bool enable;
         int gameTime;
         int aliveTimer;
         bool alive;
@@ -36,6 +37,7 @@ namespace UltimatePong
 
         public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, GraphicsDevice graphicsDevice,int  offset)
         {
+            enable = true;
             this.spriteTexture = spriteTexture;
             this.spriteBatch = spriteBatch;
             this.GraphicsDevice = graphicsDevice;
@@ -45,8 +47,8 @@ namespace UltimatePong
 
             Colortype = new Color[5];
             Colortype[0] = Color.Red;
-            Colortype[1] = Color.Blue;
-            Colortype[2] = Color.Green;
+            Colortype[1] = Color.Green;
+            Colortype[2] = Color.Blue;
             Colortype[3] = Color.Gold;
             Colortype[4] = Color.Purple;
 
@@ -60,7 +62,7 @@ namespace UltimatePong
         //Counts the second of the powerup life
         public void timer(GameTime gameTime)
         {
-            if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds)
+            if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds&&enable)
             {
                 this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 aliveTimer++;
@@ -73,14 +75,14 @@ namespace UltimatePong
                         powerupType = new Random().Next(0, Colortype.Length); 
                         alive = true;
                         break;
-                    case 3: //despawns the powerup after X seconds
-                        randomDeathTime = randomNumber.Next(1, 4);
+                    case 8: //despawns the powerup after X seconds
+                        randomDeathTime = 8 + randomNumber.Next(1, 4);
                         alive = false;
                         break;
                     default:
                         break;
                 }
-                if (aliveTimer == 3 + randomDeathTime)
+                if (aliveTimer == randomDeathTime)
                     aliveTimer = 0;
 
             }
@@ -89,7 +91,7 @@ namespace UltimatePong
         //draws the powerup
         public void drawPowerup()
         {
-            if (alive == true)
+            if (alive == true&&enable)
                 spriteBatch.Draw(spriteTexture, powerup, Colortype[powerupType]);
             else
                 powerup.Offset(-100, -100);
@@ -121,10 +123,10 @@ namespace UltimatePong
                         redEvent();
                         break;
                     case 1:
-                        blueEvent();
+                        greenEvent();
                         break;
                     case 2:
-                        greenEvent();
+                        blueEvent();
                         break;
                     case 3:
                         goldEvent();
@@ -152,16 +154,6 @@ namespace UltimatePong
                 bar.Width = bar.Width - 50;
         }
 
-        //Neutral
-        public void blueEvent() 
-        {
-            Console.WriteLine("blueEvent");
-            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
-                bar.Height = bar.Height + 50;
-            else
-                bar.Width = bar.Width + 50;
-        }
-
         //good for the player
         public void greenEvent()
         {
@@ -172,6 +164,13 @@ namespace UltimatePong
                 bar.Width = bar.Width + 50;
         }
 
+        //Change ball direction to random value
+        public void blueEvent()
+        {
+            Console.WriteLine("blueEvent");
+            lastHitBar = "ballEvent";
+        }
+
         //Special power
         public void goldEvent()
         {
@@ -179,6 +178,7 @@ namespace UltimatePong
 
         }
 
+        //inverted controls
         public void purpleEvent()
         {
             Console.WriteLine("purpleEvent");
@@ -214,5 +214,9 @@ namespace UltimatePong
             this.keys = keys;
         }
 
+        public void disable()
+        {
+            enable = false;
+        }
     }
 }

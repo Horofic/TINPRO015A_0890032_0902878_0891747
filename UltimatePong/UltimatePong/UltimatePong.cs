@@ -47,6 +47,7 @@ namespace UltimatePong
         int ballCenter;
         float maxOffset;
         float offset;
+        int lastSpawnedDirection;
 
         //default bar properties
         const int barLength = 128;
@@ -232,28 +233,32 @@ namespace UltimatePong
                 switch (powerup[powerupCount].lastHitBar)
                 {
                     case "leftBar":
-                        if(powerup[powerupCount].powerupType < 3)
+                        if(powerup[powerupCount].powerupType < 2)
                             leftBar = powerup[powerupCount].updateBar(leftBar);
                         else if(powerup[powerupCount].powerupType==4)
                             leftBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "rightBar":
-                        if (powerup[powerupCount].powerupType < 3)
+                        if (powerup[powerupCount].powerupType < 2)
                             rightBar = powerup[powerupCount].updateBar(rightBar);
                         else if (powerup[powerupCount].powerupType == 4)
                             rightBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "topBar":
-                        if (powerup[powerupCount].powerupType < 3)
+                        if (powerup[powerupCount].powerupType < 2)
                             topBar = powerup[powerupCount].updateBar(topBar);
                         else if (powerup[powerupCount].powerupType == 4)
                             topBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "bottomBar":
-                        if (powerup[powerupCount].powerupType < 3)
+                        if (powerup[powerupCount].powerupType < 2)
                             bottomBar = powerup[powerupCount].updateBar(bottomBar);
                         else if (powerup[powerupCount].powerupType == 4)
                             bottomBarKeys = powerup[powerupCount].updateKeys();
+                        break;
+                    case "ballEvent":
+                        ballXVelocity *= -1;
+                        ballYVelocity *= -1; 
                         break;
                     default:
                         break;
@@ -394,12 +399,16 @@ namespace UltimatePong
             //barcollition
             if (ball.Intersects(topBar))
                 barBounce("top");
+               
             else if (ball.Intersects(bottomBar))
                 barBounce("bottom");
+                
             else if (ball.Intersects(leftBar))
                 barBounce("left");
+                
             else if (ball.Intersects(rightBar))
                 barBounce("right");
+                
 
 
             // check if ball touches the border if does that player loses a life and ball is reset
@@ -669,10 +678,95 @@ namespace UltimatePong
                 }
             }
             ballSpeed = 500.0f;
-            ballYVelocity = random.Next(-1,1) * ballSpeed;
-            ballXVelocity = (float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballYVelocity * ballYVelocity));
             ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
-
+            spawnBallDirection();
         }
+
+        private void spawnBallDirection()
+        {
+            int[] playersLives = new int[4];
+            playersLives[0] = topPlayerLives;
+            playersLives[1] = bottomPlayerLives;
+            playersLives[2] = leftPlayerLives;
+            playersLives[3] = rightPlayerLives;
+
+            int[] playersAlive = new int[4];
+            int chosenPlayer = 0;
+            int death = 0;
+
+            for (int i = 0; i < playersLives.Length; i++)
+            {
+                if (playersLives[i] > 0)
+                {
+                    playersAlive[i] = i;
+                }
+                else
+                {
+                    playersAlive[i] = -1;
+                    death++;
+                }
+            }
+
+            foreach(int p in playersAlive)
+            Console.WriteLine(p);
+            int hussle1;
+            int hussle2;
+            int temp;
+
+            for(int i=0;i<2;i++)
+            {
+                hussle1 = random.Next(1, 4);
+                hussle2 = random.Next(1, 4);
+                temp = playersAlive[hussle1];
+                playersAlive[hussle1] = playersAlive[hussle2];
+                playersAlive[hussle2] = temp;
+            }
+            
+            foreach(int player in playersAlive)
+            {
+                if (player != -1 && player != lastSpawnedDirection)
+                {
+                    chosenPlayer = player;
+                    break;
+                }
+            }
+
+            if (death == 3)
+                chosenPlayer = 4;
+
+            switch (chosenPlayer)
+            {
+                case 0:
+                    lastSpawnedDirection = 0;
+                    ballXVelocity = 0;
+                    ballYVelocity = -ballSpeed;
+                    break;
+                case 1:
+                    lastSpawnedDirection = 1;
+                    ballXVelocity = 0;
+                    ballYVelocity = ballSpeed;
+                    break;
+                case 2:
+                    lastSpawnedDirection = 2;
+                    ballXVelocity = -ballSpeed;
+                    ballYVelocity = 0;
+                    break;
+                case 3:
+                    lastSpawnedDirection = 3;
+                    ballXVelocity = ballSpeed;
+                    ballYVelocity = 0;
+                    break;
+                case 4:
+                    ballXVelocity = ballYVelocity = ballSpeed = 0;
+                    foreach (Powerup powerup in powerup)
+                        powerup.disable();
+                    break;
+                default:
+                    break;
+            }
+
+            
+        }
+
     }
 }
