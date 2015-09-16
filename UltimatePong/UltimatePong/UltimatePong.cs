@@ -219,35 +219,50 @@ namespace UltimatePong
             powerup[powerupCount].checkCollision(ball);
 
             if (ball.Intersects(topBar))
-                powerup[powerupCount].setBar(topBar,"topBar");
+                powerup[powerupCount].setBar(topBar,"topBar",topBarKeys);
             else if (ball.Intersects(bottomBar))
-                powerup[powerupCount].setBar(bottomBar,"bottomBar");
+                powerup[powerupCount].setBar(bottomBar,"bottomBar",bottomBarKeys);
             else if (ball.Intersects(leftBar))
-                powerup[powerupCount].setBar(leftBar,"leftBar");
+                powerup[powerupCount].setBar(leftBar,"leftBar",leftBarKeys);
             else if (ball.Intersects(rightBar))
-                powerup[powerupCount].setBar(rightBar,"rightBar");
+                powerup[powerupCount].setBar(rightBar,"rightBar",rightBarKeys);
             
             if (powerup[powerupCount].hit == true)
             {
                 switch (powerup[powerupCount].lastHitBar)
                 {
                     case "leftBar":
-                        leftBar = powerup[powerupCount].updateBar(leftBar);
+                        if(powerup[powerupCount].powerupType < 4)
+                            leftBar = powerup[powerupCount].updateBar(leftBar);
+                        else if(powerup[powerupCount].powerupType==4)
+                            leftBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "rightBar":
-                        rightBar = powerup[powerupCount].updateBar(rightBar);
+                        if (powerup[powerupCount].powerupType < 4)
+                            rightBar = powerup[powerupCount].updateBar(rightBar);
+                        else if (powerup[powerupCount].powerupType == 4)
+                            rightBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "topBar":
-                        topBar = powerup[powerupCount].updateBar(topBar);
+                        if (powerup[powerupCount].powerupType < 4)
+                            topBar = powerup[powerupCount].updateBar(topBar);
+                        else if (powerup[powerupCount].powerupType == 4)
+                            topBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "bottomBar":
-                        bottomBar = powerup[powerupCount].updateBar(bottomBar);
+                        if (powerup[powerupCount].powerupType < 4)
+                            bottomBar = powerup[powerupCount].updateBar(bottomBar);
+                        else if (powerup[powerupCount].powerupType == 4)
+                            bottomBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     default:
                         break;
                 }
                 powerup[powerupCount].hit = false;
             }
+
+
+
             powerupCount++;
         }
 

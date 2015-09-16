@@ -21,7 +21,7 @@ namespace UltimatePong
         int randomDeathTime;
 
         Color[] Colortype;
-        int powerupType;
+        public int powerupType;
 
         int powerupX;
         int powerupY;
@@ -29,6 +29,8 @@ namespace UltimatePong
         Rectangle bar;
         public String lastHitBar;
         public bool hit;
+
+        Keys[] keys;
 
         GraphicsDevice GraphicsDevice;
 
@@ -41,14 +43,16 @@ namespace UltimatePong
             gameTime = 0;
             aliveTimer = 0;
 
-            Colortype = new Color[4];
+            Colortype = new Color[5];
             Colortype[0] = Color.Red;
             Colortype[1] = Color.Blue;
             Colortype[2] = Color.Green;
             Colortype[3] = Color.Gold;
+            Colortype[4] = Color.Purple;
 
             powerupX = 400;
             powerupY = 400;
+            
             randomNumber = new Random(DateTime.Now.Millisecond+offset);
 
         }
@@ -64,14 +68,12 @@ namespace UltimatePong
                 switch (aliveTimer)
                 {
                     case 1: //spawn a powerup after 3 seconds of the previous powerup death
-                        Console.WriteLine("POWERUP: Alive");
                         rngPosition();
                         powerup = new Rectangle(powerupX,powerupY, 30, 30);
-                        powerupType = new Random().Next(0, 3); 
+                        powerupType = new Random().Next(0, Colortype.Length); 
                         alive = true;
                         break;
                     case 3: //despawns the powerup after X seconds
-                        Console.WriteLine("POWERUP: Killed");
                         randomDeathTime = randomNumber.Next(1, 4);
                         alive = false;
                         break;
@@ -127,6 +129,9 @@ namespace UltimatePong
                     case 3:
                         goldEvent();
                         break;
+                    case 4:
+                        purpleEvent();
+                        break;
                     default:
                         break;
                 }
@@ -174,6 +179,15 @@ namespace UltimatePong
 
         }
 
+        public void purpleEvent()
+        {
+            Console.WriteLine("purpleEvent");
+            Keys temp = keys[0];
+            keys[0] = keys[1];
+            keys[1] = temp;
+            
+        }
+
         //the last hit bar gets modified according to the hit powerup
         public Rectangle updateBar(Rectangle bar)
         {
@@ -186,11 +200,18 @@ namespace UltimatePong
             return this.bar;
         }
 
-        //this.bar becomes the last hit bar. The program knows which bar get the powerup
-        public void setBar(Rectangle bar, String lastHitBar)
+        //purpleEvent : Invert keys
+        public Keys[] updateKeys()
+        {
+            return this.keys;
+        }
+
+        //this.bar becomes the last hit bar. The program knows which bar hit the ball most recent.
+        public void setBar(Rectangle bar, String lastHitBar,Keys[] keys)
         {
             this.lastHitBar = lastHitBar;
             this.bar = bar;
+            this.keys = keys;
         }
 
     }
