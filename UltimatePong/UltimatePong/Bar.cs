@@ -15,29 +15,31 @@ namespace UltimatePong
         SpriteBatch spriteBatch;
 
         //Bar properties
-        Rectangle bar;
-        Texture2D barTexture;
+        public Rectangle bar;
+        public Texture2D barTexture;
 
-        public int barSpeed;
-        public int barLenght;
+        public int barSpeed = 400;
+        public int barLength;
         public int barWidth;
 
         //Start position bar
-        public int barXPos;
-        public int barYPos;
-
-        int barStartPos;
+        int barXPos;
+        int barYPos;
 
 
-        public Bar(SpriteBatch spriteBatch,Texture2D barTexture, int barXPos)
+
+        public Bar(SpriteBatch spriteBatch,Texture2D barTexture, int barXPos, int barYPos, int barLength, int barWidth)
         {
+            
             this.barTexture = barTexture;
             this.spriteBatch = spriteBatch;
+            this.barLength = barLength;
+            this.barWidth = barWidth;
 
             this.barXPos = barXPos;
-            //this.barYPos = barYPos;
+            this.barYPos = barYPos;
             
-            bar = new Rectangle(barStartPos,16,barLenght,barWidth);
+            bar = new Rectangle(barXPos,barYPos, barLength, barWidth);
         }
 
 
@@ -48,7 +50,7 @@ namespace UltimatePong
 
 
         public void DrawBar()
-        { 
+        {
             spriteBatch.Draw(barTexture,bar,Color.White);
         }
 

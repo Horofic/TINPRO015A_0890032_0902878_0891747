@@ -17,6 +17,7 @@ namespace UltimatePong
         Texture2D leftBorderTexture;
         Texture2D rightBorderTexture;
         Texture2D bottomBorderTexture;
+        Texture2D barTexture;
 
         Rectangle ball;
         Rectangle topBar;
@@ -131,11 +132,14 @@ namespace UltimatePong
             
             //Ball texture
             spriteTexture = Content.Load<Texture2D>("ball1.png");
-            //Bar(player) textures
+            //Border textures
             topBorderTexture = Content.Load<Texture2D>("bar.png");
             leftBorderTexture = Content.Load<Texture2D>("bar.png");
             rightBorderTexture = Content.Load<Texture2D>("bar.png");
             bottomBorderTexture = Content.Load<Texture2D>("bar.png");
+            //Player Textures
+            barTexture = Content.Load<Texture2D>("ball1.png");
+
             //Font texture
             font = Content.Load<SpriteFont>("font");
 
@@ -165,7 +169,7 @@ namespace UltimatePong
             leftBarSpeed = barSpeed;
             rightBarSpeed = barSpeed;
 
-            topBarLength = barLength;
+           topBarLength = barLength;
             bottomBarLength = barLength;
             leftBarLength = barLength;
             rightBarLength= barLength;
@@ -181,6 +185,7 @@ namespace UltimatePong
             collision = false;
             ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
+
 
 
             //initialize bars
@@ -207,7 +212,9 @@ namespace UltimatePong
 
             gameTime = 0;
             //Test
-            tesbar = new Bar(spriteBatch,spriteTexture, barStartPos);
+             tesbar = new Bar(spriteBatch,barTexture,400,400,288,8);
+           
+            
 
             base.Initialize();
         }
@@ -219,7 +226,6 @@ namespace UltimatePong
             checkInput(gameTime);
             // Collision detection and ball movement
             checkBallCollision(gameTime);
-
             //powerup
             
             powerupEvents(gameTime);
@@ -339,7 +345,7 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
-            tesbar.DrawBar();
+           
             //ball
             spriteBatch.Draw(spriteTexture, ball, Color.White);
             //bars
@@ -347,6 +353,7 @@ namespace UltimatePong
             spriteBatch.Draw(spriteTexture, bottomBar, Color.White);
             spriteBatch.Draw(spriteTexture, leftBar, Color.White);
             spriteBatch.Draw(spriteTexture, rightBar, Color.White);
+            tesbar.DrawBar();
             //borders
             spriteBatch.Draw(topBorderTexture, topBorder, Color.White);
             spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
