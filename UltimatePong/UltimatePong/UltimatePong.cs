@@ -48,6 +48,11 @@ namespace UltimatePong
         float maxOffset;
         float offset;
         int lastSpawnedDirection;
+        bool pause;
+        //pause
+        int pauseTimer;
+        int gameTime;
+
 
         //default bar properties
         const int barLength = 128;
@@ -193,6 +198,8 @@ namespace UltimatePong
             for(int i=0;i<powerup.Length;i++)
             powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);
 
+            gameTime = 0;
+
             base.Initialize();
         }
 
@@ -207,7 +214,8 @@ namespace UltimatePong
             //powerup
             
             powerupEvents(gameTime);
-
+            if(pause)
+                pauseBall(gameTime);
             base.Update(gameTime);
         }
 
@@ -276,9 +284,6 @@ namespace UltimatePong
                 }
                 powerup[powerupCount].hit = false;
             }
-
-
-
             powerupCount++;
         }
 
@@ -688,9 +693,34 @@ namespace UltimatePong
                     rightBar.Offset(-800, -800);
                 }
             }
-            ballSpeed = 500.0f;
+           // ballSpeed = 500.0f;
             ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
-            spawnBallDirection();
+            pause = true;
+            
+
+        }
+
+        public void pauseBall(GameTime gameTime)
+        {
+            Console.WriteLine("PAUSE!");
+            ballXVelocity = ballYVelocity = ballSpeed = 0;
+            if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds)
+            {
+                this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
+                pauseTimer++;
+                switch(pauseTimer)
+                {
+                    case 2:
+                        ballXVelocity = ballYVelocity = ballSpeed = 500;
+                        pauseTimer = 0;
+                        pause = false;
+                        spawnBallDirection();
+
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         private void spawnBallDirection()
