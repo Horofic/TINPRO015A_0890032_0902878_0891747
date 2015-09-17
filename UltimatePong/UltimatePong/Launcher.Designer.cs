@@ -31,11 +31,11 @@
             this.StartButton = new System.Windows.Forms.Button();
             this.PowerupsBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.BounceTypeBox = new System.Windows.Forms.CheckBox();
             this.LivesAmountBox = new System.Windows.Forms.NumericUpDown();
             this.PlayerAmountText = new System.Windows.Forms.Label();
             this.LivesAmountText = new System.Windows.Forms.Label();
             this.PlayerAmountBox = new System.Windows.Forms.ComboBox();
-            this.BounceTypeBox = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).BeginInit();
             this.SuspendLayout();
@@ -74,6 +74,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(226, 144);
             this.panel1.TabIndex = 3;
+            // 
+            // BounceTypeBox
+            // 
+            this.BounceTypeBox.AutoSize = true;
+            this.BounceTypeBox.Location = new System.Drawing.Point(103, 79);
+            this.BounceTypeBox.Name = "BounceTypeBox";
+            this.BounceTypeBox.Size = new System.Drawing.Size(99, 17);
+            this.BounceTypeBox.TabIndex = 9;
+            this.BounceTypeBox.Text = "Classic Bounce";
+            this.BounceTypeBox.UseVisualStyleBackColor = true;
             // 
             // LivesAmountBox
             // 
@@ -126,17 +136,6 @@
             this.PlayerAmountBox.Name = "PlayerAmountBox";
             this.PlayerAmountBox.Size = new System.Drawing.Size(100, 21);
             this.PlayerAmountBox.TabIndex = 5;
-            // 
-            // BounceTypeBox
-            // 
-            this.BounceTypeBox.AutoSize = true;
-            this.BounceTypeBox.Location = new System.Drawing.Point(103, 79);
-            this.BounceTypeBox.Name = "BounceTypeBox";
-            this.BounceTypeBox.Size = new System.Drawing.Size(63, 17);
-            this.BounceTypeBox.TabIndex = 9;
-            this.BounceTypeBox.Text = "Bounce";
-            this.BounceTypeBox.UseVisualStyleBackColor = true;
-//            this.BounceTypeBox.CheckedChanged += new System.EventHandler(this.BounceTypeBox_CheckedChanged);
             // 
             // Launcher
             // 

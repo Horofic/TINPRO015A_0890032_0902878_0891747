@@ -15,7 +15,6 @@ namespace UltimatePong
         Texture2D spriteTexture;
         public Rectangle powerup;
         bool enable;
-        int gameTime;
         int aliveTimer;
         bool alive;
         Random randomNumber;
@@ -27,13 +26,9 @@ namespace UltimatePong
         int powerupX;
         int powerupY;
 
-        Rectangle bar;
         public int lastHitBar;
-        private bool hit;
 
         int difference = 50;
-
-        Keys[] keys;
 
         GraphicsDevice GraphicsDevice;
         Timer timer;
@@ -46,7 +41,6 @@ namespace UltimatePong
             this.spriteBatch = spriteBatch;
             this.GraphicsDevice = graphicsDevice;
 
-            gameTime = 0;
             aliveTimer = 0;
 
             Colortype = new Color[5];
@@ -56,11 +50,12 @@ namespace UltimatePong
             Colortype[3] = Color.Gold;
             Colortype[4] = Color.Purple;
 
-            powerupX = 400;
-            powerupY = 400;
+            //test variables
+            //powerupX = 400;
+            //powerupY = 400;
+            powerupType = 2;
             
             randomNumber = new Random(DateTime.Now.Millisecond+offset);
-
         }
 
         //Counts the second of the powerup life
@@ -95,15 +90,6 @@ namespace UltimatePong
             
         }
 
-        //draws the powerup
-        public void drawPowerup()
-        {
-            if (alive == true&&enable)
-                spriteBatch.Draw(spriteTexture, powerup, Colortype[powerupType]);
-            else
-                powerup.Offset(-100, -100);
-        }
-
         //randomize the powerup spawn position
         public void rngPosition()
         {
@@ -116,14 +102,22 @@ namespace UltimatePong
             }
         }
 
-        //check if powerup gets hit. Execute powerup event.
-        public void checkCollision(ref Rectangle ball,ref Bar[] bar)
+        //draws the powerup
+        public void drawPowerup()
         {
-            if (ball.Intersects(powerup))
-                hit = true;
-            if(hit)
+            if (alive == true && enable)
+                spriteBatch.Draw(spriteTexture, powerup, Colortype[powerupType]);
+            else
+                powerup.Offset(-100, -100);
+        }
+
+        //check if powerup gets hit. Execute powerup event.
+        public void checkCollision(ref Rectangle ball,ref Bar[] bar, int lastHitBar,ref int[] playerlives, ref float ballXVelocity,ref  float ballYVelocity)
+        {
+            if(ball.Intersects(powerup)&&alive&&this.lastHitBar>=0)
             {
                 Console.WriteLine("Powerup got hit");
+                this.lastHitBar = lastHitBar;
 
                 switch(powerupType)
                 {
@@ -134,13 +128,13 @@ namespace UltimatePong
                         greenEvent(ref bar[lastHitBar]);
                         break;
                     case 2:
-                        blueEvent();
+                        blueEvent(ref ballXVelocity,ref ballYVelocity);
                         break;
                     case 3:
-                        goldEvent();
+                        goldEvent(ref playerlives[lastHitBar]);
                         break;
                     case 4:
-                        purpleEvent();
+                        purpleEvent(ref bar[lastHitBar]);
                         break;
                     default:
                         break;
@@ -149,7 +143,6 @@ namespace UltimatePong
                 alive = false;
                 aliveTimer = 0;
                 timer.reset();
-                hit = false;
             }
         }
 
@@ -159,10 +152,9 @@ namespace UltimatePong
             Console.WriteLine("redEvent");
             bar.barLength -= difference;
             if (lastHitBar > 1)
-                bar.bar.Y = bar.bar.Y - (difference / 2);
+                bar.bar.Offset(0, (difference / 2));
             else
-                bar.bar.X = bar.bar.X - (difference / 2);
-
+                bar.bar.Offset((difference / 2), 0);
         }
 
         //good for the player
@@ -171,49 +163,49 @@ namespace UltimatePong
             Console.WriteLine("greenEvent");
             bar.barLength += difference;
             if (lastHitBar > 1)
-                bar.bar.Y = bar.bar.Y - (difference / 2);
+                bar.bar.Offset(0, -(difference / 2));
             else
-                bar.bar.X = bar.bar.X - (difference / 2);
-
+                bar.bar.Offset(-(difference / 2), 0);
         }
 
         //Change ball direction to random value
-        public void blueEvent()
+        public void blueEvent(ref float ballXVelocity, ref float ballYVelocity)
         {
             Console.WriteLine("blueEvent");
-            /*int randomVelocity = randomNumber.Next(0, 3);
+            int randomVelocity = randomNumber.Next(0, 3);
+            if(ballXVelocity==0)
+            {
+                ballXVelocity += 200;
+            }
+            else if (ballYVelocity == 0)
+            {
+                ballYVelocity += 200;
+            }
             if (randomVelocity == 0 || randomVelocity == 2)
                 ballXVelocity *= -1;
             if (randomVelocity == 1 || randomVelocity == 2)
-                ballYVelocity *= -1;*/
+                ballYVelocity *= -1;
         }
 
         //+1 life
-        public void goldEvent()
+        public void goldEvent(ref int playerlife)
         {
             Console.WriteLine("goldEvent");
-
+            playerlife++;
         }
 
         //inverted controls
-        public void purpleEvent()
+        public void purpleEvent(ref Bar bar)
         {
             Console.WriteLine("purpleEvent");
-            /*Keys temp = keys[0];
-            keys[0] = keys[1];
-            keys[1] = temp;*/
-            
+            Keys temp = bar.controls[0];
+            bar.controls[0] = bar.controls[1];
+            bar.controls[1] = temp;
         }
 
-        //purpleEvent: Invert keys
-       /* public Keys[] updateKeys()
+        public void disabled(bool disable)
         {
-            return this.keys;
-        }*/
-
-        public void disable()
-        {
-            enable = false;
+            enable = !disable;
         }
     }
 }

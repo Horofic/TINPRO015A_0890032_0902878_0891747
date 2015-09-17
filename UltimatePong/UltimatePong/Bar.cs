@@ -23,7 +23,7 @@ namespace UltimatePong
         public int barWidth = 8;
         String barType;
         //Controls of the bar(player)
-        Keys[] controls;
+        public Keys[] controls;
         int barSpeedMultiplier;
         //Start position bar
         int barXPos;
@@ -31,7 +31,7 @@ namespace UltimatePong
 
 
 
-        public Bar(SpriteBatch spriteBatch,Texture2D barTexture, int barXPos, int barYPos, Keys[] controls, String barType)
+        public Bar(SpriteBatch spriteBatch,Texture2D barTexture, int barXPos, int barYPos,  Keys[] controls, String barType)
         {
             
             this.barTexture = barTexture;
@@ -49,13 +49,6 @@ namespace UltimatePong
             barLength = 128;
             bar = new Rectangle(barXPos,barYPos, barLength, barWidth);
         }
-
-
-
-
-
-
-
 
         public void DrawBar()
         {
