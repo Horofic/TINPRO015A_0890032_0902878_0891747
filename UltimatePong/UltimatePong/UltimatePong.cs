@@ -234,65 +234,17 @@ namespace UltimatePong
                 powerupCount = 0;
 
             powerup[powerupCount].startTimer(gameTime);
-            powerup[powerupCount].checkCollision(ball);
-
-            if (ball.Intersects(topBar))
-                powerup[powerupCount].setBar(topBar,"topBar",topBarKeys);
-            else if (ball.Intersects(bottomBar))
-                powerup[powerupCount].setBar( bottomBar,"bottomBar", bottomBarKeys);
-            else if (ball.Intersects(leftBar))
-                powerup[powerupCount].setBar(leftBar,"leftBar",leftBarKeys);
-            else if (ball.Intersects(rightBar))
-                powerup[powerupCount].setBar(rightBar,"rightBar",rightBarKeys);
             
-            if (powerup[powerupCount].hit == true)
-            {
-                switch (powerup[powerupCount].lastHitBar)
-                {
-                    case "leftBar":
-                        if (powerup[powerupCount].powerupType < 2)
-                            leftBar = powerup[powerupCount].updateBar(leftBar);
-                        else if (powerup[powerupCount].powerupType == 3 && leftPlayerLives != 0)
-                            leftPlayerLives += 1;
-                        else if (powerup[powerupCount].powerupType == 4)
-                            leftBarKeys = powerup[powerupCount].updateKeys();
-                        break;
-                    case "rightBar":
-                        if (powerup[powerupCount].powerupType < 2)
-                            rightBar = powerup[powerupCount].updateBar(rightBar);
-                        else if (powerup[powerupCount].powerupType == 3 && rightPlayerLives != 0)
-                            rightPlayerLives += 1;
-                        else if (powerup[powerupCount].powerupType == 4)
-                            rightBarKeys = powerup[powerupCount].updateKeys();
-                        break;
-                    case "topBar":
-                        if (powerup[powerupCount].powerupType < 2)
-                            topBar = powerup[powerupCount].updateBar(topBar);
-                        else if (powerup[powerupCount].powerupType == 3 && topPlayerLives != 0)
-                            topPlayerLives += 1;
-                        else if (powerup[powerupCount].powerupType == 4)
-                            topBarKeys = powerup[powerupCount].updateKeys();
-                        break;
-                    case "bottomBar":
-                        if (powerup[powerupCount].powerupType < 2)
-                            bottomBar = powerup[powerupCount].updateBar(bottomBar);
-                        else if (powerup[powerupCount].powerupType == 3 && bottomPlayerLives != 0)
-                            bottomPlayerLives += 1;
-                        else if (powerup[powerupCount].powerupType == 4)
-                            bottomBarKeys = powerup[powerupCount].updateKeys();
-                        break;
-                    case "ballEvent":
-                        int randomVelocity = random.Next(0, 3); 
-                        if (randomVelocity== 0 || randomVelocity == 2)
-                            ballXVelocity *= -1;
-                        if (randomVelocity == 1 || randomVelocity == 2)
-                            ballYVelocity *= -1; 
-                        break;
-                    default:
-                        break;
-                }
-                powerup[powerupCount].hit = false;
-            }
+            if (ball.Intersects(topBar))
+                powerup[powerupCount].lastHitBar = "topBar";
+            else if (ball.Intersects(bottomBar))
+                powerup[powerupCount].lastHitBar = "bottomBar";
+            else if (ball.Intersects(leftBar))
+                powerup[powerupCount].lastHitBar = "leftBar";
+            else if (ball.Intersects(rightBar))
+                powerup[powerupCount].lastHitBar = "rightBar";
+            powerup[powerupCount].checkCollision(ref ball,ref topBar,ref bottomBar,ref leftBar,ref rightBar);
+
             powerupCount++;
         }
 
