@@ -114,11 +114,10 @@ namespace UltimatePong
                 powerupX = 175 + (625 - powerupX);
                 powerupY = 175 + (625 - powerupY);
             }
-
         }
 
         //check if powerup gets hit. Execute powerup event.
-        public void checkCollision(ref Rectangle ball,ref Rectangle topBar, ref Rectangle bottomBar, ref Rectangle leftBar, ref Rectangle rightBar)
+        public void checkCollision(ref Rectangle ball,ref Rectangle[] bar)
         {
             if (ball.Intersects(powerup))
                 hit = true;
@@ -129,10 +128,10 @@ namespace UltimatePong
                 switch(powerupType)
                 {
                     case 0:
-                        redEvent(ref topBar, ref bottomBar, ref leftBar, ref rightBar);
+                        redEvent(ref playerBars);
                         break;
                     case 1:
-                        greenEvent(ref topBar, ref bottomBar, ref leftBar, ref rightBar);
+                        greenEvent(ref playerBars);
                         break;
                     case 2:
                         blueEvent();

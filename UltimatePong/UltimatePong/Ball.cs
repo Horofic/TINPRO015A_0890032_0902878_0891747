@@ -24,14 +24,13 @@ namespace UltimatePong
         public float ballSpeedInc;
         public float bounceCorrection;
         public bool classicBounce;
-
+        public float ballXVelocity;
+        public float ballYVelocity;
 
 
         //local use
 
         int ballStartPos;
-        float ballXVelocity;
-        float ballYVelocity;
         bool collision;
         bool active;
         Rectangle ball;
@@ -203,7 +202,7 @@ namespace UltimatePong
         }
 
 
-        private void simpleBounce(int i)
+        public void simpleBounce(int i)
         {
             switch (i)
             {
