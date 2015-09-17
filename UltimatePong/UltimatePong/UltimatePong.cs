@@ -100,6 +100,9 @@ namespace UltimatePong
 
         SpriteFont font;
 
+        //Test
+        Bar tesbar;
+
         public UltimatePong(int playerAmount, int livesAmount, bool powerups, bool bounceType)
         {
             graphics = new GraphicsDeviceManager(this);
@@ -121,7 +124,11 @@ namespace UltimatePong
 
         protected override void Initialize()
         {
+
+           
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            
             //Ball texture
             spriteTexture = Content.Load<Texture2D>("ball1.png");
             //Bar(player) textures
@@ -199,6 +206,8 @@ namespace UltimatePong
             powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);
 
             gameTime = 0;
+            //Test
+            tesbar = new Bar(spriteBatch,spriteTexture, barStartPos);
 
             base.Initialize();
         }
@@ -378,6 +387,7 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
+            tesbar.DrawBar();
             //ball
             spriteBatch.Draw(spriteTexture, ball, Color.White);
             //bars

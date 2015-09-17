@@ -53,6 +53,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Bar.cs" />
     <Compile Include="Launcher.cs">
       <SubType>Form</SubType>
     </Compile>
