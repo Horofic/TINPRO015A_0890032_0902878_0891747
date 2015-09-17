@@ -21,10 +21,35 @@ namespace UltimatePong
         {
             savedGameTime = 0;
             elapsedTime = 0;
+        }
+
+        public void startTimer()
+        {
             done = false;
         }
 
-        //run this method continuosly to run the timer 
+        public void stopTimer()
+        {
+            done = true;
+        }
+
+        //run this method continuosly to run the timer
+        //runtimer with a given set time 
+        public bool runTimer(GameTime gameTime, int time)
+        {
+            if (savedGameTime < (int)gameTime.TotalGameTime.TotalSeconds && done == false)
+            {
+                savedGameTime = (int)gameTime.TotalGameTime.TotalSeconds;
+                elapsedTime++;
+            }
+            if (elapsedTime >= time)
+            {
+                done = true;
+            }
+            return done;
+        }
+
+        //runtimer without a set time
         public void runTimer(GameTime gameTime)
         {
             if (savedGameTime < (int)gameTime.TotalGameTime.TotalSeconds && done == false)
@@ -57,7 +82,21 @@ namespace UltimatePong
             done = false;
         }
 
+        //set current time
+        public void setTime(GameTime gameTime)
+        {
+            savedGameTime = (int)gameTime.TotalGameTime.Seconds;
+            done = false;
+        }
 
-        
+        //get true when given time is met. else false
+        public bool getTimeDone(GameTime gameTime, int time)
+        {
+            if ((int)gameTime.TotalGameTime.Seconds - savedGameTime >= time)
+                return true;
+            else
+                return false;
+        }
+
     }
 }

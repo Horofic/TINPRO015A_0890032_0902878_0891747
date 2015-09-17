@@ -40,7 +40,7 @@ namespace UltimatePong
 
         public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, GraphicsDevice graphicsDevice,int  offset)
         {
-            timer = new Timer(10);
+            timer = new Timer();
             enable = true;
             this.spriteTexture = spriteTexture;
             this.spriteBatch = spriteBatch;
