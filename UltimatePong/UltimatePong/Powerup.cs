@@ -14,7 +14,7 @@ namespace UltimatePong
         SpriteBatch spriteBatch;
         Texture2D spriteTexture;
         public Rectangle powerup;
-        bool enable;
+        bool disable;
         int aliveTimer;
         bool alive;
         Random randomNumber;
@@ -36,7 +36,7 @@ namespace UltimatePong
         public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, GraphicsDevice graphicsDevice,int  offset)
         {
             timer = new Timer();
-            enable = true;
+            disable = false;
             this.spriteTexture = spriteTexture;
             this.spriteBatch = spriteBatch;
             this.GraphicsDevice = graphicsDevice;
@@ -61,6 +61,7 @@ namespace UltimatePong
         //Counts the second of the powerup life
         public void startTimer(GameTime gameTime)
         {
+            if(!disable)
             timer.runTimer(gameTime);
             if (aliveTimer < timer.getElapsedTime())
             {
@@ -105,7 +106,7 @@ namespace UltimatePong
         //draws the powerup
         public void drawPowerup()
         {
-            if (alive == true && enable)
+            if (alive == true && !disable)
                 spriteBatch.Draw(spriteTexture, powerup, Colortype[powerupType]);
             else
                 powerup.Offset(-100, -100);
@@ -150,6 +151,7 @@ namespace UltimatePong
         public void redEvent(ref Bar bar) 
         {
             Console.WriteLine("redEvent");
+            if(bar.barLength-50>0)
             bar.barLength -= difference;
             if (lastHitBar > 1)
                 bar.bar.Offset(0, (difference / 2));
@@ -161,7 +163,8 @@ namespace UltimatePong
         public void greenEvent(ref Bar bar)
         {
             Console.WriteLine("greenEvent");
-            bar.barLength += difference;
+            if (bar.barLength - 50 > 0)
+                bar.barLength += difference;
             if (lastHitBar > 1)
                 bar.bar.Offset(0, -(difference / 2));
             else
@@ -203,9 +206,11 @@ namespace UltimatePong
             bar.controls[1] = temp;
         }
 
-        public void disabled(bool disable)
+        public void disabled(bool disabled)
         {
-            enable = !disable;
+            timer.reset();
+            aliveTimer = 0;
+            disable = disabled;
         }
     }
 }

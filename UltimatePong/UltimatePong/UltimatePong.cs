@@ -8,7 +8,7 @@ namespace UltimatePong
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Random random = new Random();
+        Random random = new Random(DateTime.Now.Millisecond+ DateTime.Now.Second);
 
         //sprites
         Texture2D spriteTexture;
@@ -182,6 +182,7 @@ namespace UltimatePong
 
             gameTime = 0;
             setPlayersAmount();
+            spawnBallDirection();
 
             base.Initialize();
         }
@@ -367,8 +368,6 @@ namespace UltimatePong
             }
         }
 
-       
-
         private void barBounce(string v)
         {
             if(ballSpeed<ballSpeedLimit)
@@ -509,7 +508,7 @@ namespace UltimatePong
             if(player == playerBars[0].bar)
             {
                 playerLives[0] -= 1;
-
+                lastSpawnedDirection = 0;
                 if (playerLives[0] == 0)
                 {
                     topBorderTexture = Content.Load<Texture2D>("deadBar.png");
@@ -520,7 +519,7 @@ namespace UltimatePong
            else if (player == playerBars[1].bar)
             {
                 playerLives[1] -= 1;
-
+                lastSpawnedDirection = 1;
                 if (playerLives[1] == 0)
                 {
                     bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
@@ -531,7 +530,7 @@ namespace UltimatePong
             else if (player == playerBars[2].bar)
             {
                 playerLives[2] -= 1;
-
+                lastSpawnedDirection = 2;
                 if (playerLives[2] == 0)
                 {
                     leftBorderTexture = Content.Load<Texture2D>("deadBar.png");
@@ -542,8 +541,7 @@ namespace UltimatePong
             else if (player == playerBars[3].bar)
             {
                 playerLives[3] -= 1;
-
-
+                lastSpawnedDirection = 3;
                 if (playerLives[3] == 0)
                 {
                     rightBorderTexture = Content.Load<Texture2D>("deadBar.png");
@@ -565,12 +563,17 @@ namespace UltimatePong
                 pauseTimer++;
                 switch(pauseTimer)
                 {
+                    case 1:
+                        foreach (Powerup powerup in powerup)
+                            powerup.disabled(true);
+                        break;
                     case 3:
                         ballXVelocity = ballYVelocity = ballSpeed = 500;
                         pauseTimer = 0;
                         pause = false;
+                        
                         spawnBallDirection();
-
+                        
                         break;
                     default:
                         break;
@@ -603,10 +606,10 @@ namespace UltimatePong
             int hussle2;
             int temp;
 
-            for(int i=0;i<2;i++)
+            for(int i=0;i<3;i++)
             {
-                hussle1 = random.Next(1, 4);
-                hussle2 = random.Next(1, 4);
+                hussle1 = random.Next(0, 4);
+                hussle2 = random.Next(0, 4);
                 temp = playersAlive[hussle1];
                 playersAlive[hussle1] = playersAlive[hussle2];
                 playersAlive[hussle2] = temp;
@@ -621,7 +624,7 @@ namespace UltimatePong
                 }
             }
 
-            if (death == 3)
+            if (death==3)
                 chosenPlayer = 4;
 
             switch (chosenPlayer)
@@ -654,6 +657,9 @@ namespace UltimatePong
                 default:
                     break;
             }
+            if(chosenPlayer!=4)
+                foreach (Powerup powerup in powerup)
+                    powerup.disabled(false);
         }
     }
 }
