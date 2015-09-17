@@ -222,15 +222,15 @@ namespace UltimatePong
 
             powerup[powerupCount].startTimer(gameTime);
             
-            if (ball.Intersects(topBar))
+            if (ball.Intersects(playerBars[0].bar))
                 powerup[powerupCount].lastHitBar = "topBar";
-            else if (ball.Intersects(bottomBar))
+            else if (ball.Intersects(playerBars[1].bar))
                 powerup[powerupCount].lastHitBar = "bottomBar";
-            else if (ball.Intersects(leftBar))
+            else if (ball.Intersects(playerBars[2].bar))
                 powerup[powerupCount].lastHitBar = "leftBar";
-            else if (ball.Intersects(rightBar))
+            else if (ball.Intersects(playerBars[3].bar))
                 powerup[powerupCount].lastHitBar = "rightBar";
-            powerup[powerupCount].checkCollision(ref ball,ref topBar,ref bottomBar,ref leftBar,ref rightBar);
+            powerup[powerupCount].checkCollision(ref ball,ref playerBars);
 
             powerupCount++;
         }
@@ -309,7 +309,7 @@ namespace UltimatePong
                 if (topPlayerLives.Equals(0))
                     simpleBounce("y");
                 else
-                ResetBall(topBar);
+                ResetBall(playerBars[0].bar);
             }
 
             else if (ball.Intersects(bottomBorder))
@@ -317,7 +317,7 @@ namespace UltimatePong
                 if (bottomPlayerLives.Equals(0))
                     simpleBounce("y");
                 else
-                    ResetBall(bottomBar);
+                    ResetBall(playerBars[1].bar);
             }
 
             else if (ball.Intersects(leftBorder))
@@ -325,7 +325,7 @@ namespace UltimatePong
                 if (leftPlayerLives.Equals(0))
                     simpleBounce("x");
                 else
-                    ResetBall(leftBar);
+                    ResetBall(playerBars[2].bar);
             }
 
             else if (ball.Intersects(rightBorder))
@@ -333,7 +333,7 @@ namespace UltimatePong
                 if (rightPlayerLives.Equals(0))
                     simpleBounce("x");
                 else
-                    ResetBall(rightBar);
+                    ResetBall(playerBars[3].bar);
             }
 
 
@@ -396,9 +396,9 @@ namespace UltimatePong
             switch (v)
             {
                 case "top":
-                    barCenter = topBar.Center.X;
+                    barCenter = playerBars[0].bar.Center.X;
                     ballCenter = ball.Center.X;
-                    maxOffset = ((topBar.Width / 2.0f) + ball.Width + 2.0f);
+                    maxOffset = ((playerBars[0].bar.Width / 2.0f) + ball.Width + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -424,9 +424,9 @@ namespace UltimatePong
 
 
                 case "bottom":
-                    barCenter = bottomBar.Center.X;
+                    barCenter = playerBars[1].bar.Center.X;
                     ballCenter = ball.Center.X;
-                    maxOffset = ((bottomBar.Width / 2.0f) + ball.Width + 2.0f);
+                    maxOffset = ((playerBars[1].bar.Width / 2.0f) + ball.Width + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -456,9 +456,9 @@ namespace UltimatePong
 
 
                 case "left":
-                    barCenter = leftBar.Center.Y;
+                    barCenter = playerBars[2].bar.Center.Y;
                     ballCenter = ball.Center.Y;
-                    maxOffset = ((leftBar.Height / 2.0f) + ball.Height + 2.0f);
+                    maxOffset = ((playerBars[2].bar.Height / 2.0f) + ball.Height + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -488,9 +488,9 @@ namespace UltimatePong
 
 
                 case "right":
-                    barCenter = rightBar.Center.Y;
+                    barCenter = playerBars[3].bar.Center.Y;
                     ballCenter = ball.Center.Y;
-                    maxOffset = ((rightBar.Height / 2.0f) + ball.Height + 2.0f);
+                    maxOffset = ((playerBars[3].bar.Height / 2.0f) + ball.Height + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -525,40 +525,40 @@ namespace UltimatePong
 
         protected void ResetBall(Rectangle player)
         {
-            if(player == topBar)
+            if(player == playerBars[0].bar)
             {
                 topPlayerLives = topPlayerLives - 1;
 
                 if (topPlayerLives == 0)
                 {
                     topBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    topBar.Offset(-800, -800);
+                    playerBars[0].bar.Offset(-800, -800);
                 }
             }
 
-           else if (player == bottomBar)
+           else if (player == playerBars[1].bar)
             {
                 bottomPlayerLives = bottomPlayerLives - 1;
 
                 if (bottomPlayerLives == 0)
                 {
                     bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    bottomBar.Offset(-800, -800);
+                    playerBars[1].bar.Offset(-800, -800);
                 }
             }
 
-            else if (player == leftBar)
+            else if (player == playerBars[2].bar)
             {
                 leftPlayerLives = leftPlayerLives - 1;
 
                 if (leftPlayerLives == 0)
                 {
                     leftBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    leftBar.Offset(-800, -800);
+                    playerBars[2].bar.Offset(-800, -800);
                 }
             }
 
-            else if (player == rightBar)
+            else if (player == playerBars[3].bar)
             {
                 rightPlayerLives = rightPlayerLives - 1;
                 
@@ -566,7 +566,7 @@ namespace UltimatePong
                 if (rightPlayerLives == 0)
                 {
                     rightBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    rightBar.Offset(-800, -800);
+                    playerBars[3].bar.Offset(-800, -800);
                 }
             }
            // ballSpeed = 500.0f;
