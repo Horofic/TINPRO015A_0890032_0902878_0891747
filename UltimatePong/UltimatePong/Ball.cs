@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGame;
 using System;
 using System.Collections.Generic;
@@ -89,29 +90,53 @@ namespace UltimatePong
 
             switch (player)
             {
-
+                case 0:
+                    ballYVelocity = ballSpeed;
+                    ballXVelocity = 0;
+                    return;
+                case 1:
+                    ballYVelocity = -ballSpeed;
+                    ballXVelocity = 0;
+                    return;
+                case 2:
+                    ballXVelocity = ballSpeed;
+                    ballYVelocity = 0;
+                    return;
+                case 3:
+                    ballXVelocity = -ballSpeed;
+                    ballYVelocity = 0;
+                    return;
+                default:
+                    return;
             }
 
         }
 
         public void removeBall()
         {
-            throw new NotImplementedException();
+            ballXVelocity = 0;
+            ballYVelocity = 0;
+            ballSpeed = 0;
+            active = false;
+            ball.Offset((-ball.X - 800 ), (-ball.Y - 800));
+
+
         }
 
-        public void drawBall()
+        public void drawBall(SpriteBatch spriteBatch, Texture2D spriteTexture)
         {
-            throw new NotImplementedException();
+            spriteBatch.Draw(spriteTexture, ball, Color.White);
         }
 
 
         /*
          * Updates the ball position and makes the ball bounce on a collision. Returns an int to indicate that a player loses a live. default = -1, top = 0 bottom = 1
          */
-        public int update(GameTime gameTime, Rectangle[] bars, Rectangle[] borders, int[] lives)
+        public int updateBall(GameTime gameTime, Rectangle[] bars, Rectangle[] borders, int[] lives)
         {
             if (!active)
                 return -1;
+
 
             //barcollition
             for(int i = 0; i < 4; i++)
@@ -153,11 +178,19 @@ namespace UltimatePong
 
 
 
+
+
         /*
          *  -----------------
          *  PRIVATE FUNCTIONS
          *  -----------------
          */
+
+        private bool checkSpawnTime(GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
+
 
         /*
          *  MOVEBALL()
