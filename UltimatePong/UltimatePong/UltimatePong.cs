@@ -223,13 +223,13 @@ namespace UltimatePong
             powerup[powerupCount].startTimer(gameTime);
             
             if (ball.Intersects(playerBars[0].bar))
-                powerup[powerupCount].lastHitBar = "topBar";
+                powerup[powerupCount].lastHitBar = 0;
             else if (ball.Intersects(playerBars[1].bar))
-                powerup[powerupCount].lastHitBar = "bottomBar";
+                powerup[powerupCount].lastHitBar = 1;
             else if (ball.Intersects(playerBars[2].bar))
-                powerup[powerupCount].lastHitBar = "leftBar";
+                powerup[powerupCount].lastHitBar = 2;
             else if (ball.Intersects(playerBars[3].bar))
-                powerup[powerupCount].lastHitBar = "rightBar";
+                powerup[powerupCount].lastHitBar = 3;
             powerup[powerupCount].checkCollision(ref ball,ref playerBars);
 
             powerupCount++;

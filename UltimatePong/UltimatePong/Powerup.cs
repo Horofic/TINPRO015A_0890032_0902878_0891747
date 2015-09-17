@@ -28,7 +28,7 @@ namespace UltimatePong
         int powerupY;
 
         Rectangle bar;
-        public String lastHitBar;
+        public int lastHitBar;
         private bool hit;
 
         int difference = 50;
@@ -128,10 +128,10 @@ namespace UltimatePong
                 switch(powerupType)
                 {
                     case 0:
-                       // redEvent(ref playerBars);
+                        redEvent(ref bar[lastHitBar]);
                         break;
                     case 1:
-                       // greenEvent(ref playerBars);
+                        greenEvent(ref bar[lastHitBar]);
                         break;
                     case 2:
                         blueEvent();
@@ -154,53 +154,27 @@ namespace UltimatePong
         }
 
         //Bad for the player
-        public void redEvent(ref Rectangle topBar, ref Rectangle bottomBar, ref Rectangle leftBar, ref Rectangle rightBar) 
+        public void redEvent(ref Bar bar) 
         {
             Console.WriteLine("redEvent");
-            switch(lastHitBar)
-            {
-                case "topBar":
-                    topBar.Width -= difference;
-                    fixBarPosition(ref topBar);
-                    break;
-                case "bottomBar":
-                    bottomBar.Width -= difference;
-                    fixBarPosition(ref bottomBar);
-                    break;
-                case "leftBar":
-                    leftBar.Height -= difference;
-                    fixBarPosition(ref leftBar);
-                    break;
-                case "rightBar":
-                    rightBar.Height -= difference;
-                    fixBarPosition(ref rightBar);
-                    break;
-            }
+            bar.barLength -= difference;
+            if (lastHitBar > 1)
+                bar.bar.Y = bar.bar.Y - (difference / 2);
+            else
+                bar.bar.X = bar.bar.X - (difference / 2);
+
         }
 
         //good for the player
-        public void greenEvent(ref Rectangle topBar, ref Rectangle bottomBar, ref Rectangle leftBar, ref Rectangle rightBar)
+        public void greenEvent(ref Bar bar)
         {
             Console.WriteLine("greenEvent");
-            switch (lastHitBar)
-            {
-                case "topBar":
-                    topBar.Width += difference;
-                    fixBarPosition(ref topBar);
-                    break;
-                case "bottomBar":
-                    bottomBar.Width += difference;
-                    fixBarPosition(ref bottomBar);
-                    break;
-                case "leftBar":
-                    leftBar.Height += difference;
-                    fixBarPosition(ref leftBar);
-                    break;
-                case "rightBar":
-                    rightBar.Height += difference;
-                    fixBarPosition(ref rightBar);
-                    break;
-            }
+            bar.barLength += difference;
+            if (lastHitBar > 1)
+                bar.bar.Y = bar.bar.Y - (difference / 2);
+            else
+                bar.bar.X = bar.bar.X - (difference / 2);
+
         }
 
         //Change ball direction to random value
@@ -231,28 +205,10 @@ namespace UltimatePong
             
         }
 
-        //Green/Red Event: the last hit bar gets modified according to the hit powerup
-        public void fixBarPosition(ref Rectangle bar)
-        {
-            //fix the position of the bar
-            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
-                bar.Y = bar.Y - (difference / 2);
-            else
-                bar.X = bar.X - (difference / 2);
-        }
-
         //purpleEvent: Invert keys
        /* public Keys[] updateKeys()
         {
             return this.keys;
-        }*/
-
-        //this.bar becomes the last hit bar. The program knows which bar hit the ball most recent.
-       /* public void setBar(Rectangle bar, String lastHitBar,Keys[] keys)
-        {
-            this.lastHitBar = lastHitBar;
-            this.bar = bar;
-            this.keys = keys;
         }*/
 
         public void disable()

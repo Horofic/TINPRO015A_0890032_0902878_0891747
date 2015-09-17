@@ -19,7 +19,7 @@ namespace UltimatePong
         public Texture2D barTexture;
         //changeble bar values
         public int barSpeed;
-        public int barLength = 128;
+        public int barLength;
         public int barWidth = 8;
         String barType;
         //Controls of the bar(player)
@@ -46,7 +46,7 @@ namespace UltimatePong
 
             this.barXPos = barXPos;
             this.barYPos = barYPos;
-            
+            barLength = 128;
             bar = new Rectangle(barXPos,barYPos, barLength, barWidth);
         }
 
