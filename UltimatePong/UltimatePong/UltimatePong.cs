@@ -216,7 +216,7 @@ namespace UltimatePong
             if (powerupCount > 2)
                 powerupCount = 0;
 
-            powerup[powerupCount].timer(gameTime);
+            powerup[powerupCount].startTimer(gameTime);
             powerup[powerupCount].checkCollision(ball);
 
             if (ball.Intersects(topBar))
@@ -233,32 +233,43 @@ namespace UltimatePong
                 switch (powerup[powerupCount].lastHitBar)
                 {
                     case "leftBar":
-                        if(powerup[powerupCount].powerupType < 2)
+                        if (powerup[powerupCount].powerupType < 2)
                             leftBar = powerup[powerupCount].updateBar(leftBar);
-                        else if(powerup[powerupCount].powerupType==4)
+                        else if (powerup[powerupCount].powerupType == 3 && leftPlayerLives != 0)
+                            leftPlayerLives += 1;
+                        else if (powerup[powerupCount].powerupType == 4)
                             leftBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "rightBar":
                         if (powerup[powerupCount].powerupType < 2)
                             rightBar = powerup[powerupCount].updateBar(rightBar);
+                        else if (powerup[powerupCount].powerupType == 3 && rightPlayerLives != 0)
+                            rightPlayerLives += 1;
                         else if (powerup[powerupCount].powerupType == 4)
                             rightBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "topBar":
                         if (powerup[powerupCount].powerupType < 2)
                             topBar = powerup[powerupCount].updateBar(topBar);
+                        else if (powerup[powerupCount].powerupType == 3 && topPlayerLives != 0)
+                            topPlayerLives += 1;
                         else if (powerup[powerupCount].powerupType == 4)
                             topBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "bottomBar":
                         if (powerup[powerupCount].powerupType < 2)
                             bottomBar = powerup[powerupCount].updateBar(bottomBar);
+                        else if (powerup[powerupCount].powerupType == 3 && bottomPlayerLives != 0)
+                            bottomPlayerLives += 1;
                         else if (powerup[powerupCount].powerupType == 4)
                             bottomBarKeys = powerup[powerupCount].updateKeys();
                         break;
                     case "ballEvent":
-                        ballXVelocity *= -1;
-                        ballYVelocity *= -1; 
+                        int randomVelocity = random.Next(0, 3); 
+                        if (randomVelocity== 0 || randomVelocity == 2)
+                            ballXVelocity *= -1;
+                        if (randomVelocity == 1 || randomVelocity == 2)
+                            ballYVelocity *= -1; 
                         break;
                     default:
                         break;

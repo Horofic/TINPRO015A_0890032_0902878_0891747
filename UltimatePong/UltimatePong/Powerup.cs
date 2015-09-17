@@ -60,7 +60,7 @@ namespace UltimatePong
         }
 
         //Counts the second of the powerup life
-        public void timer(GameTime gameTime)
+        public void startTimer(GameTime gameTime)
         {
             if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds&&enable)
             {
@@ -148,9 +148,9 @@ namespace UltimatePong
         public void redEvent() 
         {
             Console.WriteLine("redEvent");
-            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
+            if (lastHitBar == "leftBar" || lastHitBar == "rightBar" && bar.Height>50)
                 bar.Height = bar.Height-50;
-            else
+            else if (lastHitBar == "topBar" || lastHitBar == "bottomBar" && bar.Width > 50)
                 bar.Width = bar.Width - 50;
         }
 
@@ -188,7 +188,7 @@ namespace UltimatePong
             
         }
 
-        //the last hit bar gets modified according to the hit powerup
+        //Green/Red Event: the last hit bar gets modified according to the hit powerup
         public Rectangle updateBar(Rectangle bar)
         {
             //fix the position of the bar
@@ -200,7 +200,7 @@ namespace UltimatePong
             return this.bar;
         }
 
-        //purpleEvent : Invert keys
+        //purpleEvent: Invert keys
         public Keys[] updateKeys()
         {
             return this.keys;
