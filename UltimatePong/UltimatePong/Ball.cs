@@ -33,7 +33,9 @@ namespace UltimatePong
         int ballStartPos;
         bool collision;
         bool active;
+        bool spawning;
         Rectangle ball;
+        Timer timer;
 
 
 
@@ -54,6 +56,8 @@ namespace UltimatePong
             active = true;
             ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
+            timer = new Timer();
+
         }
 
         public Ball(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_)
@@ -69,6 +73,7 @@ namespace UltimatePong
             collision = false;
             int ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
+            timer = new Timer();
         }
 
         /*
@@ -80,12 +85,14 @@ namespace UltimatePong
         /*
          *  Spawns the ball in the center of the playingfield and lets it move in a random direction
          */
-        public void spawnBall(int player, float speed)
+        public void spawnBall(int player, float speed, GameTime gameTime)
         {
             ballSpeed = speed;
             collision = false;
             active = true;
             ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
+            timer.setTime(gameTime);
+            spawning = true;
 
             switch (player)
             {
@@ -136,9 +143,19 @@ namespace UltimatePong
             if (!active)
                 return -1;
 
+            if (spawning)
+            {
+                if (!timer.getTimeDone(gameTime, 2))
+                {
+                    return -1;
+                }
+                spawning = false;
+
+            }
+
 
             //barcollition
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (ball.Intersects(bars[i]))
                 {

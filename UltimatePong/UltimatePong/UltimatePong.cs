@@ -17,13 +17,10 @@ namespace UltimatePong
         Texture2D leftBorderTexture;
         Texture2D rightBorderTexture;
         Texture2D bottomBorderTexture;
+
         Texture2D barTexture;
 
         Rectangle ball;
-        Rectangle topBar;
-        Rectangle bottomBar;
-        Rectangle leftBar;
-        Rectangle rightBar;
 
         Rectangle topBorder;
         Rectangle bottomBorder;
@@ -62,27 +59,15 @@ namespace UltimatePong
         const float bounceCorrection = 0.6f;
 
         //top bar properties
-        float topBarSpeed;
-        int topBarLength;
-        int topBarSpeedMultiplier = 1;
         Keys[] topBarKeys = new Keys[3];
 
         //bottom bar properties
-        float bottomBarSpeed;
-        int bottomBarLength;
-        int bottomBarSpeedMultiplier = 1;
         Keys[] bottomBarKeys = new Keys[3];
 
         //left bar properties
-        float leftBarSpeed;
-        int leftBarLength;
-        int leftBarSpeedMultiplier = 1;
         Keys[] leftBarKeys = new Keys[3];
 
         //right bar properties
-        float rightBarSpeed;
-        int rightBarLength;
-        int rightBarSpeedMultiplier = 1;
         Keys[] rightBarKeys = new Keys[3];
 
         //Player lives
@@ -102,7 +87,7 @@ namespace UltimatePong
         SpriteFont font;
 
         //Test
-        Bar tesbar;
+        Bar[] playerBars;
 
         public UltimatePong(int playerAmount, int livesAmount, bool powerups, bool bounceType)
         {
@@ -163,17 +148,6 @@ namespace UltimatePong
             rightBarKeys[1] = Keys.J; //DOWN
             rightBarKeys[2] = Keys.K; //BOOST
 
-            //initialize bar properties
-            topBarSpeed = barSpeed;
-            bottomBarSpeed = barSpeed;
-            leftBarSpeed = barSpeed;
-            rightBarSpeed = barSpeed;
-
-           topBarLength = barLength;
-            bottomBarLength = barLength;
-            leftBarLength = barLength;
-            rightBarLength= barLength;
-
 
             //initialize ball
             ballSize = 16;
@@ -190,10 +164,6 @@ namespace UltimatePong
 
             //initialize bars
             int barStartPos = (fieldSize - barLength) / 2;
-            topBar = new Rectangle(barStartPos, barToBorderDist, barLength, barWidth);
-            bottomBar = new Rectangle(barStartPos, fieldSize-barToBorderDist-barWidth, barLength, barWidth);
-            leftBar = new Rectangle(barToBorderDist, barStartPos, barWidth, barLength);
-            rightBar = new Rectangle(fieldSize - barToBorderDist - barWidth, barStartPos, barWidth, barLength);
 
             //initialize borders
             topBorder = new Rectangle(0, 0, fieldSize, borderWidth);
@@ -210,12 +180,20 @@ namespace UltimatePong
             for(int i=0;i<powerup.Length;i++)
             powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);
 
-            gameTime = 0;
-            //Test
-             tesbar = new Bar(spriteBatch,barTexture,400,400,288,8);
            
-            
 
+
+
+            
+            //Test
+            playerBars = new Bar[4];
+            playerBars[0] = new Bar(spriteBatch, barTexture, barStartPos, barToBorderDist, topBarKeys, "Lying");//Topp bar
+            playerBars[1] = new Bar(spriteBatch, barTexture, barStartPos, fieldSize - barToBorderDist - barWidth, bottomBarKeys, "Lying");//Bottom bar
+            playerBars[2] = new Bar(spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
+            playerBars[3] = new Bar(spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
+
+
+            gameTime = 0;
             base.Initialize();
         }
 
@@ -226,8 +204,11 @@ namespace UltimatePong
             checkInput(gameTime);
             // Collision detection and ball movement
             checkBallCollision(gameTime);
-            //powerup
-            
+            //move bars
+            foreach (Bar bar in playerBars)
+                bar.updateBar(gameTime);
+
+            //Power-ups
             powerupEvents(gameTime);
             if(pause)
                 pauseBall(gameTime);
@@ -264,79 +245,6 @@ namespace UltimatePong
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
 
-
-            //ball controls, just for testing
-            /* if (Keyboard.GetState().IsKeyDown(Keys.W))
-                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-             if (Keyboard.GetState().IsKeyDown(Keys.S))
-                 ball.Offset(0, ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-             if (Keyboard.GetState().IsKeyDown(Keys.A))
-                 ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-
-             if (Keyboard.GetState().IsKeyDown(Keys.D))
-                 ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);*/
-
-
-            //Top bar controls
-            if (keyBoardstate.IsKeyDown(topBarKeys[2]))
-                topBarSpeedMultiplier = 3;
-            else
-                topBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(topBarKeys[0]))
-                if (!topBar.Intersects(leftBorder))
-                    topBar.Offset((-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - topBarSpeedMultiplier, 0);
-          
-            if (keyBoardstate.IsKeyDown(topBarKeys[1]))
-                if (!topBar.Intersects(rightBorder))
-                    topBar.Offset((topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + topBarSpeedMultiplier, 0);
-
-
-
-            //Bottom bar controlszcc n
-            if (keyBoardstate.IsKeyDown(bottomBarKeys[2]))
-                bottomBarSpeedMultiplier = 3;
-            else
-                bottomBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(bottomBarKeys[0]))
-                if (!bottomBar.Intersects(leftBorder))
-                    bottomBar.Offset((-bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - bottomBarSpeedMultiplier, 0);
-
-            if (keyBoardstate.IsKeyDown(bottomBarKeys[1]))
-                if (!bottomBar.Intersects(rightBorder))
-                    bottomBar.Offset((bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + bottomBarSpeedMultiplier, 0);
-
-            //Left bar controls
-            if (keyBoardstate.IsKeyDown(leftBarKeys[2]))
-                leftBarSpeedMultiplier = 3;
-            else
-                leftBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(leftBarKeys[0]))
-                if (!leftBar.Intersects(topBorder))
-                    leftBar.Offset(0, (-leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - leftBarSpeedMultiplier);
-
-            if (keyBoardstate.IsKeyDown(leftBarKeys[1]))
-                if (!leftBar.Intersects(bottomBorder))
-                    leftBar.Offset(0, (leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + leftBarSpeedMultiplier);
-
-            //Right bar controls
-            if (keyBoardstate.IsKeyDown(rightBarKeys[2]))
-                rightBarSpeedMultiplier = 3;
-            else
-                rightBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(rightBarKeys[0]))
-                if (!rightBar.Intersects(topBorder))
-                    rightBar.Offset(0, (-rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - rightBarSpeedMultiplier);
-
-            if (keyBoardstate.IsKeyDown(rightBarKeys[1]))
-                if (!rightBar.Intersects(bottomBorder))
-                    rightBar.Offset(0, (rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + rightBarSpeedMultiplier);
-
         }
 
         protected override void Draw(GameTime gameTime)
@@ -349,11 +257,7 @@ namespace UltimatePong
             //ball
             spriteBatch.Draw(spriteTexture, ball, Color.White);
             //bars
-            spriteBatch.Draw(spriteTexture, topBar, Color.White);
-            spriteBatch.Draw(spriteTexture, bottomBar, Color.White);
-            spriteBatch.Draw(spriteTexture, leftBar, Color.White);
-            spriteBatch.Draw(spriteTexture, rightBar, Color.White);
-            tesbar.DrawBar();
+           
             //borders
             spriteBatch.Draw(topBorderTexture, topBorder, Color.White);
             spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
@@ -367,6 +271,9 @@ namespace UltimatePong
             //powerup
             foreach(Powerup powerup in powerup)
             powerup.drawPowerup();
+
+            foreach (Bar bar in playerBars)
+                bar.DrawBar();
 
             spriteBatch.End();
 
@@ -382,16 +289,16 @@ namespace UltimatePong
             collision = true;
 
             //barcollition
-            if (ball.Intersects(topBar))
+            if (ball.Intersects(playerBars[0].bar))
                 barBounce("top");
                
-            else if (ball.Intersects(bottomBar))
+            else if (ball.Intersects(playerBars[1].bar))
                 barBounce("bottom");
                 
-            else if (ball.Intersects(leftBar))
+            else if (ball.Intersects(playerBars[2].bar))
                 barBounce("left");
                 
-            else if (ball.Intersects(rightBar))
+            else if (ball.Intersects(playerBars[3].bar))
                 barBounce("right");
                 
 
