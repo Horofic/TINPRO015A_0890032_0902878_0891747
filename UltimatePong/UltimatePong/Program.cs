@@ -1,10 +1,11 @@
 ﻿using System;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using UltimatePong;
+
 
 namespace UltimatePong
 {
@@ -26,23 +27,22 @@ namespace UltimatePong
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            launcher = new Launcher(2,3,true); //give default values
+            launcher = new Launcher(); //give default values
             Application.Run(launcher); //start launcher first time
             runLauncher();
         }
 
         static void runLauncher() //this keeps looping until launcher is closed
         {
-            
-            if (launcher.StartPressed == true) //check if StartButton is pressed > start game. Else exit program.
+            //check if StartButton is pressed > start game. Else exit program.
+            if (launcher.StartPressed == true)
             {
-                game = new UltimatePong(launcher.playerAmount, launcher.livesAmount, launcher.powerups);
+                game = new UltimatePong(launcher.playerAmount, launcher.livesAmount, launcher.powerups,launcher.bounceType);
                 game.Run();
 
-                launcher = new Launcher(launcher.playerAmount, launcher.livesAmount, launcher.powerups);
-                Application.Run(launcher);
-
-                runLauncher();
+                // Restart the app passing "/restart [processId]" as cmd line args
+                Application.Exit();
+                Process.Start(Application.ExecutablePath, "/restart" + Process.GetCurrentProcess().Id);
             }
         }
 
