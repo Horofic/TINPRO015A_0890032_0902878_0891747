@@ -36,9 +36,11 @@ namespace UltimatePong
         Keys[] keys;
 
         GraphicsDevice GraphicsDevice;
+        Timer timer;
 
         public Powerup(SpriteBatch spriteBatch,Texture2D spriteTexture, GraphicsDevice graphicsDevice,int  offset)
         {
+            timer = new Timer(10);
             enable = true;
             this.spriteTexture = spriteTexture;
             this.spriteBatch = spriteBatch;
@@ -64,17 +66,17 @@ namespace UltimatePong
         //Counts the second of the powerup life
         public void startTimer(GameTime gameTime)
         {
-            if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds&&enable)
+            timer.runTimer(gameTime);
+            if (aliveTimer < timer.getElapsedTime())
             {
-                this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
-                aliveTimer++;
+                aliveTimer = timer.getElapsedTime();
 
                 switch (aliveTimer)
                 {
                     case 1: //spawn a powerup after 3 seconds of the previous powerup death
                         rngPosition();
-                        powerup = new Rectangle(powerupX,powerupY, 30, 30);
-                        powerupType = new Random().Next(0, Colortype.Length); 
+                        powerup = new Rectangle(powerupX, powerupY, 30, 30);
+                        powerupType = new Random().Next(0, Colortype.Length);
                         alive = true;
                         break;
                     case 8: //despawns the powerup after X seconds
@@ -85,9 +87,12 @@ namespace UltimatePong
                         break;
                 }
                 if (aliveTimer == randomDeathTime)
+                {
                     aliveTimer = 0;
-
+                    timer.reset();
+                }
             }
+            
         }
 
         //draws the powerup
@@ -144,6 +149,7 @@ namespace UltimatePong
 
                 alive = false;
                 aliveTimer = 0;
+                timer.reset();
                 hit = false;
             }
         }
