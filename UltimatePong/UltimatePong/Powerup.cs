@@ -29,7 +29,9 @@ namespace UltimatePong
 
         Rectangle bar;
         public String lastHitBar;
-        public bool hit;
+        private bool hit;
+
+        int difference = 50;
 
         Keys[] keys;
 
@@ -111,19 +113,21 @@ namespace UltimatePong
         }
 
         //check if powerup gets hit. Execute powerup event.
-        public void checkCollision(Rectangle ball)
+        public void checkCollision(ref Rectangle ball,ref Rectangle topBar, ref Rectangle bottomBar, ref Rectangle leftBar, ref Rectangle rightBar)
         {
-            if(ball.Intersects(powerup))
+            if (ball.Intersects(powerup))
+                hit = true;
+            if(hit)
             {
                 Console.WriteLine("Powerup got hit");
 
                 switch(powerupType)
                 {
                     case 0:
-                        redEvent();
+                        redEvent(ref topBar, ref bottomBar, ref leftBar, ref rightBar);
                         break;
                     case 1:
-                        greenEvent();
+                        greenEvent(ref topBar, ref bottomBar, ref leftBar, ref rightBar);
                         break;
                     case 2:
                         blueEvent();
@@ -140,35 +144,69 @@ namespace UltimatePong
 
                 alive = false;
                 aliveTimer = 0;
-                hit = true;
+                hit = false;
             }
         }
 
         //Bad for the player
-        public void redEvent() 
+        public void redEvent(ref Rectangle topBar, ref Rectangle bottomBar, ref Rectangle leftBar, ref Rectangle rightBar) 
         {
             Console.WriteLine("redEvent");
-            if (lastHitBar == "leftBar" || lastHitBar == "rightBar" && bar.Height>50)
-                bar.Height = bar.Height-50;
-            else if (lastHitBar == "topBar" || lastHitBar == "bottomBar" && bar.Width > 50)
-                bar.Width = bar.Width - 50;
+            switch(lastHitBar)
+            {
+                case "topBar":
+                    topBar.Width -= difference;
+                    fixBarPosition(ref topBar);
+                    break;
+                case "bottomBar":
+                    bottomBar.Width -= difference;
+                    fixBarPosition(ref bottomBar);
+                    break;
+                case "leftBar":
+                    leftBar.Height -= difference;
+                    fixBarPosition(ref leftBar);
+                    break;
+                case "rightBar":
+                    rightBar.Height -= difference;
+                    fixBarPosition(ref rightBar);
+                    break;
+            }
         }
 
         //good for the player
-        public void greenEvent()
+        public void greenEvent(ref Rectangle topBar, ref Rectangle bottomBar, ref Rectangle leftBar, ref Rectangle rightBar)
         {
             Console.WriteLine("greenEvent");
-            if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
-                bar.Height = bar.Height + 50;
-            else
-                bar.Width = bar.Width + 50;
+            switch (lastHitBar)
+            {
+                case "topBar":
+                    topBar.Width += difference;
+                    fixBarPosition(ref topBar);
+                    break;
+                case "bottomBar":
+                    bottomBar.Width += difference;
+                    fixBarPosition(ref bottomBar);
+                    break;
+                case "leftBar":
+                    leftBar.Height += difference;
+                    fixBarPosition(ref leftBar);
+                    break;
+                case "rightBar":
+                    rightBar.Height += difference;
+                    fixBarPosition(ref rightBar);
+                    break;
+            }
         }
 
         //Change ball direction to random value
         public void blueEvent()
         {
             Console.WriteLine("blueEvent");
-            lastHitBar = "ballEvent";
+            /*int randomVelocity = randomNumber.Next(0, 3);
+            if (randomVelocity == 0 || randomVelocity == 2)
+                ballXVelocity *= -1;
+            if (randomVelocity == 1 || randomVelocity == 2)
+                ballYVelocity *= -1;*/
         }
 
         //+1 life
@@ -182,37 +220,35 @@ namespace UltimatePong
         public void purpleEvent()
         {
             Console.WriteLine("purpleEvent");
-            Keys temp = keys[0];
+            /*Keys temp = keys[0];
             keys[0] = keys[1];
-            keys[1] = temp;
+            keys[1] = temp;*/
             
         }
 
         //Green/Red Event: the last hit bar gets modified according to the hit powerup
-        public Rectangle updateBar(Rectangle bar)
+        public void fixBarPosition(ref Rectangle bar)
         {
             //fix the position of the bar
             if (lastHitBar == "leftBar" || lastHitBar == "rightBar")
-                this.bar.Y = bar.Y - (this.bar.Height - bar.Height) / 2;
+                bar.Y = bar.Y - (difference / 2);
             else
-                this.bar.X = bar.X - (this.bar.Width - bar.Width) / 2;
-
-            return this.bar;
+                bar.X = bar.X - (difference / 2);
         }
 
         //purpleEvent: Invert keys
-        public Keys[] updateKeys()
+       /* public Keys[] updateKeys()
         {
             return this.keys;
-        }
+        }*/
 
         //this.bar becomes the last hit bar. The program knows which bar hit the ball most recent.
-        public void setBar(Rectangle bar, String lastHitBar,Keys[] keys)
+       /* public void setBar(Rectangle bar, String lastHitBar,Keys[] keys)
         {
             this.lastHitBar = lastHitBar;
             this.bar = bar;
             this.keys = keys;
-        }
+        }*/
 
         public void disable()
         {
