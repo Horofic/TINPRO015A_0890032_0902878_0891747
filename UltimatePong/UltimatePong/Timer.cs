@@ -24,15 +24,6 @@ namespace UltimatePong
             done = false;
         }
 
-        public bool getDone()
-        {
-            if (elapsedTime == time)
-            {
-                done = true;
-            }
-            return done;
-        }
-
         public void runTimer(GameTime gameTime)
         {
             if (savedGameTime < (int)gameTime.TotalGameTime.TotalSeconds && done == false)
@@ -40,6 +31,15 @@ namespace UltimatePong
                 savedGameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 elapsedTime++;
             }
+        }
+
+        public bool getDone()
+        {
+            if (elapsedTime == time)
+            {
+                done = true;
+            }
+            return done;
         }
 
         public int getElapsedTime()
