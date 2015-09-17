@@ -14,11 +14,11 @@ namespace UltimatePong
         int elapsedTime;
 
         bool done;
-        int time;
 
-        public Timer(int time)
+        //Initialize Timer
+        //time is the time when done becomes true
+        public Timer()
         {
-            this.time = time;
             savedGameTime = 0;
             elapsedTime = 0;
             done = false;
@@ -31,14 +31,14 @@ namespace UltimatePong
                 savedGameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 elapsedTime++;
             }
-            if (elapsedTime == time)
+        }
+
+        public bool getDone(int time)
+        {
+            if (elapsedTime >= time)
             {
                 done = true;
             }
-        }
-
-        public bool getDone()
-        {
             return done;
         }
 
