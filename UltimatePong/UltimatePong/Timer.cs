@@ -31,14 +31,14 @@ namespace UltimatePong
                 savedGameTime = (int)gameTime.TotalGameTime.TotalSeconds;
                 elapsedTime++;
             }
-        }
-
-        public bool getDone()
-        {
             if (elapsedTime == time)
             {
                 done = true;
             }
+        }
+
+        public bool getDone()
+        {
             return done;
         }
 
