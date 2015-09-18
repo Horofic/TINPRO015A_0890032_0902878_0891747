@@ -8,7 +8,7 @@ namespace UltimatePong
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Random random = new Random();
+        Random random = new Random(DateTime.Now.Millisecond+ DateTime.Now.Second);
 
         //sprites
         Texture2D spriteTexture;
@@ -17,13 +17,10 @@ namespace UltimatePong
         Texture2D leftBorderTexture;
         Texture2D rightBorderTexture;
         Texture2D bottomBorderTexture;
+
         Texture2D barTexture;
 
         Rectangle ball;
-        Rectangle topBar;
-        Rectangle bottomBar;
-        Rectangle leftBar;
-        Rectangle rightBar;
 
         Rectangle topBorder;
         Rectangle bottomBorder;
@@ -54,7 +51,6 @@ namespace UltimatePong
         int pauseTimer;
         int gameTime;
 
-
         //default bar properties
         const int barLength = 128;
         const int barWidth = 8;
@@ -62,47 +58,37 @@ namespace UltimatePong
         const float bounceCorrection = 0.6f;
 
         //top bar properties
-        float topBarSpeed;
-        int topBarLength;
-        int topBarSpeedMultiplier = 1;
         Keys[] topBarKeys = new Keys[3];
 
         //bottom bar properties
-        float bottomBarSpeed;
-        int bottomBarLength;
-        int bottomBarSpeedMultiplier = 1;
         Keys[] bottomBarKeys = new Keys[3];
 
         //left bar properties
-        float leftBarSpeed;
-        int leftBarLength;
-        int leftBarSpeedMultiplier = 1;
         Keys[] leftBarKeys = new Keys[3];
 
         //right bar properties
-        float rightBarSpeed;
-        int rightBarLength;
-        int rightBarSpeedMultiplier = 1;
         Keys[] rightBarKeys = new Keys[3];
 
         //Player lives
-        int topPlayerLives;
-        int bottomPlayerLives;
-        int leftPlayerLives;
-        int rightPlayerLives;
+        int[] playerLives;
 
+        //Game Settings
         public int players;
         public int lives;
         public bool powerups;
-        public bool bounceType;
+        public bool classicBounce;
 
         Powerup[] powerup;
         int powerupCount;
 
         SpriteFont font;
 
-        //Test
-        Bar tesbar;
+        //test
+        Border border;
+
+        //playerBars
+        Bar[] playerBars;
+        int lastHitBar;
 
         public UltimatePong(int playerAmount, int livesAmount, bool powerups, bool bounceType)
         {
@@ -114,7 +100,7 @@ namespace UltimatePong
             this.players = playerAmount;
             this.lives = livesAmount;
             this.powerups = powerups;
-            this.bounceType = bounceType;
+            this.classicBounce = bounceType;
 
             //Printlines
             System.Console.WriteLine("players:" + players);
@@ -125,9 +111,6 @@ namespace UltimatePong
 
         protected override void Initialize()
         {
-
-           
-
             spriteBatch = new SpriteBatch(GraphicsDevice);
             
             //Ball texture
@@ -142,7 +125,6 @@ namespace UltimatePong
 
             //Font texture
             font = Content.Load<SpriteFont>("font");
-
 
             base.Window.AllowUserResizing = false;
 
@@ -163,18 +145,6 @@ namespace UltimatePong
             rightBarKeys[1] = Keys.J; //DOWN
             rightBarKeys[2] = Keys.K; //BOOST
 
-            //initialize bar properties
-            topBarSpeed = barSpeed;
-            bottomBarSpeed = barSpeed;
-            leftBarSpeed = barSpeed;
-            rightBarSpeed = barSpeed;
-
-           topBarLength = barLength;
-            bottomBarLength = barLength;
-            leftBarLength = barLength;
-            rightBarLength= barLength;
-
-
             //initialize ball
             ballSize = 16;
             ballSpeed = 500.0f;
@@ -186,14 +156,10 @@ namespace UltimatePong
             ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
 
-
-
             //initialize bars
+            //barKeys = new Keys[][]{  topBarKeys, bottomBarKeys, leftBarKeys, rightBarKeys }; //put all the inputs in 1 array
+
             int barStartPos = (fieldSize - barLength) / 2;
-            topBar = new Rectangle(barStartPos, barToBorderDist, barLength, barWidth);
-            bottomBar = new Rectangle(barStartPos, fieldSize-barToBorderDist-barWidth, barLength, barWidth);
-            leftBar = new Rectangle(barToBorderDist, barStartPos, barWidth, barLength);
-            rightBar = new Rectangle(fieldSize - barToBorderDist - barWidth, barStartPos, barWidth, barLength);
 
             //initialize borders
             topBorder = new Rectangle(0, 0, fieldSize, borderWidth);
@@ -202,7 +168,7 @@ namespace UltimatePong
             rightBorder = new Rectangle(fieldSize - borderWidth, 0, borderWidth, fieldSize);
 
             //initialize player lives
-            topPlayerLives = bottomPlayerLives = leftPlayerLives = rightPlayerLives = lives;
+            playerLives = new int[4] {lives,lives,lives,lives}; 
 
             //powerup
             powerup = new Powerup[3];
@@ -210,17 +176,45 @@ namespace UltimatePong
             for(int i=0;i<powerup.Length;i++)
             powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);
 
-            gameTime = 0;
             //Test
-             tesbar = new Bar(spriteBatch,barTexture,400,400,288,8);
-           
-            
+            playerBars = new Bar[4];
+            playerBars[0] = new Bar(spriteBatch, barTexture, barStartPos, barToBorderDist, topBarKeys, "Lying");//Topp bar
+            playerBars[1] = new Bar(spriteBatch, barTexture, barStartPos, fieldSize - barToBorderDist - barWidth, bottomBarKeys, "Lying");//Bottom bar
+            playerBars[2] = new Bar(spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
+            playerBars[3] = new Bar(spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
+
+            border = new Border(spriteBatch,barTexture,0,0,"Standing");//Left border
+
+
+            gameTime = 0;
+            setPlayersAmount();
+            spawnBallDirection();
 
             base.Initialize();
         }
+        
+        private void setPlayersAmount()
+        {
+            switch(players)
+            {
+                case 2:
+                    topBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    playerBars[0].bar.Offset(-800, -800);
+                    playerBars[1].bar.Offset(-800, -800);
+                    playerLives[0] = 0;
+                    playerLives[1] = 0;
+                    break;
+                case 3:
+                    topBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    playerBars[0].bar.Offset(-800, -800);
+                    playerLives[0] = 0;
+                    break;
+                default:
+                    break;
+            }
+        }
 
-
-  
         protected override void Update(GameTime gameTime)
         {
             
@@ -229,8 +223,14 @@ namespace UltimatePong
             checkInput(gameTime);
             // Collision detection and ball movement
             checkBallCollision(gameTime);
-            //powerup
-            
+            //move bars
+            foreach (Bar bar in playerBars)
+                bar.updateBar(gameTime);
+            //borders
+            border.updateBorder();
+
+            //Power-ups
+            if(powerups)
             powerupEvents(gameTime);
             if(pause)
                 pauseBall(gameTime);
@@ -243,103 +243,22 @@ namespace UltimatePong
                 powerupCount = 0;
 
             powerup[powerupCount].startTimer(gameTime);
-            
-            if (ball.Intersects(topBar))
-                powerup[powerupCount].lastHitBar = "topBar";
-            else if (ball.Intersects(bottomBar))
-                powerup[powerupCount].lastHitBar = "bottomBar";
-            else if (ball.Intersects(leftBar))
-                powerup[powerupCount].lastHitBar = "leftBar";
-            else if (ball.Intersects(rightBar))
-                powerup[powerupCount].lastHitBar = "rightBar";
-            powerup[powerupCount].checkCollision(ref ball,ref topBar,ref bottomBar,ref leftBar,ref rightBar);
-
+            for (int i = 0; i < playerBars.Length; i++)
+                if (ball.Intersects(playerBars[i].bar))
+                {
+                    lastHitBar = i;
+                    break;
+                }
+            int[] vel = new int[2];
+            powerup[powerupCount].checkCollision(ref ball, ref playerBars, lastHitBar,ref playerLives,ref ballXVelocity,ref ballYVelocity);
             powerupCount++;
         }
 
         private void checkInput(GameTime gameTime)
         {
-
-            
             var keyBoardstate = Keyboard.GetState();
-                      
-
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
-
-
-            //ball controls, just for testing
-            /* if (Keyboard.GetState().IsKeyDown(Keys.W))
-                 ball.Offset(0, -ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-             if (Keyboard.GetState().IsKeyDown(Keys.S))
-                 ball.Offset(0, ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-
-             if (Keyboard.GetState().IsKeyDown(Keys.A))
-                 ball.Offset(-ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);
-
-             if (Keyboard.GetState().IsKeyDown(Keys.D))
-                 ball.Offset(ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds, 0);*/
-
-
-            //Top bar controls
-            if (keyBoardstate.IsKeyDown(topBarKeys[2]))
-                topBarSpeedMultiplier = 3;
-            else
-                topBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(topBarKeys[0]))
-                if (!topBar.Intersects(leftBorder))
-                    topBar.Offset((-topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - topBarSpeedMultiplier, 0);
-          
-            if (keyBoardstate.IsKeyDown(topBarKeys[1]))
-                if (!topBar.Intersects(rightBorder))
-                    topBar.Offset((topBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + topBarSpeedMultiplier, 0);
-
-
-
-            //Bottom bar controlszcc n
-            if (keyBoardstate.IsKeyDown(bottomBarKeys[2]))
-                bottomBarSpeedMultiplier = 3;
-            else
-                bottomBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(bottomBarKeys[0]))
-                if (!bottomBar.Intersects(leftBorder))
-                    bottomBar.Offset((-bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - bottomBarSpeedMultiplier, 0);
-
-            if (keyBoardstate.IsKeyDown(bottomBarKeys[1]))
-                if (!bottomBar.Intersects(rightBorder))
-                    bottomBar.Offset((bottomBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + bottomBarSpeedMultiplier, 0);
-
-            //Left bar controls
-            if (keyBoardstate.IsKeyDown(leftBarKeys[2]))
-                leftBarSpeedMultiplier = 3;
-            else
-                leftBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(leftBarKeys[0]))
-                if (!leftBar.Intersects(topBorder))
-                    leftBar.Offset(0, (-leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - leftBarSpeedMultiplier);
-
-            if (keyBoardstate.IsKeyDown(leftBarKeys[1]))
-                if (!leftBar.Intersects(bottomBorder))
-                    leftBar.Offset(0, (leftBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + leftBarSpeedMultiplier);
-
-            //Right bar controls
-            if (keyBoardstate.IsKeyDown(rightBarKeys[2]))
-                rightBarSpeedMultiplier = 3;
-            else
-                rightBarSpeedMultiplier = 0;
-
-            if (keyBoardstate.IsKeyDown(rightBarKeys[0]))
-                if (!rightBar.Intersects(topBorder))
-                    rightBar.Offset(0, (-rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - rightBarSpeedMultiplier);
-
-            if (keyBoardstate.IsKeyDown(rightBarKeys[1]))
-                if (!rightBar.Intersects(bottomBorder))
-                    rightBar.Offset(0, (rightBarSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + rightBarSpeedMultiplier);
-
         }
 
         protected override void Draw(GameTime gameTime)
@@ -351,24 +270,26 @@ namespace UltimatePong
             //ball
             spriteBatch.Draw(spriteTexture, ball, Color.White);
             //bars
-            spriteBatch.Draw(spriteTexture, topBar, Color.White);
-            spriteBatch.Draw(spriteTexture, bottomBar, Color.White);
-            spriteBatch.Draw(spriteTexture, leftBar, Color.White);
-            spriteBatch.Draw(spriteTexture, rightBar, Color.White);
-            tesbar.DrawBar();
+           
             //borders
             spriteBatch.Draw(topBorderTexture, topBorder, Color.White);
             spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
             spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
             spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
+            border.DrawBorder();
             //font
-            spriteBatch.DrawString(font, topPlayerLives.ToString(),new Vector2(390, 50), Color.White);
-            spriteBatch.DrawString(font, bottomPlayerLives.ToString(), new Vector2(390, 710), Color.White);
-            spriteBatch.DrawString(font, leftPlayerLives.ToString(), new Vector2(70, 390), Color.White);
-            spriteBatch.DrawString(font, rightPlayerLives.ToString(), new Vector2(700, 390), Color.White);
+            if(players==4)
+            spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
+            if(players!=2)
+            spriteBatch.DrawString(font, playerLives[1].ToString(), new Vector2(390, 710), Color.White);
+            spriteBatch.DrawString(font, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
+            spriteBatch.DrawString(font, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
             //powerup
             foreach(Powerup powerup in powerup)
             powerup.drawPowerup();
+
+            foreach (Bar bar in playerBars)
+                bar.DrawBar();
 
             spriteBatch.End();
 
@@ -383,17 +304,17 @@ namespace UltimatePong
 
             collision = true;
 
-            //barcollition
-            if (ball.Intersects(topBar))
+            //barcollision
+            if (ball.Intersects(playerBars[0].bar))
                 barBounce("top");
                
-            else if (ball.Intersects(bottomBar))
+            else if (ball.Intersects(playerBars[1].bar))
                 barBounce("bottom");
                 
-            else if (ball.Intersects(leftBar))
+            else if (ball.Intersects(playerBars[2].bar))
                 barBounce("left");
                 
-            else if (ball.Intersects(rightBar))
+            else if (ball.Intersects(playerBars[3].bar))
                 barBounce("right");
                 
 
@@ -401,37 +322,35 @@ namespace UltimatePong
             // check if ball touches the border if does that player loses a life and ball is reset
             else if (ball.Intersects(topBorder))
             {
-                if (topPlayerLives.Equals(0))
+                if (playerLives[0].Equals(0)||players==2||players==3)
                     simpleBounce("y");
                 else
-                ResetBall(topBar);
+                ResetBall(playerBars[0].bar);
             }
 
             else if (ball.Intersects(bottomBorder))
             {
-                if (bottomPlayerLives.Equals(0))
+                if (playerLives[1].Equals(0)||players==2)
                     simpleBounce("y");
                 else
-                    ResetBall(bottomBar);
+                    ResetBall(playerBars[1].bar);
             }
 
             else if (ball.Intersects(leftBorder))
             {
-                if (leftPlayerLives.Equals(0))
+                if (playerLives[2].Equals(0))
                     simpleBounce("x");
                 else
-                    ResetBall(leftBar);
+                    ResetBall(playerBars[2].bar);
             }
 
             else if (ball.Intersects(rightBorder))
             {
-                if (rightPlayerLives.Equals(0))
+                if (playerLives[3].Equals(0))
                     simpleBounce("x");
                 else
-                    ResetBall(rightBar);
+                    ResetBall(playerBars[3].bar);
             }
-
-
             else
             {
                 collision = false;
@@ -460,29 +379,8 @@ namespace UltimatePong
             }
         }
 
-       
-
         private void barBounce(string v)
         {
-            /*
-            switch (v)
-            {
-                case "top":
-                    simpleBounce("y");
-                    break;
-                case "bottom":
-                    simpleBounce("y");
-                    break;
-                case "left":
-                    simpleBounce("x");
-                    break;
-                case "right":
-                    simpleBounce("x");
-                    break;
-                default:
-                    break;
-            }
-            */
             if(ballSpeed<ballSpeedLimit)
                 ballSpeed += ballSpeedInc;
             Console.WriteLine(ballSpeed);
@@ -491,9 +389,9 @@ namespace UltimatePong
             switch (v)
             {
                 case "top":
-                    barCenter = topBar.Center.X;
+                    barCenter = playerBars[0].bar.Center.X;
                     ballCenter = ball.Center.X;
-                    maxOffset = ((topBar.Width / 2.0f) + ball.Width + 2.0f);
+                    maxOffset = ((playerBars[0].bar.Width / 2.0f) + ball.Width + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -519,9 +417,9 @@ namespace UltimatePong
 
 
                 case "bottom":
-                    barCenter = bottomBar.Center.X;
+                    barCenter = playerBars[1].bar.Center.X;
                     ballCenter = ball.Center.X;
-                    maxOffset = ((bottomBar.Width / 2.0f) + ball.Width + 2.0f);
+                    maxOffset = ((playerBars[1].bar.Width / 2.0f) + ball.Width + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -551,9 +449,9 @@ namespace UltimatePong
 
 
                 case "left":
-                    barCenter = leftBar.Center.Y;
+                    barCenter = playerBars[2].bar.Center.Y;
                     ballCenter = ball.Center.Y;
-                    maxOffset = ((leftBar.Height / 2.0f) + ball.Height + 2.0f);
+                    maxOffset = ((playerBars[2].bar.Height / 2.0f) + ball.Height + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -583,9 +481,9 @@ namespace UltimatePong
 
 
                 case "right":
-                    barCenter = rightBar.Center.Y;
+                    barCenter = playerBars[3].bar.Center.Y;
                     ballCenter = ball.Center.Y;
-                    maxOffset = ((rightBar.Height / 2.0f) + ball.Height + 2.0f);
+                    maxOffset = ((playerBars[3].bar.Height / 2.0f) + ball.Height + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -614,66 +512,61 @@ namespace UltimatePong
                 default:
                     break;
             }
-
-
         }
 
         protected void ResetBall(Rectangle player)
         {
-            if(player == topBar)
+            if(player == playerBars[0].bar)
             {
-                topPlayerLives = topPlayerLives - 1;
-
-                if (topPlayerLives == 0)
+                playerLives[0] -= 1;
+                lastSpawnedDirection = 0;
+                if (playerLives[0] == 0)
                 {
                     topBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    topBar.Offset(-800, -800);
+                    playerBars[0].bar.Offset(-800, -800);
                 }
             }
 
-           else if (player == bottomBar)
+           else if (player == playerBars[1].bar)
             {
-                bottomPlayerLives = bottomPlayerLives - 1;
-
-                if (bottomPlayerLives == 0)
+                playerLives[1] -= 1;
+                lastSpawnedDirection = 1;
+                if (playerLives[1] == 0)
                 {
                     bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    bottomBar.Offset(-800, -800);
+                    playerBars[1].bar.Offset(-800, -800);
                 }
             }
 
-            else if (player == leftBar)
+            else if (player == playerBars[2].bar)
             {
-                leftPlayerLives = leftPlayerLives - 1;
-
-                if (leftPlayerLives == 0)
+                playerLives[2] -= 1;
+                lastSpawnedDirection = 2;
+                if (playerLives[2] == 0)
                 {
                     leftBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    leftBar.Offset(-800, -800);
+                    playerBars[2].bar.Offset(-800, -800);
                 }
             }
 
-            else if (player == rightBar)
+            else if (player == playerBars[3].bar)
             {
-                rightPlayerLives = rightPlayerLives - 1;
-                
-
-                if (rightPlayerLives == 0)
+                playerLives[3] -= 1;
+                lastSpawnedDirection = 3;
+                if (playerLives[3] == 0)
                 {
                     rightBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    rightBar.Offset(-800, -800);
+                    playerBars[3].bar.Offset(-800, -800);
                 }
             }
-           // ballSpeed = 500.0f;
+            // ballSpeed = 500.0f;
+           // lastHitBar = -1;
             ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
             pause = true;
-            
-
         }
       
         public void pauseBall(GameTime gameTime)
         {
-            Console.WriteLine("PAUSE!");
             ballXVelocity = ballYVelocity = ballSpeed = 0;
             if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds)
             {
@@ -681,12 +574,17 @@ namespace UltimatePong
                 pauseTimer++;
                 switch(pauseTimer)
                 {
-                    case 2:
+                    case 1:
+                        foreach (Powerup powerup in powerup)
+                            powerup.disabled(true);
+                        break;
+                    case 3:
                         ballXVelocity = ballYVelocity = ballSpeed = 500;
                         pauseTimer = 0;
                         pause = false;
+                        
                         spawnBallDirection();
-
+                        
                         break;
                     default:
                         break;
@@ -696,19 +594,13 @@ namespace UltimatePong
 
         private void spawnBallDirection()
         {
-            int[] playersLives = new int[4];
-            playersLives[0] = topPlayerLives;
-            playersLives[1] = bottomPlayerLives;
-            playersLives[2] = leftPlayerLives;
-            playersLives[3] = rightPlayerLives;
-
             int[] playersAlive = new int[4];
             int chosenPlayer = 0;
             int death = 0;
 
-            for (int i = 0; i < playersLives.Length; i++)
+            for (int i = 0; i < playerLives.Length; i++)
             {
-                if (playersLives[i] > 0)
+                if (playerLives[i] > 0)
                 {
                     playersAlive[i] = i;
                 }
@@ -725,10 +617,10 @@ namespace UltimatePong
             int hussle2;
             int temp;
 
-            for(int i=0;i<2;i++)
+            for(int i=0;i<3;i++)
             {
-                hussle1 = random.Next(1, 4);
-                hussle2 = random.Next(1, 4);
+                hussle1 = random.Next(0, 4);
+                hussle2 = random.Next(0, 4);
                 temp = playersAlive[hussle1];
                 playersAlive[hussle1] = playersAlive[hussle2];
                 playersAlive[hussle2] = temp;
@@ -743,7 +635,7 @@ namespace UltimatePong
                 }
             }
 
-            if (death == 3)
+            if (death==3)
                 chosenPlayer = 4;
 
             switch (chosenPlayer)
@@ -771,14 +663,14 @@ namespace UltimatePong
                 case 4:
                     ballXVelocity = ballYVelocity = ballSpeed = 0;
                     foreach (Powerup powerup in powerup)
-                        powerup.disable();
+                        powerup.disabled(true);
                     break;
                 default:
                     break;
             }
-
-            
+            if(chosenPlayer!=4)
+                foreach (Powerup powerup in powerup)
+                    powerup.disabled(false);
         }
-
     }
 }

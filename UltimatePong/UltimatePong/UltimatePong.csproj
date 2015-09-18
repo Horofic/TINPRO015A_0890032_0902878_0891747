@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Ball.cs" />
     <Compile Include="Bar.cs" />
+    <Compile Include="Border.cs" />
     <Compile Include="Launcher.cs">
       <SubType>Form</SubType>
     </Compile>
