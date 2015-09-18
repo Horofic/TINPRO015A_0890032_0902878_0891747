@@ -57,7 +57,21 @@ namespace UltimatePong
 
         }
 
-        public void updateBar(GameTime gameTime)
+        public void updateBar()
+        {
+            if (barType == "Standing")
+            {
+                bar.Width = barWidth;
+                bar.Height = barLength;
+            }
+            else if(barType == "Lying")
+            {
+                bar.Width = barLength;
+                bar.Height = barWidth;
+            }
+        }
+
+        public void moveBar(GameTime gameTime)
         {
             var keyBoardState = Keyboard.GetState();
 
@@ -74,24 +88,16 @@ namespace UltimatePong
 
                 if (keyBoardState.IsKeyDown(controls[1]))
                     bar.Offset(0, (barSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + barSpeedMultiplier);
-
-                bar.Width = barWidth;
-                bar.Height = barLength;
             }
-            else if(barType == "Lying")
+            else if (barType == "Lying")
             {
                 if (keyBoardState.IsKeyDown(controls[0]))
                     bar.Offset((-barSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) - barSpeedMultiplier, 0);
 
                 if (keyBoardState.IsKeyDown(controls[1]))
-                    bar.Offset((barSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + barSpeedMultiplier,0);
-
-                bar.Width = barLength;
-                bar.Height = barWidth;
+                    bar.Offset((barSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + barSpeedMultiplier, 0);
             }
         }
-
-
 
     }
 }

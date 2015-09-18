@@ -19,6 +19,7 @@ namespace UltimatePong
         Texture2D bottomBorderTexture;
 
         Texture2D barTexture;
+        Texture2D borderTexture;
 
         Rectangle ball;
 
@@ -84,8 +85,8 @@ namespace UltimatePong
         SpriteFont font;
 
         //test
-        Border border;
-
+        //Border border;
+        Border[] borders;
         //playerBars
         Bar[] playerBars;
         int lastHitBar;
@@ -116,11 +117,12 @@ namespace UltimatePong
             //Ball texture
             spriteTexture = Content.Load<Texture2D>("ball1.png");
             //Border textures
-            topBorderTexture = Content.Load<Texture2D>("bar.png");
-            leftBorderTexture = Content.Load<Texture2D>("bar.png");
-            rightBorderTexture = Content.Load<Texture2D>("bar.png");
-            bottomBorderTexture = Content.Load<Texture2D>("bar.png");
+            // topBorderTexture = Content.Load<Texture2D>("bar.png");
+            //leftBorderTexture = Content.Load<Texture2D>("bar.png");
+            //rightBorderTexture = Content.Load<Texture2D>("bar.png");
+            //bottomBorderTexture = Content.Load<Texture2D>("bar.png");
             //Player Textures
+            borderTexture = Content.Load<Texture2D>("ball1.png");
             barTexture = Content.Load<Texture2D>("ball1.png");
 
             //Font texture
@@ -162,10 +164,10 @@ namespace UltimatePong
             int barStartPos = (fieldSize - barLength) / 2;
 
             //initialize borders
-            topBorder = new Rectangle(0, 0, fieldSize, borderWidth);
-            bottomBorder = new Rectangle(0, fieldSize - borderWidth, fieldSize, borderWidth);
-            leftBorder = new Rectangle(0, 0, borderWidth, fieldSize);
-            rightBorder = new Rectangle(fieldSize - borderWidth, 0, borderWidth, fieldSize);
+        //    topBorder = new Rectangle(0, 0, fieldSize, borderWidth);
+          //  bottomBorder = new Rectangle(0, fieldSize - borderWidth, fieldSize, borderWidth);
+           // leftBorder = new Rectangle(0, 0, borderWidth, fieldSize);
+           // rightBorder = new Rectangle(fieldSize - borderWidth, 0, borderWidth, fieldSize);
 
             //initialize player lives
             playerLives = new int[4] {lives,lives,lives,lives}; 
@@ -183,7 +185,15 @@ namespace UltimatePong
             playerBars[2] = new Bar(spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
             playerBars[3] = new Bar(spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
-            border = new Border(spriteBatch,barTexture,0,0,"Standing");//Left border
+            borders = new Border[4];
+            borders[0] = new Border(spriteBatch, barTexture, 0, 0, "Lying");//Top border
+            borders[1] = new Border(spriteBatch, barTexture, 0, (fieldSize - borderWidth), "Lying");//Bottom border
+            borders[2] = new Border(spriteBatch, barTexture, 0, 0, "Standing");//Left border
+            borders[3] = new Border(spriteBatch, barTexture, (fieldSize - borderWidth), 0, "Standing");//Right border
+
+
+
+          //  border = new Border(spriteBatch,barTexture,0,0,"Standing");//Lef//t border
 
 
             gameTime = 0;
@@ -222,9 +232,10 @@ namespace UltimatePong
             checkBallCollision(gameTime);
             //move bars
             foreach (Bar bar in playerBars)
-                bar.updateBar(gameTime);
+                bar.updateBar();
             //borders
-            border.updateBorder();
+            foreach (Border border in borders)
+                border.updateBorder();
 
             //Power-ups
             if(powerups)
@@ -250,10 +261,13 @@ namespace UltimatePong
             powerup[powerupCount].checkCollision(ref ball, ref playerBars, lastHitBar,ref playerLives,ref ballXVelocity,ref ballYVelocity);
             powerupCount++;
         }
-
+        
         private void checkInput(GameTime gameTime)
         {
             var keyBoardstate = Keyboard.GetState();
+            foreach (Bar bar in playerBars)
+                bar.moveBar(gameTime);
+            
             if (keyBoardstate.IsKeyDown(Keys.Escape))
                 Exit();
         }
@@ -270,11 +284,11 @@ namespace UltimatePong
             //bars
            
             //borders
-            spriteBatch.Draw(topBorderTexture, topBorder, Color.White);
-            spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
-            spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
-            spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
-            border.DrawBorder();
+            //spriteBatch.Draw(topBorderTexture, topBorder, Color.White);
+            //spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
+            //spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
+          //  spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
+         //   border.DrawBorder();
             //font
             if(players==4)
             spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
@@ -288,6 +302,9 @@ namespace UltimatePong
 
             foreach (Bar bar in playerBars)
                 bar.DrawBar();
+
+            foreach (Border border in borders)
+                border.DrawBorder();
 
             spriteBatch.End();
 
