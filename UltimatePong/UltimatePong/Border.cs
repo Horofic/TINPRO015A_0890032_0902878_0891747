@@ -11,9 +11,9 @@ namespace UltimatePong
     class Border : Game
     {
 
-        Rectangle border;
+        public Rectangle border;
         SpriteBatch spriteBatch;
-        Texture2D borderTexture;
+        public Texture2D borderTexture;
 
         int borderXPos;
         int borderYPos;

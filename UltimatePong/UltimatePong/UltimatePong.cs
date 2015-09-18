@@ -13,20 +13,10 @@ namespace UltimatePong
         //sprites
         Texture2D spriteTexture;
 
-        Texture2D topBorderTexture;
-        Texture2D leftBorderTexture;
-        Texture2D rightBorderTexture;
-        Texture2D bottomBorderTexture;
-
         Texture2D barTexture;
         Texture2D borderTexture;
 
         Rectangle ball;
-
-        Rectangle topBorder;
-        Rectangle bottomBorder;
-        Rectangle leftBorder;
-        Rectangle rightBorder;
 
         //playing field properties
         const int fieldSize = 800;
@@ -117,14 +107,9 @@ namespace UltimatePong
             //Ball texture
             spriteTexture = Content.Load<Texture2D>("ball1.png");
             //Border textures
-            // topBorderTexture = Content.Load<Texture2D>("bar.png");
-            //leftBorderTexture = Content.Load<Texture2D>("bar.png");
-            //rightBorderTexture = Content.Load<Texture2D>("bar.png");
-            //bottomBorderTexture = Content.Load<Texture2D>("bar.png");
+            borderTexture = Content.Load<Texture2D>("bar.png");
             //Player Textures
-            borderTexture = Content.Load<Texture2D>("ball1.png");
             barTexture = Content.Load<Texture2D>("ball1.png");
-
             //Font texture
             font = Content.Load<SpriteFont>("font");
 
@@ -163,12 +148,6 @@ namespace UltimatePong
 
             int barStartPos = (fieldSize - barLength) / 2;
 
-            //initialize borders
-        //    topBorder = new Rectangle(0, 0, fieldSize, borderWidth);
-          //  bottomBorder = new Rectangle(0, fieldSize - borderWidth, fieldSize, borderWidth);
-           // leftBorder = new Rectangle(0, 0, borderWidth, fieldSize);
-           // rightBorder = new Rectangle(fieldSize - borderWidth, 0, borderWidth, fieldSize);
-
             //initialize player lives
             playerLives = new int[4] {lives,lives,lives,lives}; 
 
@@ -178,22 +157,19 @@ namespace UltimatePong
             for(int i=0;i<powerup.Length;i++)
             powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);
 
-            //Test
+            //initialize players
             playerBars = new Bar[4];
             playerBars[0] = new Bar(spriteBatch, barTexture, barStartPos, barToBorderDist, topBarKeys, "Lying");//Topp bar
             playerBars[1] = new Bar(spriteBatch, barTexture, barStartPos, fieldSize - barToBorderDist - barWidth, bottomBarKeys, "Lying");//Bottom bar
             playerBars[2] = new Bar(spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
             playerBars[3] = new Bar(spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
+            //Inititialize borders
             borders = new Border[4];
-            borders[0] = new Border(spriteBatch, barTexture, 0, 0, "Lying");//Top border
-            borders[1] = new Border(spriteBatch, barTexture, 0, (fieldSize - borderWidth), "Lying");//Bottom border
-            borders[2] = new Border(spriteBatch, barTexture, 0, 0, "Standing");//Left border
-            borders[3] = new Border(spriteBatch, barTexture, (fieldSize - borderWidth), 0, "Standing");//Right border
-
-
-
-          //  border = new Border(spriteBatch,barTexture,0,0,"Standing");//Lef//t border
+            borders[0] = new Border(spriteBatch, borderTexture, 0, 0, "Lying");//Top border
+            borders[1] = new Border(spriteBatch, borderTexture, 0, (fieldSize - borderWidth), "Lying");//Bottom border
+            borders[2] = new Border(spriteBatch, borderTexture, 0, 0, "Standing");//Left border
+            borders[3] = new Border(spriteBatch, borderTexture, (fieldSize - borderWidth), 0, "Standing");//Right border
 
 
             gameTime = 0;
@@ -208,15 +184,15 @@ namespace UltimatePong
             switch(players)
             {
                 case 2:
-                    topBorderTexture = Content.Load<Texture2D>("deadBar.png");
-                    bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[0].borderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[1].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerBars[0].bar.Offset(-800, -800);
                     playerBars[1].bar.Offset(-800, -800);
                     playerLives[0] = 0;
                     playerLives[1] = 0;
                     break;
                 case 3:
-                    topBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[1].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerBars[0].bar.Offset(-800, -800);
                     playerLives[0] = 0;
                     break;
@@ -280,34 +256,24 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
-           
-            //ball
-            spriteBatch.Draw(spriteTexture, ball, Color.White);
-            //bars
-           
-            //borders
-            //spriteBatch.Draw(topBorderTexture, topBorder, Color.White);
-            //spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
-            //spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
-          //  spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
-         //   border.DrawBorder();
-            //font
-            if(players==4)
-            spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
-            if(players!=2)
-            spriteBatch.DrawString(font, playerLives[1].ToString(), new Vector2(390, 710), Color.White);
-            spriteBatch.DrawString(font, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
-            spriteBatch.DrawString(font, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
-            //powerup
-            foreach(Powerup powerup in powerup)
-            powerup.drawPowerup();
-
-            foreach (Bar bar in playerBars)
-                bar.DrawBar();
-
-            foreach (Border border in borders)
-                border.DrawBorder();
-
+                //ball
+                spriteBatch.Draw(spriteTexture, ball, Color.White);
+                //bars
+                foreach (Bar bar in playerBars)
+                    bar.DrawBar();
+                //borders
+                foreach (Border border in borders)
+                    border.DrawBorder();
+                //font
+                if (players==4)
+                spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
+                if(players!=2)
+                spriteBatch.DrawString(font, playerLives[1].ToString(), new Vector2(390, 710), Color.White);
+                spriteBatch.DrawString(font, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
+                spriteBatch.DrawString(font, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
+                //powerup
+                foreach(Powerup powerup in powerup)
+                powerup.drawPowerup();
             spriteBatch.End();
 
             base.Draw(gameTime);
@@ -337,7 +303,7 @@ namespace UltimatePong
 
 
             // check if ball touches the border if does that player loses a life and ball is reset
-            else if (ball.Intersects(topBorder))
+            else if (ball.Intersects(borders[0].border))//Collision met top border
             {
                 if (playerLives[0].Equals(0)||players==2||players==3)
                     simpleBounce("y");
@@ -345,7 +311,7 @@ namespace UltimatePong
                 ResetBall(playerBars[0].bar);
             }
 
-            else if (ball.Intersects(bottomBorder))
+            else if (ball.Intersects(borders[1].border))//Collision met bottom border
             {
                 if (playerLives[1].Equals(0)||players==2)
                     simpleBounce("y");
@@ -353,7 +319,7 @@ namespace UltimatePong
                     ResetBall(playerBars[1].bar);
             }
 
-            else if (ball.Intersects(leftBorder))
+            else if (ball.Intersects(borders[2].border))//Collision met left border
             {
                 if (playerLives[2].Equals(0))
                     simpleBounce("x");
@@ -361,7 +327,7 @@ namespace UltimatePong
                     ResetBall(playerBars[2].bar);
             }
 
-            else if (ball.Intersects(rightBorder))
+            else if (ball.Intersects(borders[3].border))//Collision met right border
             {
                 if (playerLives[3].Equals(0))
                     simpleBounce("x");
@@ -539,7 +505,7 @@ namespace UltimatePong
                 lastSpawnedDirection = 0;
                 if (playerLives[0] == 0)
                 {
-                    topBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[0].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerBars[0].bar.Offset(-800, -800);
                 }
             }
@@ -550,7 +516,7 @@ namespace UltimatePong
                 lastSpawnedDirection = 1;
                 if (playerLives[1] == 0)
                 {
-                    bottomBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[1].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerBars[1].bar.Offset(-800, -800);
                 }
             }
@@ -561,7 +527,7 @@ namespace UltimatePong
                 lastSpawnedDirection = 2;
                 if (playerLives[2] == 0)
                 {
-                    leftBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[2].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerBars[2].bar.Offset(-800, -800);
                 }
             }
@@ -572,7 +538,7 @@ namespace UltimatePong
                 lastSpawnedDirection = 3;
                 if (playerLives[3] == 0)
                 {
-                    rightBorderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[3].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerBars[3].bar.Offset(-800, -800);
                 }
             }
