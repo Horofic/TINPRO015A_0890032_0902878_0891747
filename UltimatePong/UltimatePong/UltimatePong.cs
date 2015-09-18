@@ -83,6 +83,9 @@ namespace UltimatePong
 
         SpriteFont font;
 
+        //test
+        Border border;
+
         //playerBars
         Bar[] playerBars;
         int lastHitBar;
@@ -180,6 +183,9 @@ namespace UltimatePong
             playerBars[2] = new Bar(spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
             playerBars[3] = new Bar(spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
+            border = new Border(spriteBatch,barTexture,0,0,"Standing");//Left border
+
+
             gameTime = 0;
             setPlayersAmount();
             spawnBallDirection();
@@ -217,6 +223,8 @@ namespace UltimatePong
             //move bars
             foreach (Bar bar in playerBars)
                 bar.updateBar(gameTime);
+            //borders
+            border.updateBorder();
 
             //Power-ups
             if(powerups)
@@ -266,6 +274,7 @@ namespace UltimatePong
             spriteBatch.Draw(bottomBorderTexture, bottomBorder, Color.White);
             spriteBatch.Draw(leftBorderTexture, leftBorder, Color.White);
             spriteBatch.Draw(rightBorderTexture, rightBorder, Color.White);
+            border.DrawBorder();
             //font
             if(players==4)
             spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
