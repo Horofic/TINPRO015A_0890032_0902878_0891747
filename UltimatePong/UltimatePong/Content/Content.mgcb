@@ -19,3 +19,14 @@
 /processorParam:TextureFormat=Compressed
 /build:font.spritefont
 
+#begin bleep-high.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bleep-high.wav
+
+#begin bleep-low.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:bleep-low.wav

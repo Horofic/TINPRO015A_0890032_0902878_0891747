@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 namespace UltimatePong
 {
     public class UltimatePong : Game
@@ -15,6 +16,9 @@ namespace UltimatePong
 
         Texture2D barTexture;
         Texture2D borderTexture;
+
+        SoundEffect bleepHigh;
+        SoundEffect bleepLow;
 
         Rectangle ball;
 
@@ -103,7 +107,9 @@ namespace UltimatePong
         protected override void Initialize()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            
+
+            bleepHigh = Content.Load<SoundEffect>("bleep-high");
+            bleepLow = Content.Load<SoundEffect>("bleep-low");
             //Ball texture
             spriteTexture = Content.Load<Texture2D>("ball1.png");
             //Border textures
@@ -203,8 +209,9 @@ namespace UltimatePong
 
         protected override void Update(GameTime gameTime)
         {
-            
 
+            
+            //bleepLow.Play();
 
             checkInput(gameTime);
             // Collision detection and ball movement
@@ -289,24 +296,42 @@ namespace UltimatePong
 
             //barcollision
             if (ball.Intersects(playerBars[0].bar))
+            {
                 barBounce("top");
+                bleepHigh.Play(); 
+            }
+                
                
             else if (ball.Intersects(playerBars[1].bar))
+            {
                 barBounce("bottom");
+                bleepHigh.Play();
+            }
+                
                 
             else if (ball.Intersects(playerBars[2].bar))
+            {
                 barBounce("left");
+                bleepHigh.Play();
+            }
+                
                 
             else if (ball.Intersects(playerBars[3].bar))
+            {
                 barBounce("right");
-                
-
+                bleepHigh.Play();
+            }
+           
 
             // check if ball touches the border if does that player loses a life and ball is reset
             else if (ball.Intersects(borders[0].border))//Collision met top border
             {
                 if (playerLives[0].Equals(0)||players==2||players==3)
+                {
                     simpleBounce("y");
+                    bleepLow.Play();
+                }
+                    
                 else
                 ResetBall(playerBars[0].bar);
             }
@@ -314,7 +339,11 @@ namespace UltimatePong
             else if (ball.Intersects(borders[1].border))//Collision met bottom border
             {
                 if (playerLives[1].Equals(0)||players==2)
+                {
                     simpleBounce("y");
+                    bleepLow.Play();
+                }
+                    
                 else
                     ResetBall(playerBars[1].bar);
             }
@@ -322,7 +351,11 @@ namespace UltimatePong
             else if (ball.Intersects(borders[2].border))//Collision met left border
             {
                 if (playerLives[2].Equals(0))
+                {
                     simpleBounce("x");
+                    bleepLow.Play();
+                }
+                    
                 else
                     ResetBall(playerBars[2].bar);
             }
@@ -330,7 +363,10 @@ namespace UltimatePong
             else if (ball.Intersects(borders[3].border))//Collision met right border
             {
                 if (playerLives[3].Equals(0))
+                {
                     simpleBounce("x");
+                    bleepLow.Play();
+                }
                 else
                     ResetBall(playerBars[3].bar);
             }
