@@ -223,6 +223,9 @@ namespace UltimatePong
   
         protected override void Update(GameTime gameTime)
         {
+            
+
+
             checkInput(gameTime);
             // Collision detection and ball movement
             checkBallCollision(gameTime);
@@ -341,7 +344,6 @@ namespace UltimatePong
 
         protected override void Draw(GameTime gameTime)
         {
-            
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
