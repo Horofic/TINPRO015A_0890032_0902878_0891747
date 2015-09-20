@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using System.Collections.Generic;
+
 namespace UltimatePong
 {
     public class UltimatePong : Game
@@ -20,7 +22,7 @@ namespace UltimatePong
         SoundEffect bleepHigh;
         SoundEffect bleepLow;
 
-        Rectangle ball;
+        List<Ball> balls;
 
         //playing field properties
         const int fieldSize = 800;
@@ -72,6 +74,8 @@ namespace UltimatePong
         public int lives;
         public bool powerups;
         public bool classicBounce;
+        private bool firstCycle;
+
 
         Powerup[] powerup;
         int powerupCount;
@@ -139,15 +143,8 @@ namespace UltimatePong
             rightBarKeys[2] = Keys.K; //BOOST
 
             //initialize ball
-            ballSize = 16;
-            ballSpeed = 500.0f;
-            ballSpeedInc = 20.0f;
-            ballSpeedLimit = 800f;
-            ballXVelocity = -300.0f;
-            ballYVelocity = 0.0f;
-            collision = false;
-            ballStartPos = (fieldSize - ballSize) / 2;
-            ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
+            balls.Insert(0, new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false));
+            firstCycle = true;
 
             //initialize bars
             //barKeys = new Keys[][]{  topBarKeys, bottomBarKeys, leftBarKeys, rightBarKeys }; //put all the inputs in 1 array
@@ -178,11 +175,13 @@ namespace UltimatePong
             borders[3] = new Border(spriteBatch, borderTexture, (fieldSize - borderWidth), 0, "Standing");//Right border
 
 
+
+
             gameTime = 0;
             setPlayersAmount();
-            spawnBallDirection();
 
             base.Initialize();
+
         }
         
         private void setPlayersAmount()
@@ -209,13 +208,21 @@ namespace UltimatePong
 
         protected override void Update(GameTime gameTime)
         {
-
+            if (firstCycle)
+            {
+                balls[0].spawnBall(0, ballSpeed, gameTime);
+                firstCycle = false;
+            }
             
             //bleepLow.Play();
 
             checkInput(gameTime);
             // Collision detection and ball movement
-            checkBallCollision(gameTime);
+            foreach (Ball ball in balls)
+            {
+                int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);//needs to be fixed and the returned int must be processed.
+            }
+                
             //move bars
             foreach (Bar bar in playerBars)
                 bar.updateBar();
@@ -263,8 +270,9 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             
             spriteBatch.Begin();
-                //ball
-                spriteBatch.Draw(spriteTexture, ball, Color.White);
+            //balls
+            foreach (Ball ball in balls)
+                ball.drawBall(spriteBatch, spriteTexture);
                 //bars
                 foreach (Bar bar in playerBars)
                     bar.DrawBar();
@@ -286,252 +294,7 @@ namespace UltimatePong
             base.Draw(gameTime);
         }
 
-        private void checkBallCollision(GameTime gameTime)
-        {
-            if (collision)
-                moveBall(gameTime);
-
-
-            collision = true;
-
-            //barcollision
-            if (ball.Intersects(playerBars[0].bar))
-            {
-                barBounce("top");
-                bleepHigh.Play(); 
-            }
-                
-               
-            else if (ball.Intersects(playerBars[1].bar))
-            {
-                barBounce("bottom");
-                bleepHigh.Play();
-            }
-                
-                
-            else if (ball.Intersects(playerBars[2].bar))
-            {
-                barBounce("left");
-                bleepHigh.Play();
-            }
-                
-                
-            else if (ball.Intersects(playerBars[3].bar))
-            {
-                barBounce("right");
-                bleepHigh.Play();
-            }
-           
-
-            // check if ball touches the border if does that player loses a life and ball is reset
-            else if (ball.Intersects(borders[0].border))//Collision met top border
-            {
-                if (playerLives[0].Equals(0)||players==2||players==3)
-                {
-                    simpleBounce("y");
-                    bleepLow.Play();
-                }
-                    
-                else
-                ResetBall(playerBars[0].bar);
-            }
-
-            else if (ball.Intersects(borders[1].border))//Collision met bottom border
-            {
-                if (playerLives[1].Equals(0)||players==2)
-                {
-                    simpleBounce("y");
-                    bleepLow.Play();
-                }
-                    
-                else
-                    ResetBall(playerBars[1].bar);
-            }
-
-            else if (ball.Intersects(borders[2].border))//Collision met left border
-            {
-                if (playerLives[2].Equals(0))
-                {
-                    simpleBounce("x");
-                    bleepLow.Play();
-                }
-                    
-                else
-                    ResetBall(playerBars[2].bar);
-            }
-
-            else if (ball.Intersects(borders[3].border))//Collision met right border
-            {
-                if (playerLives[3].Equals(0))
-                {
-                    simpleBounce("x");
-                    bleepLow.Play();
-                }
-                else
-                    ResetBall(playerBars[3].bar);
-            }
-            else
-            {
-                collision = false;
-                moveBall(gameTime);
-            }
-        }
-
-        private void moveBall(GameTime gameTime)
-        {
-            ball.Offset((ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
-        }
-
-        private void simpleBounce(string v)
-        {
-
-            switch (v)
-            {
-                case "x":
-                    ballXVelocity = -ballXVelocity;
-                    break;
-                case "y":
-                    ballYVelocity = -ballYVelocity;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void barBounce(string v)
-        {
-            if(ballSpeed<ballSpeedLimit)
-                ballSpeed += ballSpeedInc;
-            Console.WriteLine(ballSpeed);
-            int barCenter;
-            
-            switch (v)
-            {
-                case "top":
-                    barCenter = playerBars[0].bar.Center.X;
-                    ballCenter = ball.Center.X;
-                    maxOffset = ((playerBars[0].bar.Width / 2.0f) + ball.Width + 2.0f);
-                    offset = barCenter - ballCenter;
-
-                    if (offset == 0)
-                    {
-                        ballXVelocity = 0;
-                        ballYVelocity = ballSpeed;
-                    }
-                    //ball bounces right
-                    else if (offset < 0)
-                    {
-                        multiplier = (1-((-offset) / maxOffset) *bounceCorrection );
-                        ballYVelocity = multiplier * ballSpeed;
-                        ballXVelocity = (float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballYVelocity * ballYVelocity)); 
-                    }
-                    //ball bounces left
-                    else if (offset > 0)
-                    {
-                        multiplier = (1-(offset / maxOffset) * bounceCorrection);
-                        ballYVelocity = multiplier * ballSpeed;
-                        ballXVelocity = -(float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballYVelocity * ballYVelocity));
-                    }
-                    break;
-
-
-                case "bottom":
-                    barCenter = playerBars[1].bar.Center.X;
-                    ballCenter = ball.Center.X;
-                    maxOffset = ((playerBars[1].bar.Width / 2.0f) + ball.Width + 2.0f);
-                    offset = barCenter - ballCenter;
-
-                    if (offset == 0)
-                    {
-                        ballXVelocity = 0;
-                        ballYVelocity = -ballSpeed;
-                    }
-
-
-                    //ball bounces right
-                    else if (offset < 0)
-                    {
-                        multiplier = (1 - ((-offset) / maxOffset) * bounceCorrection);
-                        ballYVelocity = -multiplier * ballSpeed;
-                        ballXVelocity = (float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballYVelocity * ballYVelocity));
-                    }
-
-                    //ball bounces left
-                    else if (offset > 0)
-                    {
-                        multiplier = (1 - (offset / maxOffset) * bounceCorrection);
-                        ballYVelocity = -multiplier * ballSpeed;
-                        ballXVelocity = -(float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballYVelocity * ballYVelocity));
-                    }
-                    break;
-
-
-
-                case "left":
-                    barCenter = playerBars[2].bar.Center.Y;
-                    ballCenter = ball.Center.Y;
-                    maxOffset = ((playerBars[2].bar.Height / 2.0f) + ball.Height + 2.0f);
-                    offset = barCenter - ballCenter;
-
-                    if (offset == 0)
-                    {
-                        ballXVelocity = ballSpeed;
-                        ballYVelocity = 0;
-                    }
-
-
-                    //ball bounces down
-                    else if (offset < 0)
-                    {
-                        multiplier = (1 - ((-offset) / maxOffset) * bounceCorrection);
-                        ballXVelocity = multiplier * ballSpeed;
-                        ballYVelocity = (float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballXVelocity * ballXVelocity));
-                    }
-
-                    //ball bounces up
-                    else if (offset > 0)
-                    {
-                        multiplier = (1 - (offset / maxOffset) * bounceCorrection);
-                        ballXVelocity = multiplier * ballSpeed;
-                        ballYVelocity = -(float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballXVelocity * ballXVelocity));
-                    }
-                    break; 
-
-
-
-                case "right":
-                    barCenter = playerBars[3].bar.Center.Y;
-                    ballCenter = ball.Center.Y;
-                    maxOffset = ((playerBars[3].bar.Height / 2.0f) + ball.Height + 2.0f);
-                    offset = barCenter - ballCenter;
-
-                    if (offset == 0)
-                    {
-                        ballXVelocity = -ballSpeed;
-                        ballYVelocity = 0;
-                    }
-
-
-                    //ball bounces down
-                    else if (offset < 0)
-                    {
-                        multiplier = (1 - ((-offset) / maxOffset) * bounceCorrection);
-                        ballXVelocity = -multiplier * ballSpeed;
-                        ballYVelocity = (float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballXVelocity * ballXVelocity));
-                    }
-
-                    //ball bounces up
-                    else if (offset > 0)
-                    {
-                        multiplier = (1 - (offset / maxOffset) * bounceCorrection);
-                        ballXVelocity = -multiplier * ballSpeed;
-                        ballYVelocity = -(float)Math.Sqrt((double)(ballSpeed * ballSpeed - ballXVelocity * ballXVelocity));
-                    }
-                    break; 
-                default:
-                    break;
-            }
-        }
+        
 
         protected void ResetBall(Rectangle player)
         {
