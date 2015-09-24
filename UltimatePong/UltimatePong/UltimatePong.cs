@@ -153,19 +153,19 @@ namespace UltimatePong
             for(int i=0;i<powerup.Length;i++)
             powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);
 
-            //initialize players
-            playerBars = new Bar[4];
-            playerBars[0] = new Bar(spriteBatch, barTexture, barStartPos, barToBorderDist, topBarKeys, "Lying");//Topp bar
-            playerBars[1] = new Bar(spriteBatch, barTexture, barStartPos, fieldSize - barToBorderDist - barWidth, bottomBarKeys, "Lying");//Bottom bar
-            playerBars[2] = new Bar(spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
-            playerBars[3] = new Bar(spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
-
             //Inititialize borders
             borders = new Border[4];
             borders[0] = new Border(spriteBatch, borderTexture, 0, 0, "Lying");//Top border
             borders[1] = new Border(spriteBatch, borderTexture, 0, (fieldSize - borderWidth), "Lying");//Bottom border
             borders[2] = new Border(spriteBatch, borderTexture, 0, 0, "Standing");//Left border
             borders[3] = new Border(spriteBatch, borderTexture, (fieldSize - borderWidth), 0, "Standing");//Right border
+
+            //initialize players
+            playerBars = new Bar[4];
+            playerBars[0] = new Bar(borders, spriteBatch, barTexture, barStartPos, barToBorderDist, topBarKeys, "Lying");//Topp bar
+            playerBars[1] = new Bar(borders, spriteBatch, barTexture, barStartPos, fieldSize - barToBorderDist - barWidth, bottomBarKeys, "Lying");//Bottom bar
+            playerBars[2] = new Bar(borders, spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
+            playerBars[3] = new Bar(borders, spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
             gameTime = 0;
             setPlayersAmount();
@@ -210,7 +210,7 @@ namespace UltimatePong
                     direction = random.Next(0, 4);
                     break;
             }
-
+            lastSpawnedDirection = direction;
             balls[0].spawnBall(direction, ballSpeed, gameTime);
             firstCycle = false;
         }
@@ -261,7 +261,6 @@ namespace UltimatePong
                     lastHitBar = i;
                     break;
                 }
-            int[] vel = new int[2];
             powerup[powerupCount].checkCollision(ref balls[0].ball, ref playerBars, lastHitBar,ref playerLives,ref balls[0].ballXVelocity,ref balls[0].ballYVelocity);
             powerupCount++;
         }

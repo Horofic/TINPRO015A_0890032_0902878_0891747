@@ -100,21 +100,26 @@ namespace UltimatePong
                 case 0:
                     ballYVelocity = -ballSpeed;
                     ballXVelocity = 0;
-                    return;
+                    break;
                 case 1:
                     ballYVelocity = ballSpeed;
                     ballXVelocity = 0;
-                    return;
+                    break;
                 case 2:
                     ballXVelocity = -ballSpeed;
                     ballYVelocity = 0;
-                    return;
+                    break;
                 case 3:
                     ballXVelocity = ballSpeed;
                     ballYVelocity = 0;
-                    return;
+                    break;
+                case 4:
+                    ballSpeed = 0;
+                    ballXVelocity = 0;
+                    ballYVelocity = 0;
+                    break;
                 default:
-                    return;
+                    break;
             }
 
         }

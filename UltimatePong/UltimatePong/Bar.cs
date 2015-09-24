@@ -28,12 +28,13 @@ namespace UltimatePong
         //Start position bar
         int barXPos;
         int barYPos;
+        Border[] borders;
 
 
-
-        public Bar(SpriteBatch spriteBatch,Texture2D barTexture, int barXPos, int barYPos,  Keys[] controls, String barType)
+        public Bar(Border[] borders,SpriteBatch spriteBatch,Texture2D barTexture, int barXPos, int barYPos,  Keys[] controls, String barType)
         {
-            
+            this.borders = borders;
+               
             this.barTexture = barTexture;
             this.spriteBatch = spriteBatch;
 
@@ -88,6 +89,10 @@ namespace UltimatePong
 
                 if (keyBoardState.IsKeyDown(controls[1]))
                     bar.Offset(0, (barSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + barSpeedMultiplier);
+                if (bar.Intersects(borders[0].border))
+                    bar.Y = 5;
+                else if (bar.Intersects(borders[1].border))
+                    bar.Y = 800-barLength;
             }
             else if (barType == "Lying")
             {
@@ -96,6 +101,11 @@ namespace UltimatePong
 
                 if (keyBoardState.IsKeyDown(controls[1]))
                     bar.Offset((barSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds) + barSpeedMultiplier, 0);
+
+                if (bar.Intersects(borders[2].border))
+                    bar.X = 5;
+                else if (bar.Intersects(borders[3].border))
+                    bar.X = 800 - barLength;
             }
         }
 
