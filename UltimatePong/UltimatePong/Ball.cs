@@ -26,6 +26,7 @@ namespace UltimatePong
         public bool classicBounce;
         public float ballXVelocity;
         public float ballYVelocity;
+        public Rectangle ball;
 
 
         //local use
@@ -34,7 +35,6 @@ namespace UltimatePong
         bool collision;
         bool active;
         bool spawning;
-        Rectangle ball;
         Timer timer;
 
 
@@ -71,9 +71,10 @@ namespace UltimatePong
             this.classicBounce = classicBounce_;
 
             collision = false;
-            int ballStartPos = (fieldSize - ballSize) / 2;
+            ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
             timer = new Timer();
+
         }
 
         /*
@@ -97,19 +98,19 @@ namespace UltimatePong
             switch (player)
             {
                 case 0:
-                    ballYVelocity = ballSpeed;
-                    ballXVelocity = 0;
-                    return;
-                case 1:
                     ballYVelocity = -ballSpeed;
                     ballXVelocity = 0;
                     return;
+                case 1:
+                    ballYVelocity = ballSpeed;
+                    ballXVelocity = 0;
+                    return;
                 case 2:
-                    ballXVelocity = ballSpeed;
+                    ballXVelocity = -ballSpeed;
                     ballYVelocity = 0;
                     return;
                 case 3:
-                    ballXVelocity = -ballSpeed;
+                    ballXVelocity = ballSpeed;
                     ballYVelocity = 0;
                     return;
                 default:
@@ -138,7 +139,7 @@ namespace UltimatePong
         /*
          * Updates the ball position and makes the ball bounce on a collision. Returns an int to indicate that a player loses a live. default = -1, top = 0 bottom = 1
          */
-        public int updateBall(GameTime gameTime, Rectangle[] bars, Rectangle[] borders, int[] lives)
+        public int updateBall(GameTime gameTime, Bar[] bars, Border[] borders, int[] lives)
         {
             if (!active)
                 return -1;
@@ -154,13 +155,13 @@ namespace UltimatePong
             }
 
 
-            //barcollition
+            //barcollision
             for (int i = 0; i < 4; i++)
             {
-                if (ball.Intersects(bars[i]))
+                if (ball.Intersects(bars[i].bar))
                 {
-                    barBounce(i, bars[i]);
-                    while (ball.Intersects(bars[i]))
+                    barBounce(i, bars[i].bar);
+                    while (ball.Intersects(bars[i].bar))
                         moveBall(gameTime);
                     return -1;
                 }
@@ -170,12 +171,12 @@ namespace UltimatePong
 
             for (int i = 0; i < 4; i++)
             {
-                if (ball.Intersects(borders[i]))
+                if (ball.Intersects(borders[i].border))
                 {
                     if (lives[i].Equals(0))
                     {
                         simpleBounce(i);
-                        while (ball.Intersects(borders[i]))
+                        while (ball.Intersects(borders[i].border))
                             moveBall(gameTime);
                         return -1;
                     }
@@ -186,7 +187,7 @@ namespace UltimatePong
                 }
             }
             //the ball isnt in collision
-             moveBall(gameTime);
+            moveBall(gameTime);
             return -1;
         }
 

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UltimatePong
 {
@@ -30,20 +31,11 @@ namespace UltimatePong
         const int borderWidth = 5;
 
         //ball properties
-        float ballSpeed;
-        float ballSpeedLimit;
-        float ballSpeedInc;
-        float ballXVelocity;
-        float ballYVelocity;
-        int ballSize;
-        int ballStartPos;
-        bool collision;
-        float multiplier;
-        int ballCenter;
-        float maxOffset;
-        float offset;
+        float ballSpeed = 400.0f;
+        float ballSpeedLimit = 800.0f;
+        float ballSpeedInc = 20.0f;
+        int ballSize = 16;
         int lastSpawnedDirection;
-        bool pause;
         //pause
         int pauseTimer;
         int gameTime;
@@ -143,6 +135,7 @@ namespace UltimatePong
             rightBarKeys[2] = Keys.K; //BOOST
 
             //initialize ball
+            balls = new List<Ball>();
             balls.Insert(0, new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false));
             firstCycle = true;
 
@@ -174,14 +167,10 @@ namespace UltimatePong
             borders[2] = new Border(spriteBatch, borderTexture, 0, 0, "Standing");//Left border
             borders[3] = new Border(spriteBatch, borderTexture, (fieldSize - borderWidth), 0, "Standing");//Right border
 
-
-
-
             gameTime = 0;
             setPlayersAmount();
 
             base.Initialize();
-
         }
         
         private void setPlayersAmount()
@@ -197,7 +186,7 @@ namespace UltimatePong
                     playerLives[1] = 0;
                     break;
                 case 3:
-                    borders[1].borderTexture = Content.Load<Texture2D>("deadBar.png");
+                    borders[0].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerBars[0].bar.Offset(-800, -800);
                     playerLives[0] = 0;
                     break;
@@ -206,13 +195,30 @@ namespace UltimatePong
             }
         }
 
+        protected void firstSpawnBall(GameTime gameTime)
+        {
+            int direction = 0;
+            switch(players)
+            {
+                case 2:
+                    direction = random.Next(2, 4);
+                    break;
+                case 3:
+                    direction = random.Next(1, 4);
+                    break;
+                case 4:
+                    direction = random.Next(0, 4);
+                    break;
+            }
+
+            balls[0].spawnBall(direction, ballSpeed, gameTime);
+            firstCycle = false;
+        }
+
         protected override void Update(GameTime gameTime)
         {
-            if (firstCycle)
-            {
-                balls[0].spawnBall(0, ballSpeed, gameTime);
-                firstCycle = false;
-            }
+            if(firstCycle)
+            firstSpawnBall(gameTime);
             
             //bleepLow.Play();
 
@@ -221,6 +227,12 @@ namespace UltimatePong
             foreach (Ball ball in balls)
             {
                 int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);//needs to be fixed and the returned int must be processed.
+                if(playerLostALife>-1)
+                {
+                    playerLives[playerLostALife] -= 1;
+                    ball.spawnBall(spawnBallDirection(), 400.0f, gameTime);
+                }
+                
             }
                 
             //move bars
@@ -233,8 +245,7 @@ namespace UltimatePong
             //Power-ups
             if(powerups)
             powerupEvents(gameTime);
-            if(pause)
-                pauseBall(gameTime);
+            
             base.Update(gameTime);
         }
 
@@ -245,13 +256,13 @@ namespace UltimatePong
 
             powerup[powerupCount].startTimer(gameTime);
             for (int i = 0; i < playerBars.Length; i++)
-                if (ball.Intersects(playerBars[i].bar))
+                if (balls[0].ball.Intersects(playerBars[i].bar))
                 {
                     lastHitBar = i;
                     break;
                 }
             int[] vel = new int[2];
-            powerup[powerupCount].checkCollision(ref ball, ref playerBars, lastHitBar,ref playerLives,ref ballXVelocity,ref ballYVelocity);
+            powerup[powerupCount].checkCollision(ref balls[0].ball, ref playerBars, lastHitBar,ref playerLives,ref balls[0].ballXVelocity,ref balls[0].ballYVelocity);
             powerupCount++;
         }
         
@@ -268,113 +279,32 @@ namespace UltimatePong
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
-            
             spriteBatch.Begin();
             //balls
             foreach (Ball ball in balls)
                 ball.drawBall(spriteBatch, spriteTexture);
-                //bars
-                foreach (Bar bar in playerBars)
-                    bar.DrawBar();
-                //borders
-                foreach (Border border in borders)
-                    border.DrawBorder();
-                //font
-                if (players==4)
+            //bars
+            foreach (Bar bar in playerBars)
+                bar.DrawBar();
+            //borders
+            foreach (Border border in borders)
+                border.DrawBorder();
+            //font
+            if (players==4)
                 spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
-                if(players!=2)
+            if(players!=2)
                 spriteBatch.DrawString(font, playerLives[1].ToString(), new Vector2(390, 710), Color.White);
                 spriteBatch.DrawString(font, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
                 spriteBatch.DrawString(font, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
-                //powerup
-                foreach(Powerup powerup in powerup)
+            //powerup
+            foreach(Powerup powerup in powerup)
                 powerup.drawPowerup();
-            spriteBatch.End();
 
+            spriteBatch.End();
             base.Draw(gameTime);
         }
 
-        
-
-        protected void ResetBall(Rectangle player)
-        {
-            if(player == playerBars[0].bar)
-            {
-                playerLives[0] -= 1;
-                lastSpawnedDirection = 0;
-                if (playerLives[0] == 0)
-                {
-                    borders[0].borderTexture = Content.Load<Texture2D>("deadBar.png");
-                    playerBars[0].bar.Offset(-800, -800);
-                }
-            }
-
-           else if (player == playerBars[1].bar)
-            {
-                playerLives[1] -= 1;
-                lastSpawnedDirection = 1;
-                if (playerLives[1] == 0)
-                {
-                    borders[1].borderTexture = Content.Load<Texture2D>("deadBar.png");
-                    playerBars[1].bar.Offset(-800, -800);
-                }
-            }
-
-            else if (player == playerBars[2].bar)
-            {
-                playerLives[2] -= 1;
-                lastSpawnedDirection = 2;
-                if (playerLives[2] == 0)
-                {
-                    borders[2].borderTexture = Content.Load<Texture2D>("deadBar.png");
-                    playerBars[2].bar.Offset(-800, -800);
-                }
-            }
-
-            else if (player == playerBars[3].bar)
-            {
-                playerLives[3] -= 1;
-                lastSpawnedDirection = 3;
-                if (playerLives[3] == 0)
-                {
-                    borders[3].borderTexture = Content.Load<Texture2D>("deadBar.png");
-                    playerBars[3].bar.Offset(-800, -800);
-                }
-            }
-            // ballSpeed = 500.0f;
-           // lastHitBar = -1;
-            ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
-            pause = true;
-        }
-      
-        public void pauseBall(GameTime gameTime)
-        {
-            ballXVelocity = ballYVelocity = ballSpeed = 0;
-            if (this.gameTime < (int)gameTime.TotalGameTime.TotalSeconds)
-            {
-                this.gameTime = (int)gameTime.TotalGameTime.TotalSeconds;
-                pauseTimer++;
-                switch(pauseTimer)
-                {
-                    case 1:
-                        foreach (Powerup powerup in powerup)
-                            powerup.disabled(true);
-                        break;
-                    case 3:
-                        ballXVelocity = ballYVelocity = ballSpeed = 500;
-                        pauseTimer = 0;
-                        pause = false;
-                        
-                        spawnBallDirection();
-                        
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-
-        private void spawnBallDirection()
+        private int spawnBallDirection()
         {
             int[] playersAlive = new int[4];
             int chosenPlayer = 0;
@@ -420,39 +350,15 @@ namespace UltimatePong
             if (death==3)
                 chosenPlayer = 4;
 
-            switch (chosenPlayer)
-            {
-                case 0:
-                    lastSpawnedDirection = 0;
-                    ballXVelocity = 0;
-                    ballYVelocity = -ballSpeed;
-                    break;
-                case 1:
-                    lastSpawnedDirection = 1;
-                    ballXVelocity = 0;
-                    ballYVelocity = ballSpeed;
-                    break;
-                case 2:
-                    lastSpawnedDirection = 2;
-                    ballXVelocity = -ballSpeed;
-                    ballYVelocity = 0;
-                    break;
-                case 3:
-                    lastSpawnedDirection = 3;
-                    ballXVelocity = ballSpeed;
-                    ballYVelocity = 0;
-                    break;
-                case 4:
-                    ballXVelocity = ballYVelocity = ballSpeed = 0;
-                    foreach (Powerup powerup in powerup)
-                        powerup.disabled(true);
-                    break;
-                default:
-                    break;
-            }
+            lastSpawnedDirection = chosenPlayer;
+            if(chosenPlayer == 4)
+                foreach (Powerup powerup in powerup)
+                    powerup.disabled(true);
+
             if(chosenPlayer!=4)
                 foreach (Powerup powerup in powerup)
                     powerup.disabled(false);
+            return chosenPlayer;
         }
     }
 }
