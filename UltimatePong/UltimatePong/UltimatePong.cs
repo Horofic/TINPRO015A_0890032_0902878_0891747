@@ -74,7 +74,12 @@ namespace UltimatePong
 
         SpriteFont font;
 
+        KeyboardController input;
         //test
+
+
+
+        //end test
         //Border border;
         Border[] borders;
         //playerBars
@@ -116,7 +121,7 @@ namespace UltimatePong
             font = Content.Load<SpriteFont>("font");
 
             base.Window.AllowUserResizing = false;
-
+         
             //initialize bar controls
             topBarKeys[0] = Keys.T; //LEFT
             topBarKeys[1] = Keys.U; //RIGHT
@@ -167,6 +172,8 @@ namespace UltimatePong
             playerBars[2] = new Bar(borders, spriteBatch, barTexture, barToBorderDist, barStartPos, leftBarKeys ,"Standing");//Left bar
             playerBars[3] = new Bar(borders, spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
+
+            input = new KeyboardController(,leftBarKeys);
             gameTime = 0;
             setPlayersAmount();
 
@@ -217,12 +224,19 @@ namespace UltimatePong
 
         protected override void Update(GameTime gameTime)
         {
-            if(firstCycle)
-            firstSpawnBall(gameTime);
-            
-            //bleepLow.Play();
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            checkInput(gameTime);
+            if (firstCycle)
+            firstSpawnBall(gameTime);
+
+            input.Update(deltaTime);
+
+
+            if (input.quit)
+                Exit();
+
+
+                checkInput(gameTime);
             // Collision detection and ball movement
             foreach (Ball ball in balls)
             {
@@ -271,8 +285,7 @@ namespace UltimatePong
             foreach (Bar bar in playerBars)
                 bar.moveBar(gameTime);
             
-            if (keyBoardstate.IsKeyDown(Keys.Escape))
-                Exit();
+
         }
 
         protected override void Draw(GameTime gameTime)
