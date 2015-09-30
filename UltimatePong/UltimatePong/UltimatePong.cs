@@ -77,7 +77,7 @@ namespace UltimatePong
         KeyboardController input;
         //test
 
-
+        Keys[,] controls = new Keys[3,2];
 
         //end test
         //Border border;
@@ -139,6 +139,23 @@ namespace UltimatePong
             rightBarKeys[1] = Keys.J; //DOWN
             rightBarKeys[2] = Keys.K; //BOOST
 
+            controls[0, 0] = topBarKeys[0];
+            controls[0, 1] = topBarKeys[1];
+            controls[0, 2] = topBarKeys[2];
+
+            controls[1, 0] = bottomBarKeys[0];
+            controls[1, 1] = bottomBarKeys[1];
+            controls[1, 2] = bottomBarKeys[2];
+
+            controls[2, 0] = leftBarKeys[0];
+            controls[2, 1] = leftBarKeys[1];
+            controls[2, 2] = leftBarKeys[2];
+
+            controls[3, 0] = rightBarKeys[0];
+            controls[3, 1] = rightBarKeys[1];
+            controls[3, 2] = rightBarKeys[2];
+
+
             //initialize ball
             balls = new List<Ball>();
             balls.Insert(0, new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false));
@@ -173,7 +190,7 @@ namespace UltimatePong
             playerBars[3] = new Bar(borders, spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
 
-            input = new KeyboardController(,leftBarKeys);
+            input = new KeyboardController(controls);
             gameTime = 0;
             setPlayersAmount();
 

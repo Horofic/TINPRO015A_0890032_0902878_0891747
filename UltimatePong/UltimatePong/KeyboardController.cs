@@ -11,13 +11,12 @@ namespace UltimatePong
     {
         KeyboardState ks;
         Rectangle entity;
-        private Keys[] controls;
+        private Keys[,] controls;
         int speed = 400;
         int speedMultiplier;
 
-        public KeyboardController(Rectangle entity, Keys[] controls)
+        public KeyboardController(Keys[,] controls)
         {
-            this.entity = entity;
             this.controls = controls;
         }
 
@@ -32,13 +31,39 @@ namespace UltimatePong
 
         public void PlayerMovement()
         {
-            if(ks.IsKeyDown(controls[0]))
+            //top player
+            if(ks.IsKeyDown(controls[0, 0]))
+                entity.Offset((-speed - speedMultiplier),0);
+            if (ks.IsKeyDown(controls[0, 1]))
+                entity.Offset((speed - speedMultiplier),0);
+            if (ks.IsKeyDown(controls[0, 2]))
+                speedMultiplier = 3;
+            else
+                speedMultiplier = 0;
+            //bottom player
+            if (ks.IsKeyDown(controls[1, 0]))
+                entity.Offset((-speed - speedMultiplier),0);
+            if (ks.IsKeyDown(controls[1, 1]))
+                entity.Offset((speed - speedMultiplier),0);
+            if (ks.IsKeyDown(controls[1, 2]))
+                speedMultiplier = 3;
+            else
+                speedMultiplier = 0;
+            //left player
+            if (ks.IsKeyDown(controls[2, 0]))
                 entity.Offset(0, (-speed - speedMultiplier));
-
-            if (ks.IsKeyDown(controls[1]))
+            if (ks.IsKeyDown(controls[2, 1]))
                 entity.Offset(0, (speed - speedMultiplier));
-
-            if (ks.IsKeyDown(controls[2]))
+            if (ks.IsKeyDown(controls[2, 2]))
+                speedMultiplier = 3;
+            else
+                speedMultiplier = 0;
+            //right player
+            if (ks.IsKeyDown(controls[3, 0]))
+                entity.Offset(0, (-speed - speedMultiplier));
+            if (ks.IsKeyDown(controls[3, 1]))
+                entity.Offset(0, (speed - speedMultiplier));
+            if (ks.IsKeyDown(controls[3, 2]))
                 speedMultiplier = 3;
             else
                 speedMultiplier = 0;
