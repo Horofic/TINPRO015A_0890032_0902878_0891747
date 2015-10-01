@@ -77,7 +77,7 @@ namespace UltimatePong
         KeyboardController input;
         //test
 
-        Keys[,] controls = new Keys[3,2];
+        Keys[,] controls = new Keys[4,3];
 
         //end test
         //Border border;
