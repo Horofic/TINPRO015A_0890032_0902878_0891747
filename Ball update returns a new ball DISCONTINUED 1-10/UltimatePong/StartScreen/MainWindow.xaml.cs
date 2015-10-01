@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfApplication1
+namespace StartScreen
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -23,6 +23,12 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            var form = new UltimatePong(this);
+            form.show();
         }
     }
 }
