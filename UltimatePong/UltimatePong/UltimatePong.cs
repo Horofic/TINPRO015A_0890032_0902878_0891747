@@ -32,7 +32,7 @@ namespace UltimatePong
 
         //ball properties
         float ballSpeed = 400.0f;
-        float ballSpeedLimit = 800.0f;
+        float ballSpeedLimit = 80000.0f;
         float ballSpeedInc = 20.0f;
         int ballSize = 16;
         int lastSpawnedDirection;
@@ -76,7 +76,6 @@ namespace UltimatePong
 
         KeyboardController input;
         //test
-        Rectangle test;
         Keys[,] controls = new Keys[4,3];
 
         //end test
@@ -120,7 +119,7 @@ namespace UltimatePong
             //Font texture
             font = Content.Load<SpriteFont>("font");
 
-            test = new Rectangle(400, 400, 64, 64);
+          
             base.Window.AllowUserResizing = false;
          
             //initialize bar controls
@@ -191,7 +190,7 @@ namespace UltimatePong
             playerBars[3] = new Bar(borders, spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
 
-            input = new KeyboardController(controls,test);
+            input = new KeyboardController(controls);
             gameTime = 0;
             setPlayersAmount();
 
@@ -252,15 +251,22 @@ namespace UltimatePong
            
 
             if (input.quit)
-                Exit();
+            {
+                Ball newBall = new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture);
+
+                balls.Add(newBall);
+                newBall.spawnBall(spawnBallDirection(), ballSpeed, gameTime);
+
+            }
 
 
-                checkInput(gameTime);
+
+            checkInput(gameTime);
             // Collision detection and ball movement
 
             //creation of a new list of balls
             List<Ball> updatedBalls = balls;
-
+            List<Ball> ballsToRemove = new List<Ball>();
             foreach (Ball ball in updatedBalls)
             {
                 int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);
@@ -269,7 +275,7 @@ namespace UltimatePong
                     playerLives[playerLostALife] -= 1;
                     if (updatedBalls.Count > 1)
                     {
-                        updatedBalls.Remove(ball);
+                        ballsToRemove.Add(ball);
                     }
                     else
                     {
@@ -280,6 +286,8 @@ namespace UltimatePong
                 }
                 
             }
+            foreach (Ball ball in ballsToRemove)
+                updatedBalls.Remove(ball);
                 
             //move bars
             foreach (Bar bar in playerBars)
@@ -328,7 +336,6 @@ namespace UltimatePong
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
             spriteBatch.Begin();
-            spriteBatch.Draw(barTexture, test, Color.White);
             //balls
             foreach (Ball ball in balls)
                 ball.drawBall();

@@ -18,7 +18,7 @@ namespace UltimatePong
 
        Vector2 barMovement { get; set; }
 
-        public KeyboardController(Keys[,] controls, Rectangle entity)
+        public KeyboardController(Keys[,] controls)
         {
             this.controls = controls;
             this.entity = entity;
