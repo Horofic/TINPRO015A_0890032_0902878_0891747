@@ -255,7 +255,11 @@ namespace UltimatePong
 
                 checkInput(gameTime);
             // Collision detection and ball movement
-            foreach (Ball ball in balls)
+
+            //creation of a new list of balls
+            List<Ball> updatedBalls = balls;
+
+            foreach (Ball ball in updatedBalls)
             {
                 int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);//needs to be fixed and the returned int must be processed.
                 if(playerLostALife>-1)
@@ -276,7 +280,11 @@ namespace UltimatePong
             //Power-ups
             if(powerups)
             powerupEvents(gameTime);
-            
+
+
+            //update Entities
+            balls = updatedBalls;
+
             base.Update(gameTime);
         }
 
