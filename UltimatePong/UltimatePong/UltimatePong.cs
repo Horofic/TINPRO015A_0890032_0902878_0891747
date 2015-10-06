@@ -76,7 +76,7 @@ namespace UltimatePong
 
         KeyboardController input;
         //test
-
+        Rectangle test;
         Keys[,] controls = new Keys[4,3];
 
         //end test
@@ -120,6 +120,7 @@ namespace UltimatePong
             //Font texture
             font = Content.Load<SpriteFont>("font");
 
+            test = new Rectangle(400, 400, 64, 64);
             base.Window.AllowUserResizing = false;
          
             //initialize bar controls
@@ -190,7 +191,7 @@ namespace UltimatePong
             playerBars[3] = new Bar(borders, spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
 
-            input = new KeyboardController(controls);
+            input = new KeyboardController(controls,test);
             gameTime = 0;
             setPlayersAmount();
 
@@ -247,7 +248,7 @@ namespace UltimatePong
             firstSpawnBall(gameTime);
 
             input.Update(deltaTime);
-
+            input.PlayerMovement();
 
             if (input.quit)
                 Exit();
@@ -309,6 +310,7 @@ namespace UltimatePong
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
             spriteBatch.Begin();
+            spriteBatch.Draw(barTexture, test, Color.White);
             //balls
             foreach (Ball ball in balls)
                 ball.drawBall(spriteBatch, spriteTexture);
