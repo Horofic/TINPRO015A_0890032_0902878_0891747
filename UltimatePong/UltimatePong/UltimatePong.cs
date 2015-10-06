@@ -191,7 +191,7 @@ namespace UltimatePong
             playerBars[3] = new Bar(borders, spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
 
-            input = new KeyboardController(controls,test);
+            input = new KeyboardController(controls);
             gameTime = 0;
             setPlayersAmount();
 
@@ -319,7 +319,6 @@ namespace UltimatePong
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
             spriteBatch.Begin();
-            spriteBatch.Draw(barTexture, test, Color.White);
             //balls
             foreach (Ball ball in balls)
                 ball.drawBall(spriteBatch, spriteTexture);

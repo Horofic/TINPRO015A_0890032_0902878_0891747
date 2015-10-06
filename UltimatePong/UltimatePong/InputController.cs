@@ -12,8 +12,9 @@ namespace UltimatePong
     interface InputController
     {
         bool quit { get; }
+        float X { get; }
+        float Y { get; }
 
-    
         void Update(float gameTime);
     }
 }
