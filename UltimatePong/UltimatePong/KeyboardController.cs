@@ -14,7 +14,9 @@ namespace UltimatePong
         Rectangle entity;
         private Keys[,] controls;
         int speed = 400;
-        int speedMultiplier;
+        int speedMultiplier = 0;
+
+       Vector2 barMovement { get; set; }
 
         public KeyboardController(Keys[,] controls, Rectangle entity)
         {
@@ -31,10 +33,27 @@ namespace UltimatePong
         }
 
 
-        public void PlayerMovement()
+        public Vector2 PlayerMovement()
         {
-         
+                if (ks.IsKeyDown(Keys.Z))
+                {
+                    barMovement = new Vector2(200, 200);
+                    entity.Offset(barMovement);
+                    return barMovement;
+
+
+
+                    // barMovement = entity.Offset((-speed - speedMultiplier), 0);
+                }
+                else
+                {
+                    return Vector2.Zero;
+
+                }
+
+           
             //top player
+            /*
             if(ks.IsKeyDown(controls[0, 0]))
                 entity.Offset((-speed - speedMultiplier),0);
             if (ks.IsKeyDown(controls[0, 1]))
@@ -69,7 +88,9 @@ namespace UltimatePong
             if (ks.IsKeyDown(controls[3, 2]))
                 speedMultiplier = 3;
             else
-                speedMultiplier = 0;
+                speedMultiplier = 0;*/
+
+
         }
 
 

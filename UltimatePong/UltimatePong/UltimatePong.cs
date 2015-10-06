@@ -247,8 +247,9 @@ namespace UltimatePong
             if (firstCycle)
             firstSpawnBall(gameTime);
 
-            input.Update(deltaTime);
             input.PlayerMovement();
+            input.Update(deltaTime);
+           
 
             if (input.quit)
                 Exit();
