@@ -36,30 +36,15 @@ namespace UltimatePong
         bool spawning;
         Timer timer;
 
+        SpriteBatch spriteBatch;
+        Texture2D spriteTexture;
 
 
         /*
          *  CONSTRUCTORS
          */
-        public Ball()
-        {
-            fieldSize = 800;
-            ballSize = 16;
-            ballSpeed = 500.0f;
-            ballSpeedLimit = 800f;
-            ballSpeedInc = 20.0f;
-            bounceCorrection = 0.6f;
-            classicBounce = false;
-
-            collision = false;
-            active = true;
-            ballStartPos = (fieldSize - ballSize) / 2;
-            ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
-            timer = new Timer();
-
-        }
-
-        public Ball(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_)
+       
+        public Ball(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_, SpriteBatch sb, Texture2D texture)
         {
             this.fieldSize = fieldSize_;
             this.ballSize = ballSize_;
@@ -74,6 +59,8 @@ namespace UltimatePong
             ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
             timer = new Timer();
 
+            spriteBatch = sb;
+            spriteTexture = texture;
         }
 
         /*
@@ -134,7 +121,7 @@ namespace UltimatePong
 
         }
 
-        public void drawBall(SpriteBatch spriteBatch, Texture2D spriteTexture)
+        public void drawBall()
         {
             spriteBatch.Draw(spriteTexture, ball, Color.White);
         }
