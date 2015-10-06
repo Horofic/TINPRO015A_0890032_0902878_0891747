@@ -10,14 +10,16 @@ namespace UltimatePong
     class KeyboardController : InputController
     {
         KeyboardState ks;
+        //Entity entity;
         Rectangle entity;
         private Keys[,] controls;
         int speed = 400;
         int speedMultiplier;
 
-        public KeyboardController(Keys[,] controls)
+        public KeyboardController(Keys[,] controls, Rectangle entity)
         {
             this.controls = controls;
+            this.entity = entity;
         }
 
         public bool quit
@@ -31,6 +33,7 @@ namespace UltimatePong
 
         public void PlayerMovement()
         {
+         
             //top player
             if(ks.IsKeyDown(controls[0, 0]))
                 entity.Offset((-speed - speedMultiplier),0);
