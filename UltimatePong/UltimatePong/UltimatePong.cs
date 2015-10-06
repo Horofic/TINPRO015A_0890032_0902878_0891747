@@ -159,7 +159,7 @@ namespace UltimatePong
 
             //initialize ball
             balls = new List<Ball>();
-            balls.Insert(0, new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false));
+            balls.Insert(0, new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
             firstCycle = true;
 
             //initialize bars
@@ -262,11 +262,20 @@ namespace UltimatePong
 
             foreach (Ball ball in updatedBalls)
             {
-                int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);//needs to be fixed and the returned int must be processed.
+                int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);
                 if(playerLostALife>-1)
                 {
                     playerLives[playerLostALife] -= 1;
-                    ball.spawnBall(spawnBallDirection(), 400.0f, gameTime);
+                    if (updatedBalls.Count > 1)
+                    {
+                        updatedBalls.Remove(ball);
+                    }
+                    else
+                    {
+                        ball.spawnBall(spawnBallDirection(), 400.0f, gameTime);
+                        foreach (int i in playerLives)
+                            System.Console.WriteLine("Playerlive: "+ i);
+                    }
                 }
                 
             }
@@ -321,7 +330,7 @@ namespace UltimatePong
             spriteBatch.Draw(barTexture, test, Color.White);
             //balls
             foreach (Ball ball in balls)
-                ball.drawBall(spriteBatch, spriteTexture);
+                ball.drawBall();
             //bars
             foreach (Bar bar in playerBars)
                 bar.DrawBar();
@@ -366,7 +375,7 @@ namespace UltimatePong
             Console.WriteLine(p);
             int hussle1;
             int hussle2;
-            int temp;
+            int temp;  
 
             for(int i=0;i<3;i++)
             {
