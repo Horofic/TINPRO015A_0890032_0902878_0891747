@@ -74,7 +74,7 @@ namespace UltimatePong
 
         SpriteFont font;
 
-        KeyboardController input;
+        InputManagement input;
         //test
         Keys[,] controls = new Keys[4,3];
 
@@ -190,7 +190,7 @@ namespace UltimatePong
             playerBars[3] = new Bar(borders, spriteBatch, barTexture, fieldSize - barToBorderDist - barWidth, barStartPos, rightBarKeys ,"Standing");//Right bar
 
 
-            input = new KeyboardController(controls);
+            input = new InputManagement(controls);
             gameTime = 0;
             setPlayersAmount();
 
@@ -243,12 +243,17 @@ namespace UltimatePong
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+
             if (firstCycle)
             firstSpawnBall(gameTime);
 
-            input.PlayerMovement();
+            //input.PlayerMovement();
             input.Update(deltaTime);
-           
+            playerBars[0].newPos(input.TopBar);
+            playerBars[1].newPos(input.BotBar);
+            playerBars[2].newPos(input.LeftBar);
+            playerBars[3].newPos(input.RightBar);
+
 
             if (input.quit)
             {
@@ -261,7 +266,7 @@ namespace UltimatePong
 
 
 
-            checkInput(gameTime);
+            //checkInput(gameTime);
             // Collision detection and ball movement
 
             //creation of a new list of balls
@@ -322,7 +327,7 @@ namespace UltimatePong
             powerup[powerupCount].checkCollision(ref balls[0].ball, ref playerBars, lastHitBar,ref playerLives,ref balls[0].ballXVelocity,ref balls[0].ballYVelocity);
             powerupCount++;
         }
-        
+        /*
         private void checkInput(GameTime gameTime)
         {
             var keyBoardstate = Keyboard.GetState();
@@ -330,7 +335,7 @@ namespace UltimatePong
                 bar.moveBar(gameTime);
             
 
-        }
+        }*/
 
         protected override void Draw(GameTime gameTime)
         {

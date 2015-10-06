@@ -57,8 +57,7 @@
     <Compile Include="Bar.cs" />
     <Compile Include="Border.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="KeyboardController.cs" />
-    <Compile Include="InputController.cs" />
+    <Compile Include="InputManagement.cs" />
     <Compile Include="Launcher.cs">
       <SubType>Form</SubType>
     </Compile>

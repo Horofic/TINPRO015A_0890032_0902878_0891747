@@ -12,7 +12,6 @@ namespace UltimatePong
         public Rectangle rectangle { get; set; }
         public Texture2D appearance { get; private set; }
 
-
         //public int speed;
 
         public int width { get { return rectangle.Width; } }

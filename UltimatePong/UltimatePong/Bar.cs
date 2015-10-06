@@ -34,7 +34,7 @@ namespace UltimatePong
         public Bar(Border[] borders,SpriteBatch spriteBatch,Texture2D barTexture, int barXPos, int barYPos,  Keys[] controls, String barType)
         {
             this.borders = borders;
-               
+            
             this.barTexture = barTexture;
             this.spriteBatch = spriteBatch;
 
@@ -71,7 +71,7 @@ namespace UltimatePong
                 bar.Height = barWidth;
             }
         }
-
+        /*
         public void moveBar(GameTime gameTime)
         {
             var keyBoardState = Keyboard.GetState();
@@ -107,6 +107,11 @@ namespace UltimatePong
                 else if (bar.Intersects(borders[3].border))
                     bar.X = 800 - barLength;
             }
+        }
+        */
+        public void newPos(Point pos)
+        {
+            this.bar.Location += pos;
         }
 
     }
