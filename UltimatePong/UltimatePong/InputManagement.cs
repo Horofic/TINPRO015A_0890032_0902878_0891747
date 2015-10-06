@@ -9,7 +9,7 @@ namespace UltimatePong
 {
     interface InputController
     {
-        //bool quit { get; }
+        bool quit { get; }
         //float X { get; }
         //float Y { get; }
         Point TopBar { get; }
@@ -113,6 +113,17 @@ namespace UltimatePong
                 if (ks.IsKeyDown(Keys.L))//right
                     r.Location = r.Location + new Point(0, speed);
                 return r.Location;
+            }
+        }
+
+        public bool quit
+        {
+            get
+            {
+                if (ks.IsKeyDown(Keys.Escape))//speed-up
+                    return true;
+                else
+                    return false;
             }
         }
 

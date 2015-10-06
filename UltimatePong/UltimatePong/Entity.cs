@@ -19,6 +19,7 @@ namespace UltimatePong
 
         public float X { get { return rectangle.X; } set { X = value; } }
         public float Y { get { return rectangle.Y; } set { Y = value; } }
+        public Point position { get { return rectangle.Location; } }
 
 
         public Entity(Texture2D appearance, Rectangle rectangle, int width, int height)

@@ -243,7 +243,6 @@ namespace UltimatePong
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-
             if (firstCycle)
             firstSpawnBall(gameTime);
 
