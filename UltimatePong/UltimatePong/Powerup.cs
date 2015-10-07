@@ -113,13 +113,13 @@ namespace UltimatePong
         }
 
         //check if powerup gets hit. Execute powerup event.
-        public void checkCollision(ref Rectangle ball,ref Bar[] bar, int lastHitBar,ref int[] playerlives, ref float ballXVelocity,ref  float ballYVelocity)
+        public void checkCollision(ref Rectangle ball,ref List<Entity> bar, int lastHitBar,ref int[] playerlives, ref float ballXVelocity,ref  float ballYVelocity)
         {
             if(ball.Intersects(powerup)&&alive&&this.lastHitBar>=0)
             {
                 Console.WriteLine("Powerup got hit");
                 this.lastHitBar = lastHitBar;
-
+                
                 switch(powerupType)
                 {
                     case 0:
@@ -140,7 +140,7 @@ namespace UltimatePong
                     default:
                         break;
                 }
-
+                
                 alive = false;
                 aliveTimer = 0;
                 timer.reset();
@@ -148,7 +148,7 @@ namespace UltimatePong
         }
 
         //Bad for the player
-        public void redEvent(ref Bar bar) 
+        public void redEvent(ref Rectangle bar) 
         {
             Console.WriteLine("redEvent");
             if(bar.barLength-50>0)
@@ -160,7 +160,7 @@ namespace UltimatePong
         }
 
         //good for the player
-        public void greenEvent(ref Bar bar)
+        public void greenEvent(ref Rectangle bar)
         {
             Console.WriteLine("greenEvent");
             if (bar.barLength - 50 > 0)
@@ -198,7 +198,7 @@ namespace UltimatePong
         }
 
         //inverted controls
-        public void purpleEvent(ref Bar bar)
+        public void purpleEvent(ref Rectangle bar)
         {
             Console.WriteLine("purpleEvent");
             Keys temp = bar.controls[0];

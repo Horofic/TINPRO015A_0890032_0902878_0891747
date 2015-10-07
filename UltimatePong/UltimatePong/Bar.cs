@@ -50,6 +50,8 @@ namespace UltimatePong
             barLength = 128;
             bar = new Rectangle(barXPos,barYPos, barLength, barWidth);
         }
+        public Bar()
+        { }
 
         public void DrawBar()
         {

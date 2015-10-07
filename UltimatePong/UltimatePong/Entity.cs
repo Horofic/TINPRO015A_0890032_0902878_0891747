@@ -12,34 +12,37 @@ namespace UltimatePong
         public Rectangle rectangle { get; set; }
         public Texture2D appearance { get; private set; }
 
-        //public int speed;
+       // public int width { get { return rectangle.Width; } set { rectangle.Width = value; } }
+       // public int height { get { return rectangle.Height; } set { height = value; }}
 
-        public int width { get { return rectangle.Width; } }
-        public int height { get { return rectangle.Height; } }
+        public int X { get { return rectangle.X; } set { this.X = value; } }
+        public int Y { get { return rectangle.Y; } set { this.Y = value; } }
 
-        public float X { get { return rectangle.X; } set { X = value; } }
-        public float Y { get { return rectangle.Y; } set { Y = value; } }
-        public Point position { get { return rectangle.Location; } }
-
-
-        public Entity(Texture2D appearance, Rectangle rectangle, int width, int height)
+        public Entity(Texture2D appearance, Rectangle rectangle, int width, int height, Point pos)
         {
             this.appearance = appearance;
-            this.rectangle = rectangle;
-
             rectangle.Width = width;
             rectangle.Height = height;
+            rectangle.X = pos.X;
+            rectangle.Y = pos.Y;
+            this.rectangle = rectangle;
         }
 
-
-        public Entity CreateMoved(float deltaX, float deltaY)
+        public Entity CreateMoved(Point deltaPosition)
         {
             return new Entity()
             {
                 appearance = this.appearance,
-                X = this.X + deltaX,
-                Y = this.Y + deltaY,
+                rectangle = this.getRectangle(deltaPosition)
             };
         }
+
+        public Rectangle getRectangle(Point deltaPosition)
+        {
+            Rectangle temp = rectangle;
+            temp.Location += deltaPosition;
+            return temp;
+        }
+
     }
 }
