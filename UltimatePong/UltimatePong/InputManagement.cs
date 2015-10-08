@@ -84,13 +84,13 @@ namespace UltimatePong
                 int speed = 10;
 
 
-                if (ks.IsKeyDown(Keys.I))//speed-up
+                if (ks.IsKeyDown(Keys.S))//speed-up
                     speed = 20;
                 else
                     speed = 10;
-                if (ks.IsKeyDown(Keys.U))//left
+                if (ks.IsKeyDown(Keys.A))//left
                     r.Location = r.Location + new Point(0,-speed);
-                if (ks.IsKeyDown(Keys.O))//right
+                if (ks.IsKeyDown(Keys.D))//right
                     r.Location = r.Location + new Point(0,speed);
                 return r.Location;
             }
@@ -108,9 +108,9 @@ namespace UltimatePong
                     speed = 20;
                 else
                     speed = 10;
-                if (ks.IsKeyDown(Keys.J))//left
+                if (ks.IsKeyDown(Keys.L))//left
                     r.Location = r.Location + new Point(0, -speed);
-                if (ks.IsKeyDown(Keys.L))//right
+                if (ks.IsKeyDown(Keys.J))//right
                     r.Location = r.Location + new Point(0, speed);
                 return r.Location;
             }

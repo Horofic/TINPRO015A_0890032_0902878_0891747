@@ -12,8 +12,8 @@ namespace UltimatePong
         public Rectangle rectangle { get; set; }
         public Texture2D appearance { get; private set; }
 
-       // public int width { get { return rectangle.Width; } set { rectangle.Width = value; } }
-       // public int height { get { return rectangle.Height; } set { height = value; }}
+        public int width { get { return width; } set { width = value; } }
+        public int height { get { return height; } set { height = value; } }
 
         public int X { get { return rectangle.X; } set { this.X = value; } }
         public int Y { get { return rectangle.Y; } set { this.Y = value; } }
@@ -28,20 +28,47 @@ namespace UltimatePong
             this.rectangle = rectangle;
         }
 
+        //Move by adding the poss
         public Entity CreateMoved(Point deltaPosition)
-        {
-            return new Entity()
-            {
-                appearance = this.appearance,
-                rectangle = this.getRectangle(deltaPosition)
-            };
-        }
-
-        public Rectangle getRectangle(Point deltaPosition)
         {
             Rectangle temp = rectangle;
             temp.Location += deltaPosition;
-            return temp;
+
+            return new Entity()
+            {
+                appearance = this.appearance,
+                rectangle = temp
+                
+            };
+        }
+
+        //Move by giving new pos
+        public Entity CreateNewPos(Point newPosition)
+        {
+            Rectangle temp = rectangle;
+            temp.Location = newPosition;
+
+            return new Entity()
+            {
+                appearance = this.appearance,
+                rectangle = temp
+
+            };
+        }
+
+        //Change width/height
+        public Entity CreateChangedProperties(int width, int height)
+        {
+            Rectangle temp = rectangle;
+            temp.Width += width;
+            temp.Height += height;
+
+            return new Entity()
+            {
+                appearance = this.appearance,
+                rectangle = temp
+
+            };
         }
 
     }

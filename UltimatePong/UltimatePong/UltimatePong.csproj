@@ -64,6 +64,7 @@
     <Compile Include="Launcher.Designer.cs">
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
+    <Compile Include="Power-up.cs" />
     <Compile Include="Powerup.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="UltimatePong.cs" />

@@ -62,7 +62,7 @@ namespace UltimatePong
         public void startTimer(GameTime gameTime)
         {
             if(!disable)
-            timer.runTimer(gameTime);
+                timer.runTimer(gameTime);
             if (aliveTimer < timer.getElapsedTime())
             {
                 aliveTimer = timer.getElapsedTime();
@@ -113,9 +113,9 @@ namespace UltimatePong
         }
 
         //check if powerup gets hit. Execute powerup event.
-        public void checkCollision(ref Rectangle ball,ref List<Entity> bar, int lastHitBar,ref int[] playerlives, ref float ballXVelocity,ref  float ballYVelocity)
+        public void checkCollision(ref Rectangle ball,ref List<Entity> playerBars, int lastHitBar,ref int[] playerlives, ref float ballXVelocity,ref  float ballYVelocity)
         {
-            if(ball.Intersects(powerup)&&alive&&this.lastHitBar>=0)
+            if(ball.Intersects(powerup)&&alive&&lastHitBar>=0)
             {
                 Console.WriteLine("Powerup got hit");
                 this.lastHitBar = lastHitBar;
@@ -123,10 +123,10 @@ namespace UltimatePong
                 switch(powerupType)
                 {
                     case 0:
-                        redEvent(ref bar[lastHitBar]);
+                        redEvent(ref playerBars);
                         break;
                     case 1:
-                        greenEvent(ref bar[lastHitBar]);
+                        greenEvent(ref playerBars);
                         break;
                     case 2:
                         blueEvent(ref ballXVelocity,ref ballYVelocity);
@@ -135,7 +135,7 @@ namespace UltimatePong
                         goldEvent(ref playerlives[lastHitBar]);
                         break;
                     case 4:
-                        purpleEvent(ref bar[lastHitBar]);
+                        purpleEvent(ref playerBars);
                         break;
                     default:
                         break;
@@ -148,27 +148,23 @@ namespace UltimatePong
         }
 
         //Bad for the player
-        public void redEvent(ref Rectangle bar) 
+        public void redEvent(ref List<Entity> playerBars) 
         {
             Console.WriteLine("redEvent");
-            if(bar.barLength-50>0)
-            bar.barLength -= difference;
-            if (lastHitBar > 1)
-                bar.bar.Offset(0, (difference / 2));
-            else
-                bar.bar.Offset((difference / 2), 0);
+            if (lastHitBar < 2 && playerBars[lastHitBar].width-difference >0)
+                playerBars[lastHitBar].CreateChangedProperties(-difference,0);
+            else if (lastHitBar > 1 && playerBars[lastHitBar].height - difference > 0)
+                playerBars[lastHitBar].CreateChangedProperties(0,-difference);
         }
 
         //good for the player
-        public void greenEvent(ref Rectangle bar)
+        public void greenEvent(ref List<Entity> playerBars)
         {
             Console.WriteLine("greenEvent");
-            if (bar.barLength - 50 > 0)
-                bar.barLength += difference;
-            if (lastHitBar > 1)
-                bar.bar.Offset(0, -(difference / 2));
-            else
-                bar.bar.Offset(-(difference / 2), 0);
+            if (lastHitBar < 2 && playerBars[lastHitBar].width + difference < 300)
+                playerBars[lastHitBar].CreateChangedProperties(difference, 0);
+            else if (lastHitBar > 1 && playerBars[lastHitBar].height + difference < 300)
+                playerBars[lastHitBar].CreateChangedProperties(0, difference);
         }
 
         //Change ball direction to random value
@@ -196,14 +192,14 @@ namespace UltimatePong
             Console.WriteLine("goldEvent");
             playerlife++;
         }
-
+        
         //inverted controls
-        public void purpleEvent(ref Rectangle bar)
+        public void purpleEvent(ref List<Entity> playerBars)
         {
             Console.WriteLine("purpleEvent");
-            Keys temp = bar.controls[0];
+            /*Keys temp = bar.controls[0];
             bar.controls[0] = bar.controls[1];
-            bar.controls[1] = temp;
+            bar.controls[1] = temp;*/
         }
 
         public void disabled(bool disabled)
