@@ -324,8 +324,9 @@ namespace UltimatePong
                     {
                         List<Entity> tempPowerups = new List<Entity>();
                         tempPowerups.Insert(0, powerups[0].CreateNewPos(new Point(random.Next(100,700), random.Next(100, 700))));
-
+                        //tempBars.Insert(0,tempBars[0].CreateChangedProperties(10, 10));
                         powerups = tempPowerups;
+                        Console.WriteLine("hit");
                     }
             }
 
