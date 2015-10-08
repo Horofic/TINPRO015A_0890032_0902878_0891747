@@ -200,8 +200,11 @@ namespace UltimatePong
             powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);*/
 
             powerups = new List<Entity>();
-            Entity powerup1 = new Entity(barTexture, new Rectangle(), 100, 100, new Point(400,400));
-            powerups.Insert(0, powerup1);
+            Entity greenPowerup = new Entity(barTexture, new Rectangle(), 100, 100, new Point(400,200));
+            Entity redPowerup = new Entity(barTexture, new Rectangle(), 100, 100, new Point(400, 600));
+
+            powerups.Insert(0, greenPowerup);
+            powerups.Insert(1, redPowerup);
 
             //Inititialize borders
             borders = new Border[4];
@@ -319,57 +322,41 @@ namespace UltimatePong
             //Power-ups
             if(powerup)
             {
-                foreach(Ball ball in balls)
-                    if(powerups[0].rectangle.Intersects(ball.ball))
-                    {
-                        List<Entity> tempPowerups = new List<Entity>();
-                        tempPowerups.Insert(0, powerups[0].CreateNewPos(new Point(random.Next(100,700), random.Next(100, 700))));
-                        //tempBars.Insert(0,tempBars[0].CreateChangedProperties(10, 10));
-                        powerups = tempPowerups;
-                        Console.WriteLine("hit");
-                    }
+                int powerupType;
+                foreach (Ball ball in balls)
+                {
+                    powerupType = 0;
+                    foreach (Entity powerup in powerups)
+                        if (powerup.rectangle.Intersects(ball.ball))
+                        {
+                            List<Entity> tempPowerups = powerups;
+                            tempPowerups.Insert(powerupType, powerup.CreateNewPos(new Point(random.Next(100, 700), random.Next(100, 700))));
+                            tempPowerups.RemoveAt(powerupType + 1);
+
+                            //Commit
+                            powerups = tempPowerups;
+                            tempBars = power_up.powerupEvent(tempBars, powerupType, 3);
+                            powerupType = 0;
+                            break;
+                        }
+                        else
+                            powerupType++;
+                }
+                    
+            }
+            
+            //this is used to test powerups, press Z to test
+            if (input.test)
+            {
+                tempBars = power_up.powerupEvent(tempBars, 0,3);
+
             }
 
             //update Entities
             balls = updatedBalls;
             playerBars = tempBars;
 
-
             base.Update(gameTime);
-        }
-
-        public void powerupEvents(GameTime gameTime)
-        {
-            /*
-            if (powerupCount > 2)
-                powerupCount = 0;
-
-            powerup[powerupCount].startTimer(gameTime);
-            for (int i = 0; i < playerBars.Count; i++)
-                if (balls[0].ball.Intersects(playerBars[i].rectangle))
-                {
-                    lastHitBar = i;
-                    break;
-                }
-            powerup[powerupCount].checkCollision(ref balls[0].ball, ref playerBars, lastHitBar,ref playerLives,ref balls[0].ballXVelocity,ref balls[0].ballYVelocity);
-            powerupCount++;*/
-            List<Entity> tempPowerups = new List<Entity>();
-            int powerupX = random.Next(175, 625);
-            int powerupY = random.Next(175, 625);
-            if (random.Next(1, 3) == 1)
-            {
-                powerupX = 175 + (625 - powerupX);
-                powerupY = 175 + (625 - powerupY);
-            }
-
-            if (powerups[0].rectangle.Intersects(balls[0].ball))
-            {
-                power_up.greenEvent(playerBars[2]);
-                tempPowerups.Insert(0,powerups[0].CreateNewPos(new Point(powerupX,powerupY)));
-                powerups = tempPowerups;
-
-            }
-
         }
 
         protected override void Draw(GameTime gameTime)
@@ -393,8 +380,8 @@ namespace UltimatePong
             foreach(Entity bar in playerBars)
               spriteBatch.Draw(barTexture, bar.rectangle, Color.White);
             //entities powerup
-            foreach(Entity powerup in powerups)
-                spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
+            spriteBatch.Draw(barTexture, powerups[0].rectangle, Color.Green);
+            spriteBatch.Draw(barTexture, powerups[1].rectangle, Color.Red);
 
             spriteBatch.End();
             base.Draw(gameTime);

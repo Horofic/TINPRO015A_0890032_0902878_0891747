@@ -28,7 +28,7 @@ namespace UltimatePong
             this.rectangle = rectangle;
         }
 
-        //Move by adding the poss
+        //Move by adding the pos
         public Entity CreateMoved(Point deltaPosition)
         {
             Rectangle temp = rectangle;

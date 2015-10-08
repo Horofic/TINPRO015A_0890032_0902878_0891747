@@ -41,13 +41,13 @@ namespace UltimatePong
             {
                 Rectangle r = new Rectangle();
                 r.Location = new Point(0, 0);
-                int speed = 10;
+                int speed = 5;
 
                
                 if (ks.IsKeyDown(Keys.W))//speed-up
-                    speed = 20;
+                    speed = 8;
                 else
-                    speed = 10;
+                    speed = 8;
                 if (ks.IsKeyDown(Keys.Q))//left
                     r.Location = r.Location + new Point(-speed, 0);
                 if (ks.IsKeyDown(Keys.E))//right
@@ -61,13 +61,13 @@ namespace UltimatePong
             {
                 Rectangle r = new Rectangle();
                 r.Location = new Point(0, 0);
-                int speed = 10;
+                int speed = 5;
 
 
                 if (ks.IsKeyDown(Keys.S))//speed-up
-                    speed = 20;
+                    speed = 8;
                 else
-                    speed = 10;
+                    speed = 8;
                 if (ks.IsKeyDown(Keys.A))//left
                     r.Location = r.Location + new Point(-speed, 0);
                 if (ks.IsKeyDown(Keys.D))//right
@@ -81,13 +81,13 @@ namespace UltimatePong
             {
                 Rectangle r = new Rectangle();
                 r.Location = new Point(0, 0);
-                int speed = 10;
+                int speed = 5;
 
 
                 if (ks.IsKeyDown(Keys.S))//speed-up
-                    speed = 20;
+                    speed = 8;
                 else
-                    speed = 10;
+                    speed = 8;
                 if (ks.IsKeyDown(Keys.A))//left
                     r.Location = r.Location + new Point(0,-speed);
                 if (ks.IsKeyDown(Keys.D))//right
@@ -101,13 +101,13 @@ namespace UltimatePong
             {
                 Rectangle r = new Rectangle();
                 r.Location = new Point(0, 0);
-                int speed = 10;
+                int speed = 5;
 
 
                 if (ks.IsKeyDown(Keys.K))//speed-up
-                    speed = 20;
+                    speed = 8;
                 else
-                    speed = 10;
+                    speed = 8;
                 if (ks.IsKeyDown(Keys.L))//left
                     r.Location = r.Location + new Point(0, -speed);
                 if (ks.IsKeyDown(Keys.J))//right
@@ -120,7 +120,18 @@ namespace UltimatePong
         {
             get
             {
-                if (ks.IsKeyDown(Keys.Escape))//speed-up
+                if (ks.IsKeyDown(Keys.Escape))//spawn balls
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        public bool test
+        {
+            get
+            {
+                if (ks.IsKeyDown(Keys.Z))
                     return true;
                 else
                     return false;
