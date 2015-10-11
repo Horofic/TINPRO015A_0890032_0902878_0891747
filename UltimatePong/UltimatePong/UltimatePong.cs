@@ -13,22 +13,22 @@ namespace UltimatePong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Random random = new Random(DateTime.Now.Millisecond+ DateTime.Now.Second);
+        SpriteFont font;
 
         //sprites
         Texture2D spriteTexture;
-
         Texture2D barTexture;
         Texture2D borderTexture;
 
+        //Sounds
         SoundEffect bleepHigh;
         SoundEffect bleepLow;
 
         //LISTS
+        List<Entity> borders;
         List<Ball> balls;
         List<Entity> playerBars;
         List<Entity> powerups;
-        Power_up power_up = new Power_up();
-        //Entity testBar;
         
         //playing field properties
         const int fieldSize = 800;
@@ -41,9 +41,6 @@ namespace UltimatePong
         float ballSpeedInc = 20.0f;
         int ballSize = 16;
         int lastSpawnedDirection;
-        //pause
-        int pauseTimer;
-        int gameTime;
 
         //default bar properties
         const int barLength = 128;
@@ -51,43 +48,29 @@ namespace UltimatePong
         const float barSpeed = 400;
         const float bounceCorrection = 0.6f;
 
-        //top bar properties
-        Keys[] topBarKeys = new Keys[3];
-
-        //bottom bar properties
-        Keys[] bottomBarKeys = new Keys[3];
-
-        //left bar properties
-        Keys[] leftBarKeys = new Keys[3];
-
-        //right bar properties
-        Keys[] rightBarKeys = new Keys[3];
-
         //Player lives
         int[] playerLives;
 
         //Game Settings
         public int players;
         public int lives;
-        public bool powerup;
+        public bool powerupEnabled;
         public bool classicBounce;
         private bool firstCycle;
+        private bool gameDone;
 
+        //powerup
+        Power_up power_up = new Power_up();
 
-        //Powerup[] powerup;
-        int powerupCount;
-
-        SpriteFont font;
-
+        //input
         InputManagement input;
-        //test
         Keys[,] controls = new Keys[4,3];
 
-        //Border border;
-        Border[] borders;
-        //playerBars
-        //Bar[] playerBars;
-        int lastHitBar;
+        //color array
+        Color[] colorArray = {Color.White,Color.TransparentBlack,Color.Green,Color.Red,Color.Goldenrod };
+
+        //The last hit bar
+        int lastHitBar = 2;
 
         public UltimatePong(int playerAmount, int livesAmount, bool powerup, bool bounceType)
         {
@@ -98,8 +81,9 @@ namespace UltimatePong
 
             this.players = playerAmount;
             this.lives = livesAmount;
-            this.powerup = powerup;
+            this.powerupEnabled = powerup;
             this.classicBounce = bounceType;
+            this.gameDone = false;
 
             //Printlines
             System.Console.WriteLine("players:" + players);
@@ -122,42 +106,29 @@ namespace UltimatePong
             barTexture = Content.Load<Texture2D>("ball1.png");
             //Font texture
             font = Content.Load<SpriteFont>("font");
-
           
             base.Window.AllowUserResizing = false;
          
             //initialize bar controls
-            topBarKeys[0] = Keys.T; //LEFT
-            topBarKeys[1] = Keys.U; //RIGHT
-            topBarKeys[2] = Keys.Y; //BOOST
+            //TopBar controls
+            controls[0, 0] = Keys.T; //LEFT
+            controls[0, 1] = Keys.U; //RIGHT
+            controls[0, 2] = Keys.Y; //BOOST
 
-            bottomBarKeys[0] = Keys.V; //LEFT
-            bottomBarKeys[1] = Keys.N; //RIGHT
-            bottomBarKeys[2] = Keys.B; //BOOST
+            //BotBar controls
+            controls[1, 0] = Keys.V; //LEFT
+            controls[1, 1] = Keys.N; //RIGHT
+            controls[1, 2] = Keys.B; //BOOST
 
-            leftBarKeys[0] = Keys.A; //UP
-            leftBarKeys[1] = Keys.D; //DOWN
-            leftBarKeys[2] = Keys.S; //BOOST
+            //LeftBar controls
+            controls[2, 0] = Keys.A; //UP
+            controls[2, 1] = Keys.D; //DOWN
+            controls[2, 2] = Keys.S; //BOOST
 
-            rightBarKeys[0] = Keys.L; //UP
-            rightBarKeys[1] = Keys.J; //DOWN
-            rightBarKeys[2] = Keys.K; //BOOST
-
-            controls[0, 0] = topBarKeys[0];
-            controls[0, 1] = topBarKeys[1];
-            controls[0, 2] = topBarKeys[2];
-
-            controls[1, 0] = bottomBarKeys[0];
-            controls[1, 1] = bottomBarKeys[1];
-            controls[1, 2] = bottomBarKeys[2];
-
-            controls[2, 0] = leftBarKeys[0];
-            controls[2, 1] = leftBarKeys[1];
-            controls[2, 2] = leftBarKeys[2];
-
-            controls[3, 0] = rightBarKeys[0];
-            controls[3, 1] = rightBarKeys[1];
-            controls[3, 2] = rightBarKeys[2];
+            //RightBar controls
+            controls[3, 0] = Keys.L; //UP
+            controls[3, 1] = Keys.J; //DOWN
+            controls[3, 2] = Keys.K; //BOOST
 
 
             //initialize ball
@@ -172,71 +143,58 @@ namespace UltimatePong
             Point botBarPos = new Point(barStartPos, fieldSize - barToBorderDist - barWidth);
             Point leftBarPos = new Point(barToBorderDist, barStartPos);
             Point rightBarPos = new Point(fieldSize - barToBorderDist - barWidth, barStartPos);
-            if (players != 4)
-                topBarPos = new Point(-100, -100);
-            if (players == 2)
-                botBarPos = new Point(-100, -100);
 
             //Initialize Bar list
             playerBars = new List<Entity>();
-            Entity topBar = new Entity(barTexture, new Rectangle(), 128, 8, topBarPos);
-            Entity botBar = new Entity(barTexture, new Rectangle(), 128, 8, botBarPos);
-            Entity leftBar = new Entity(barTexture, new Rectangle(), 8, 128, leftBarPos);
-            Entity rightBar = new Entity(barTexture, new Rectangle(), 8, 128, rightBarPos);
-
-            playerBars.Insert(0, topBar);
-            playerBars.Insert(1, botBar);
-            playerBars.Insert(2, leftBar);
-            playerBars.Insert(3, rightBar);
+            playerBars.Insert(0, new Entity(barTexture, new Rectangle(), 128, 8, topBarPos)); //Top Bar
+            playerBars.Insert(1, new Entity(barTexture, new Rectangle(), 128, 8, botBarPos)); //Bot Bar
+            playerBars.Insert(2, new Entity(barTexture, new Rectangle(), 8, 128, leftBarPos)); //Left Bar
+            playerBars.Insert(3, new Entity(barTexture, new Rectangle(), 8, 128, rightBarPos)); //Right Bar
 
             //initialize player lives
             playerLives = new int[4] {lives,lives,lives,lives};
 
-            //powerup
-            /*
-            powerup = new Powerup[3];
-            powerupCount = 0;
-            for(int i=0;i<powerup.Length;i++)
-            powerup[i] = new Powerup(spriteBatch, spriteTexture, GraphicsDevice,i);*/
-
+            //Initialize powerups
             powerups = new List<Entity>();
-            Entity greenPowerup = new Entity(barTexture, new Rectangle(), 100, 100, new Point(400,200));
-            Entity redPowerup = new Entity(barTexture, new Rectangle(), 100, 100, new Point(400, 600));
-
-            powerups.Insert(0, greenPowerup);
-            powerups.Insert(1, redPowerup);
+            powerups.Insert(0, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150,650), random.Next(150, 650)))); //Green Powerup
+            powerups.Insert(1, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Red Powerup
+            powerups.Insert(2, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Gold Powerup
 
             //Inititialize borders
-            borders = new Border[4];
-            borders[0] = new Border(spriteBatch, borderTexture, 0, 0, "Lying");//Top border
-            borders[1] = new Border(spriteBatch, borderTexture, 0, (fieldSize - borderWidth), "Lying");//Bottom border
-            borders[2] = new Border(spriteBatch, borderTexture, 0, 0, "Standing");//Left border
-            borders[3] = new Border(spriteBatch, borderTexture, (fieldSize - borderWidth), 0, "Standing");//Right border
+            borders = new List<Entity>();
+            borders.Insert(0,new Entity(borderTexture,  new Rectangle(), fieldSize, borderWidth, new Point(0, 0))); //Top Border
+            borders.Insert(1, new Entity(borderTexture, new Rectangle(), fieldSize, borderWidth, new Point(0, fieldSize - borderWidth))); //Bot Border
+            borders.Insert(2, new Entity(borderTexture, new Rectangle(), borderWidth, fieldSize, new Point(0, 0))); //Left Border
+            borders.Insert(3, new Entity(borderTexture, new Rectangle(), borderWidth, fieldSize, new Point(fieldSize - borderWidth, 0))); //Right Border
 
             //Initialize input
             input = new InputManagement(controls);
-            gameTime = 0;
 
             base.Initialize();
         }
         
         private void setPlayersAmount()
         {
+            List<Entity> temp = playerBars;
             switch(players)
             {
                 case 2:
-                    borders[0].borderTexture = Content.Load<Texture2D>("deadBar.png");
-                    borders[1].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerLives[0] = 0;
                     playerLives[1] = 0;
+                    temp.Insert(0,playerBars[0].CreateNewPos(new Point(-100,-100)));
+                    temp.Insert(1, playerBars[1].CreateNewPos(new Point(-100, -100)));
+                    temp.RemoveAt(2);
+                    temp.RemoveAt(2);
                     break;
                 case 3:
-                    borders[0].borderTexture = Content.Load<Texture2D>("deadBar.png");
                     playerLives[0] = 0;
+                    temp.Insert(0, playerBars[0].CreateNewPos(new Point(-100, -100)));
+                    temp.RemoveAt(1);
                     break;
                 default:
                     break;
             }
+            playerBars = temp;
         }
 
         protected void firstSpawnBall(GameTime gameTime)
@@ -278,17 +236,13 @@ namespace UltimatePong
 
                 balls.Add(newBall);
                 newBall.spawnBall(spawnBallDirection(), ballSpeed, gameTime);
-
             }
 
             //BAR ENTITIES
             List<Entity> tempBars = new List<Entity>();
+            for(int i=0;i<4;i++)
+                tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
 
-            tempBars.Insert(0, playerBars[0].CreateMoved(input.TopBar));
-            tempBars.Insert(1, playerBars[1].CreateMoved(input.BotBar));
-            tempBars.Insert(2, playerBars[2].CreateMoved(input.LeftBar));
-            tempBars.Insert(3, playerBars[3].CreateMoved(input.RightBar));
-            
             //Collision detection and ball movement
             //creation of a new list of balls
             List<Ball> updatedBalls = balls;
@@ -314,43 +268,38 @@ namespace UltimatePong
             }
             foreach (Ball ball in ballsToRemove)
                 updatedBalls.Remove(ball);
-                
-            //borders
-            foreach (Border border in borders)
-                border.updateBorder();
 
             //Power-ups
-            if(powerup)
-            {
-                int powerupType;
+            if(powerupEnabled)
                 foreach (Ball ball in balls)
-                {
-                    powerupType = 0;
-                    foreach (Entity powerup in powerups)
-                        if (powerup.rectangle.Intersects(ball.ball))
+                    for(int i=0;i<powerups.Count;i++)
+                        if (powerups[i].rectangle.Intersects(ball.ball))
                         {
+                            //Move the powerup if hit
                             List<Entity> tempPowerups = powerups;
-                            tempPowerups.Insert(powerupType, powerup.CreateNewPos(new Point(random.Next(100, 700), random.Next(100, 700))));
-                            tempPowerups.RemoveAt(powerupType + 1);
+                            tempPowerups.Insert(i, powerups[i].CreateNewPos(new Point(random.Next(100, 700), random.Next(100, 700))));
+                            tempPowerups.RemoveAt(i + 1);
 
-                            //Commit
+                            //Commit changes
                             powerups = tempPowerups;
-                            tempBars = power_up.powerupEvent(tempBars, powerupType, 3);
-                            powerupType = 0;
+                            tempBars = power_up.powerupEvent(tempBars, i, lastHitBar, ref playerLives); //LastHitBar parameter needs to be fixed. Temp value = 3
                             break;
                         }
-                        else
-                            powerupType++;
-                }
-                    
-            }
             
             //this is used to test powerups, press Z to test
             if (input.test)
             {
-                tempBars = power_up.powerupEvent(tempBars, 0,3);
-
+                tempBars = power_up.powerupEvent(tempBars, 0,lastHitBar,ref playerLives);
             }
+
+            //move player to void if dead
+            for(int i=0;i<playerLives.Length;i++)
+                if (playerLives[i] < 1)
+                {
+                    tempBars.Insert(i, playerBars[i].CreateNewPos(new Point(-100, -100)));
+                    tempBars.RemoveAt(i+1);
+                }
+
 
             //update Entities
             balls = updatedBalls;
@@ -366,22 +315,32 @@ namespace UltimatePong
             //balls
             foreach (Ball ball in balls)
                 ball.drawBall();
-            //borders
-            foreach (Border border in borders)
-                border.DrawBorder();
             //font
             if (players==4)
                 spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
             if(players!=2)
                 spriteBatch.DrawString(font, playerLives[1].ToString(), new Vector2(390, 710), Color.White);
-                spriteBatch.DrawString(font, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
-                spriteBatch.DrawString(font, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
+            spriteBatch.DrawString(font, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
+            spriteBatch.DrawString(font, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
+            //entities border
+            for(int i=0;i<borders.Count;i++)
+            {
+                Color color;
+                if (playerLives[i] != 0)
+                    color = Color.TransparentBlack;
+                else
+                    color = Color.White;
+                spriteBatch.Draw(barTexture, borders[i].rectangle, color);
+            }
             //entities bar
-            foreach(Entity bar in playerBars)
-              spriteBatch.Draw(barTexture, bar.rectangle, Color.White);
+            foreach (Entity bar in playerBars)
+                spriteBatch.Draw(barTexture, bar.rectangle, Color.White);
             //entities powerup
-            spriteBatch.Draw(barTexture, powerups[0].rectangle, Color.Green);
-            spriteBatch.Draw(barTexture, powerups[1].rectangle, Color.Red);
+            for(int i=0;i<powerups.Count;i++)
+                spriteBatch.Draw(barTexture, powerups[i].rectangle, colorArray[i+2]);
+
+            if(gameDone)
+                spriteBatch.DrawString(font, "Victory!", new Vector2(330, 200), Color.White);
 
             spriteBatch.End();
             base.Draw(gameTime);
@@ -434,13 +393,11 @@ namespace UltimatePong
                 chosenPlayer = 4;
 
             lastSpawnedDirection = chosenPlayer;
-            /*if(chosenPlayer == 4)
-                foreach (Powerup powerup in powerup)
-                    powerup.disabled(true);
-
-            if(chosenPlayer!=4)
-                foreach (Powerup powerup in powerup)
-                    powerup.disabled(false);*/
+            if (chosenPlayer == 4)
+            {
+                gameDone = true;
+                powerups.Clear();
+            }
             return chosenPlayer;
         }
     }

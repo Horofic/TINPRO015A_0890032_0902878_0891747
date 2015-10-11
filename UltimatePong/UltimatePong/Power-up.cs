@@ -13,8 +13,20 @@ namespace UltimatePong
 
         }
 
-        public List<Entity> powerupEvent(List<Entity> tempBars, int powerupType,int lastHitBar)
+        /*TO_DO**
+        * Blue: Bounce off ball to random direction
+        * Purple: Invert controls for the lastHitBar
+        * Gold: Life+1 for the lastHitBar
+        * Make sure lastHitBar gets fixed
+        * Idea: Portals for the ball
+        * Idea: Hidden ball
+        * Idea: obstacles on the field
+        */
+
+        int lastHitBar;
+        public List<Entity> powerupEvent(List<Entity> tempBars, int powerupType,int lastHitBar, ref int[] playerLives)
         {
+            this.lastHitBar = lastHitBar;
             switch(powerupType)
             {
                 case 0:
@@ -26,6 +38,9 @@ namespace UltimatePong
                     int redDifference = 20;
                     tempBars.Insert(lastHitBar, tempBars[lastHitBar].CreateChangedProperties(0, -redDifference).CreateMoved(new Point(0, (redDifference / 2))));
                     tempBars.RemoveAt(lastHitBar+1);
+                    return tempBars;
+                case 2:
+                    goldEvent(ref playerLives);
                     return tempBars;
                 default:
                     return tempBars;
@@ -45,6 +60,10 @@ namespace UltimatePong
             tempBars.Insert(2, tempBars[2].CreateChangedProperties(0, -difference).CreateMoved(new Point(0, (difference / 2))));
             tempBars.RemoveAt(3);
             return tempBars;
+        }
+        public void goldEvent(ref int[] playerLives)
+        {
+            playerLives[lastHitBar] += 1;
         }
     }
 }

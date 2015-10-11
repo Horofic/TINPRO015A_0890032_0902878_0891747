@@ -130,7 +130,7 @@ namespace UltimatePong
         /*
          * Updates the ball position and makes the ball bounce on a collision. Returns an int to indicate that a player loses a live. default = -1, top = 0 bottom = 1
          */
-        public int updateBall(GameTime gameTime, List<Entity> bars, Border[] borders, int[] lives)
+        public int updateBall(GameTime gameTime, List<Entity> bars, List<Entity> borders, int[] lives)
         {
             if (!active)
                 return -1;
@@ -162,12 +162,12 @@ namespace UltimatePong
 
             for (int i = 0; i < 4; i++)
             {
-                if (ball.Intersects(borders[i].border))
+                if (ball.Intersects(borders[i].rectangle))
                 {
                     if (lives[i].Equals(0))
                     {
                         simpleBounce(i);
-                        while (ball.Intersects(borders[i].border))
+                        while (ball.Intersects(borders[i].rectangle))
                             moveBall(gameTime);
                         return -1;
                     }
