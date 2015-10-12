@@ -10,6 +10,8 @@ namespace UltimatePong
     interface InputController
     {
         bool quit { get; }
+        bool selection { get; }
+        bool confirmation { get; }
         Point moveBar(int bar, int barType);
         void Update(float gameTime);
     }
@@ -81,6 +83,29 @@ namespace UltimatePong
                     return false;
             }
         }
+
+        public bool selection
+        {
+            get
+            {
+                if (ks.IsKeyDown(Keys.Up)||ks.IsKeyDown(Keys.Down))
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        public bool confirmation
+        {
+            get
+            {
+                if (ks.IsKeyDown(Keys.Enter))
+                    return true;
+                else
+                    return false;
+            }
+        }
+        //need to make pause input and events
 
         public void Update(float gameTime)
         {

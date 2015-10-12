@@ -19,6 +19,12 @@
 /processorParam:TextureFormat=Compressed
 /build:font.spritefont
 
+#begin fontVictoryScreen.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:fontVictoryScreen.spritefont
+
 #begin bleep-high.wav
 /importer:WavImporter
 /processor:SoundEffectProcessor

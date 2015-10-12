@@ -13,7 +13,8 @@ namespace UltimatePong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Random random = new Random(DateTime.Now.Millisecond+ DateTime.Now.Second);
-        SpriteFont font;
+        SpriteFont fontPlayerLives;
+        SpriteFont fontVictoryScreen;
 
         //sprites
         Texture2D spriteTexture;
@@ -72,6 +73,12 @@ namespace UltimatePong
         //The last hit bar
         int lastHitBar = 2;
 
+        //Victory screen values
+        int[] selectionLocation = { 130, 500, 250, 600 };
+        int selection = 0;
+        double selectionTimer = 0;
+        public bool restart = false;
+
         public UltimatePong(int playerAmount, int livesAmount, bool powerup, bool bounceType)
         {
             graphics = new GraphicsDeviceManager(this);
@@ -105,8 +112,9 @@ namespace UltimatePong
             //Player Textures
             barTexture = Content.Load<Texture2D>("ball1.png");
             //Font texture
-            font = Content.Load<SpriteFont>("font");
-          
+            fontPlayerLives = Content.Load<SpriteFont>("font");
+            fontVictoryScreen = Content.Load<SpriteFont>("fontVictoryScreen");
+
             base.Window.AllowUserResizing = false;
          
             //initialize bar controls
@@ -170,6 +178,7 @@ namespace UltimatePong
             //Initialize input
             input = new InputManagement(controls);
 
+            Console.WriteLine("initialize");
             base.Initialize();
         }
         
@@ -226,9 +235,7 @@ namespace UltimatePong
                 setPlayersAmount();
                 firstSpawnBall(gameTime);
             }
-            
-
-            //input.PlayerMovement();
+    
             input.Update(deltaTime);
             if (input.quit)
             {
@@ -299,7 +306,27 @@ namespace UltimatePong
                     tempBars.Insert(i, playerBars[i].CreateNewPos(new Point(-100, -100)));
                     tempBars.RemoveAt(i+1);
                 }
-
+            //inputs for victory screen selection
+            if(gameDone)
+            {
+                if (input.selection && gameTime.TotalGameTime.TotalMilliseconds - selectionTimer > 200)
+                {
+                    selectionTimer = gameTime.TotalGameTime.TotalMilliseconds;
+                    selection += 2;
+                    if (selection > 2)
+                        selection = 0;
+                }
+                if(input.confirmation)
+                {
+                    if(selection == 0)
+                    {
+                        restart = true;
+                        base.Exit();
+                    }
+                    else 
+                        base.Exit();
+                }
+            }
 
             //update Entities
             balls = updatedBalls;
@@ -317,11 +344,11 @@ namespace UltimatePong
                 ball.drawBall();
             //font
             if (players==4)
-                spriteBatch.DrawString(font, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
+                spriteBatch.DrawString(fontPlayerLives, playerLives[0].ToString(),new Vector2(390, 50), Color.White);
             if(players!=2)
-                spriteBatch.DrawString(font, playerLives[1].ToString(), new Vector2(390, 710), Color.White);
-            spriteBatch.DrawString(font, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
-            spriteBatch.DrawString(font, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
+                spriteBatch.DrawString(fontPlayerLives, playerLives[1].ToString(), new Vector2(390, 710), Color.White);
+            spriteBatch.DrawString(fontPlayerLives, playerLives[2].ToString(), new Vector2(70, 383), Color.White);
+            spriteBatch.DrawString(fontPlayerLives, playerLives[3].ToString(), new Vector2(700, 383), Color.White);
             //entities border
             for(int i=0;i<borders.Count;i++)
             {
@@ -340,7 +367,18 @@ namespace UltimatePong
                 spriteBatch.Draw(barTexture, powerups[i].rectangle, colorArray[i+2]);
 
             if(gameDone)
-                spriteBatch.DrawString(font, "Victory!", new Vector2(330, 200), Color.White);
+            {
+                spriteBatch.DrawString(fontVictoryScreen, "Winner!", new Vector2(240, 200), Color.White);
+                String[] winningPlayer = { "Player 4", "Player 3", "Player 1", "Player 2" };
+                int win;
+                for (win = 0; win < playerLives.Length; win++)
+                    if (playerLives[win] > 0)
+                        break;
+                spriteBatch.DrawString(fontVictoryScreen, winningPlayer[win], new Vector2(218, 300), Color.White);
+                spriteBatch.DrawString(fontVictoryScreen, "Play Again", new Vector2(183, 500), Color.White);
+                spriteBatch.DrawString(fontVictoryScreen, "Quit", new Vector2(303, 600), Color.White);
+                spriteBatch.DrawString(fontVictoryScreen, ">", new Vector2(selectionLocation[selection], selectionLocation[selection + 1]), Color.White);
+            }
 
             spriteBatch.End();
             base.Draw(gameTime);

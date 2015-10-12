@@ -32,6 +32,23 @@ namespace UltimatePong
         {
             done = true;
         }
+        //run this method continuosly to run the timer
+        //runtimer with a given set time 
+        public bool runTimerMs(GameTime gameTime, int time)
+        {
+            if (savedGameTime < (int)gameTime.TotalGameTime.Milliseconds && done == false)
+            {
+                savedGameTime = (int)gameTime.TotalGameTime.Milliseconds;
+                elapsedTime++;
+                Console.WriteLine(elapsedTime);
+            }
+            if (elapsedTime >= time)
+            {
+                done = true;
+            }
+            return done;
+        }
+
 
         //run this method continuosly to run the timer
         //runtimer with a given set time 
