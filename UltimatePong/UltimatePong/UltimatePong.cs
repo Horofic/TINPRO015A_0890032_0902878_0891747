@@ -8,6 +8,21 @@ using System.Linq;
 
 namespace UltimatePong
 {
+
+    enum BallMovementInstructionResult
+    {
+        Running,
+        Done,
+        DoneAndPlayer0LostALife,
+        DoneAndPlayer1LostALife,
+        DoneAndPlayer2LostALife,
+        DoneAndPlayer3LostALife
+    }
+
+
+
+
+
     public class UltimatePong : Game
     {
         GraphicsDeviceManager graphics;
@@ -23,7 +38,7 @@ namespace UltimatePong
         SoundEffect bleepHigh;
         SoundEffect bleepLow;
 
-        List<Ball> balls;
+        List<BallController> balls;
 
         //playing field properties
         const int fieldSize = 800;
@@ -157,8 +172,8 @@ namespace UltimatePong
 
 
             //initialize ball
-            balls = new List<Ball>();
-            balls.Insert(0, new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
+            balls = new List<BallController>();
+            balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
             firstCycle = true;
 
             //initialize bars
@@ -244,7 +259,7 @@ namespace UltimatePong
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (firstCycle)
-            firstSpawnBall(gameTime);
+                firstSpawnBall(gameTime);
 
             input.PlayerMovement();
             input.Update(deltaTime);
@@ -252,7 +267,7 @@ namespace UltimatePong
 
             if (input.quit)
             {
-                Ball newBall = new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture);
+                BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture);
 
                 balls.Add(newBall);
                 newBall.spawnBall(spawnBallDirection(), ballSpeed, gameTime);
@@ -264,30 +279,57 @@ namespace UltimatePong
             checkInput(gameTime);
             // Collision detection and ball movement
 
+
+
+
+
             //creation of a new list of balls
-            List<Ball> updatedBalls = balls;
-            List<Ball> ballsToRemove = new List<Ball>();
-            foreach (Ball ball in updatedBalls)
+            List<BallController> updatedBalls = new List<BallController>();
+            
+            foreach (BallController ball in balls)
             {
-                int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);
-                if(playerLostALife>-1)
+                switch (ball.updateBall(gameTime, playerBars, borders, playerLives))
                 {
-                    playerLives[playerLostALife] -= 1;
-                    if (updatedBalls.Count > 1)
-                    {
-                        ballsToRemove.Add(ball);
-                    }
-                    else
-                    {
-                        ball.spawnBall(spawnBallDirection(), 400.0f, gameTime);
-                        foreach (int i in playerLives)
-                            System.Console.WriteLine("Playerlive: "+ i);
-                    }
+                    case BallMovementInstructionResult.Running:
+                        updatedBalls.Add(ball);
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer0LostALife:
+                        playerLives[0] -= 1;
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer1LostALife:
+                        playerLives[1] -= 1;
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer2LostALife:
+                        playerLives[2] -= 1;
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer3LostALife:
+                        playerLives[3] -= 1;
+                        break;
+
+                    case BallMovementInstructionResult.Done:
+
+                    default:
+                        break;
                 }
-                
+               
             }
-            foreach (Ball ball in ballsToRemove)
-                updatedBalls.Remove(ball);
+            int playersAlive = 0;
+            for(int i = 0; i<4; i++)
+            {
+                if (playerLives[i] > 0)
+                    playersAlive++;
+            }
+
+            if (playersAlive<2)
+            {
+                updatedBalls.Clear();
+            }
+            else if (updatedBalls.Count < 1)
+            {
+                updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
+                updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, gameTime);
+            }
+           
                 
             //move bars
             foreach (Bar bar in playerBars)
@@ -307,6 +349,8 @@ namespace UltimatePong
             base.Update(gameTime);
         }
 
+       
+
         public void powerupEvents(GameTime gameTime)
         {
             if (powerupCount > 2)
@@ -314,12 +358,12 @@ namespace UltimatePong
 
             powerup[powerupCount].startTimer(gameTime);
             for (int i = 0; i < playerBars.Length; i++)
-                if (balls[0].ball.Intersects(playerBars[i].bar))
-                {
-                    lastHitBar = i;
-                    break;
-                }
-            powerup[powerupCount].checkCollision(ref balls[0].ball, ref playerBars, lastHitBar,ref playerLives,ref balls[0].ballXVelocity,ref balls[0].ballYVelocity);
+                //if (balls[0].ball.rectangle.Intersects(playerBars[i].bar))
+                //{
+                 //   lastHitBar = i;
+                  //  break;
+              //  }
+           // powerup[powerupCount].checkCollision(ref balls[0].ball.rectangle, ref playerBars, lastHitBar,ref playerLives,ref balls[0].ballXVelocity,ref balls[0].ballYVelocity);
             powerupCount++;
         }
         
@@ -337,7 +381,7 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             spriteBatch.Begin();
             //balls
-            foreach (Ball ball in balls)
+            foreach (BallController ball in balls)
                 ball.drawBall();
             //bars
             foreach (Bar bar in playerBars)
