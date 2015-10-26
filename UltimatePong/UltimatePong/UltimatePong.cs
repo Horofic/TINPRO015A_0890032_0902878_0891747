@@ -8,6 +8,17 @@ using System.Linq;
 
 namespace UltimatePong
 {
+
+    enum BallMovementInstructionResult
+    {
+        Running,
+        Done,
+        DoneAndPlayer0LostALife,
+        DoneAndPlayer1LostALife,
+        DoneAndPlayer2LostALife,
+        DoneAndPlayer3LostALife
+    }
+
     public class UltimatePong : Game
     {
         GraphicsDeviceManager graphics;
@@ -27,7 +38,7 @@ namespace UltimatePong
 
         //LISTS
         List<Entity> borders;
-        List<Ball> balls;
+        List<BallController> balls;
         List<Entity> playerBars;
         List<Entity> powerups;
         
@@ -140,8 +151,8 @@ namespace UltimatePong
 
 
             //initialize ball
-            balls = new List<Ball>();
-            balls.Insert(0, new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
+            balls = new List<BallController>();
+            balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
             firstCycle = true;
 
             int barStartPos = (fieldSize - barLength) / 2;
@@ -239,7 +250,7 @@ namespace UltimatePong
             input.Update(deltaTime);
             if (input.quit)
             {
-                Ball newBall = new Ball(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture);
+                BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture);
 
                 balls.Add(newBall);
                 newBall.spawnBall(spawnBallDirection(), ballSpeed, gameTime);
@@ -250,37 +261,60 @@ namespace UltimatePong
             for(int i=0;i<4;i++)
                 tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
 
-            //Collision detection and ball movement
+
+
             //creation of a new list of balls
-            List<Ball> updatedBalls = balls;
-            List<Ball> ballsToRemove = new List<Ball>();
-            foreach (Ball ball in updatedBalls)
+            List<BallController> updatedBalls = new List<BallController>();
+
+            foreach (BallController ball in balls)
             {
-                int playerLostALife = ball.updateBall(gameTime, playerBars, borders, playerLives);
-                if(playerLostALife>-1)
+                switch (ball.updateBall(gameTime, playerBars, borders, playerLives))
                 {
-                    playerLives[playerLostALife] -= 1;
-                    if (updatedBalls.Count > 1)
-                    {
-                        ballsToRemove.Add(ball);
-                    }
-                    else
-                    {
-                        ball.spawnBall(spawnBallDirection(), 400.0f, gameTime);
-                        foreach (int i in playerLives)
-                            System.Console.WriteLine("Playerlive: "+ i);
-                    }
+                    case BallMovementInstructionResult.Running:
+                        updatedBalls.Add(ball);
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer0LostALife:
+                        playerLives[0] -= 1;
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer1LostALife:
+                        playerLives[1] -= 1;
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer2LostALife:
+                        playerLives[2] -= 1;
+                        break;
+                    case BallMovementInstructionResult.DoneAndPlayer3LostALife:
+                        playerLives[3] -= 1;
+                        break;
+
+                    case BallMovementInstructionResult.Done:
+
+                    default:
+                        break;
                 }
-                
+
             }
-            foreach (Ball ball in ballsToRemove)
-                updatedBalls.Remove(ball);
+            int playersAlive = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                if (playerLives[i] > 0)
+                    playersAlive++;
+            }
+
+            if (playersAlive < 2)
+            {
+                updatedBalls.Clear();
+            }
+            else if (updatedBalls.Count < 1)
+            {
+                updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
+                updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, gameTime);
+            }
 
             //Power-ups
-            if(powerupEnabled)
-                foreach (Ball ball in balls)
+            if (powerupEnabled)
+                foreach (BallController ball in balls)
                     for(int i=0;i<powerups.Count;i++)
-                        if (powerups[i].rectangle.Intersects(ball.ball))
+                        if (powerups[i].rectangle.Intersects(ball.ball.rectangle))
                         {
                             //Move the powerup if hit
                             List<Entity> tempPowerups = powerups;
@@ -340,7 +374,7 @@ namespace UltimatePong
             GraphicsDevice.Clear(Color.TransparentBlack);
             spriteBatch.Begin();
             //balls
-            foreach (Ball ball in balls)
+            foreach (BallController ball in balls)
                 ball.drawBall();
             //font
             if (players==4)

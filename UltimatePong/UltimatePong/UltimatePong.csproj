@@ -53,7 +53,8 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Ball.cs" />
+    <Compile Include="BallController.cs" />
+    <Compile Include="BallEntity.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="InputManagement.cs" />
     <Compile Include="Launcher.cs">
