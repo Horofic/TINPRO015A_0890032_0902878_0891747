@@ -303,6 +303,8 @@ namespace UltimatePong
             if (playersAlive < 2)
             {
                 updatedBalls.Clear();
+                powerups.Clear();
+                gameDone = true;
             }
             else if (updatedBalls.Count < 1)
             {
@@ -465,11 +467,6 @@ namespace UltimatePong
                 chosenPlayer = 4;
 
             lastSpawnedDirection = chosenPlayer;
-            if (chosenPlayer == 4)
-            {
-                gameDone = true;
-                powerups.Clear();
-            }
             return chosenPlayer;
         }
     }
