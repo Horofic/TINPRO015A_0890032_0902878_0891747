@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -38,12 +39,15 @@ namespace UltimatePong
         SpriteBatch spriteBatch;
         Texture2D spriteTexture;
 
+        SoundEffect bleepHigh;
+        SoundEffect bleepLow;
+
 
         /*
          *  CONSTRUCTORS
          */
 
-        public BallController(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_, SpriteBatch sb, Texture2D texture)
+        public BallController(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_, SpriteBatch sb, Texture2D texture, SoundEffect high, SoundEffect low)
         {
             this.fieldSize = fieldSize_;
             this.ballSize = ballSize_;
@@ -52,7 +56,8 @@ namespace UltimatePong
             this.ballSpeedInc = ballSpeedInc_;
             this.bounceCorrection = bounceCorrection_;
             this.classicBounce = classicBounce_;
-
+            bleepLow = low;
+            bleepHigh = high;
             ballStartPos = (fieldSize - ballSize) / 2;
             ball = new BallEntity(texture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
             timer = new Timer();
@@ -144,6 +149,7 @@ namespace UltimatePong
                 }
             }
 
+
             // check if ball touches the border if does that player loses a life and ball is reset
 
             for (int i = 0; i < 4; i++)
@@ -155,6 +161,7 @@ namespace UltimatePong
                         simpleBounce(i);
                         while (ball.rectangle.Intersects(borders[i].rectangle))
                             moveBall(gameTime);
+                            bleepLow.Play();
                         return BallMovementInstructionResult.Running;
                     }
                     else
@@ -234,7 +241,9 @@ namespace UltimatePong
             //increase speed
             if (ballSpeed < ballSpeedLimit)
                 ballSpeed += ballSpeedInc;
+            bleepHigh.Play();
             Console.WriteLine(ballSpeed);
+
 
             //classic Bounce type
             if (classicBounce)

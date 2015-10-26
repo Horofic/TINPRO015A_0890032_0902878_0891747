@@ -152,7 +152,7 @@ namespace UltimatePong
 
             //initialize ball
             balls = new List<BallController>();
-            balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
+            balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture, bleepHigh, bleepLow));
             firstCycle = true;
 
             int barStartPos = (fieldSize - barLength) / 2;
@@ -250,7 +250,7 @@ namespace UltimatePong
             input.Update(deltaTime);
             if (input.quit)
             {
-                BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture);
+                BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture,bleepHigh,bleepLow);
 
                 balls.Add(newBall);
                 newBall.spawnBall(spawnBallDirection(), ballSpeed, gameTime);
@@ -308,7 +308,7 @@ namespace UltimatePong
             }
             else if (updatedBalls.Count < 1)
             {
-                updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture));
+                updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture,bleepHigh,bleepLow));
                 updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, gameTime);
             }
 
