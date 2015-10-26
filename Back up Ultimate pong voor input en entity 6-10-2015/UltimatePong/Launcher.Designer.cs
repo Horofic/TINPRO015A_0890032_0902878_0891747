@@ -89,7 +89,7 @@
             // 
             this.LivesAmountBox.Location = new System.Drawing.Point(103, 47);
             this.LivesAmountBox.Maximum = new decimal(new int[] {
-            99,
+            9,
             0,
             0,
             0});

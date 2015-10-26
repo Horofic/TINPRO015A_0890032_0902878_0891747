@@ -54,15 +54,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Ball.cs" />
+    <Compile Include="Bar.cs" />
+    <Compile Include="Border.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="InputManagement.cs" />
+    <Compile Include="KeyboardController.cs" />
+    <Compile Include="InputController.cs" />
     <Compile Include="Launcher.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Launcher.Designer.cs">
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
-    <Compile Include="Power-up.cs" />
+    <Compile Include="Powerup.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="UltimatePong.cs" />
     <Compile Include="Program.cs" />
@@ -118,7 +121,6 @@
     <None Include="Content\font.spritefont">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\fontVictoryScreen.spritefont" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

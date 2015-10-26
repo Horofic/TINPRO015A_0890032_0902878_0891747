@@ -30,11 +30,7 @@ namespace UltimatePong
             rectangle.Width = width;
             rectangle.Height = height;
         }
-        public Entity(Texture2D appearance, Rectangle rectangle)
-        {
-            this.appearance = appearance;
-            this.rectangle = rectangle;
-        }
+
 
         public Entity CreateMoved(float deltaX, float deltaY)
         {

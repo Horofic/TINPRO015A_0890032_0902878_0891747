@@ -7,8 +7,7 @@ using System.Text;
 
 namespace UltimatePong
 {
-    
-    class BallController
+    class Ball
 
     {
 
@@ -26,12 +25,14 @@ namespace UltimatePong
         public bool classicBounce;
         public float ballXVelocity;
         public float ballYVelocity;
-        public BallEntity ball;
+        public Rectangle ball;
 
 
         //local use
 
         int ballStartPos;
+        bool collision;
+        bool active;
         bool spawning;
         Timer timer;
 
@@ -43,7 +44,7 @@ namespace UltimatePong
          *  CONSTRUCTORS
          */
        
-        public BallController(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_, SpriteBatch sb, Texture2D texture)
+        public Ball(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_, SpriteBatch sb, Texture2D texture)
         {
             this.fieldSize = fieldSize_;
             this.ballSize = ballSize_;
@@ -53,8 +54,9 @@ namespace UltimatePong
             this.bounceCorrection = bounceCorrection_;
             this.classicBounce = classicBounce_;
 
+            collision = false;
             ballStartPos = (fieldSize - ballSize) / 2;
-            ball = new BallEntity(texture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
+            ball = new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize);
             timer = new Timer();
 
             spriteBatch = sb;
@@ -73,8 +75,9 @@ namespace UltimatePong
         public void spawnBall(int player, float speed, GameTime gameTime)
         {
             ballSpeed = speed;
-            
-            ball = new BallEntity(spriteTexture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
+            collision = false;
+            active = true;
+            ball.Offset((-ball.X + ballStartPos), (-ball.Y + ballStartPos));
             timer.setTime(gameTime);
             spawning = true;
 
@@ -107,25 +110,36 @@ namespace UltimatePong
 
         }
 
- 
+        public void removeBall()
+        {
+            ballXVelocity = 0;
+            ballYVelocity = 0;
+            ballSpeed = 0;
+            active = false;
+            ball.Offset((-ball.X - 800 ), (-ball.Y - 800));
+
+
+        }
 
         public void drawBall()
         {
-            spriteBatch.Draw(spriteTexture, ball.rectangle, Color.White);
+            spriteBatch.Draw(spriteTexture, ball, Color.White);
         }
 
 
         /*
          * Updates the ball position and makes the ball bounce on a collision. Returns an int to indicate that a player loses a live. default = -1, top = 0 bottom = 1
          */
-        public BallMovementInstructionResult updateBall(GameTime gameTime, Bar[] bars, Border[] borders, int[] lives)
+        public int updateBall(GameTime gameTime, List<Entity> bars, List<Entity> borders, int[] lives)
         {
-           
+            if (!active)
+                return -1;
+
             if (spawning)
             {
                 if (!timer.getTimeDone(gameTime, 2))
                 {
-                    return BallMovementInstructionResult.Running;
+                    return -1;
                 }
                 spawning = false;
 
@@ -135,12 +149,12 @@ namespace UltimatePong
             //barcollision
             for (int i = 0; i < 4; i++)
             {
-                if (ball.rectangle.Intersects(bars[i].bar))
+                if (ball.Intersects(bars[i].rectangle))
                 {
-                    barBounce(i, bars[i].bar);
-                    while (ball.rectangle.Intersects(bars[i].bar))
+                    barBounce(i, bars[i].rectangle);
+                    while (ball.Intersects(bars[i].rectangle))
                         moveBall(gameTime);
-                    return BallMovementInstructionResult.Running;
+                    return -1;
                 }
             }
 
@@ -148,44 +162,24 @@ namespace UltimatePong
 
             for (int i = 0; i < 4; i++)
             {
-                if (ball.rectangle.Intersects(borders[i].border))
+                if (ball.Intersects(borders[i].rectangle))
                 {
                     if (lives[i].Equals(0))
                     {
                         simpleBounce(i);
-                        while (ball.rectangle.Intersects(borders[i].border))
+                        while (ball.Intersects(borders[i].rectangle))
                             moveBall(gameTime);
-                        return BallMovementInstructionResult.Running;
+                        return -1;
                     }
                     else
                     {
-                        switch (i)
-                        {
-                            case 0:
-                                return BallMovementInstructionResult.DoneAndPlayer0LostALife;
-                            case 1:
-                                return BallMovementInstructionResult.DoneAndPlayer1LostALife;
-                            case 2:
-                                return BallMovementInstructionResult.DoneAndPlayer2LostALife;
-                            case 3:
-                                return BallMovementInstructionResult.DoneAndPlayer3LostALife;
-                            default:
-                                return BallMovementInstructionResult.Done;
-                        }
+                        return i;
                     }
                 }
             }
-
-            //ball is out of bounds
-            if (ball.rectangle.Left>fieldSize || ball.rectangle.Right<0 || ball.rectangle.Top>fieldSize || ball.rectangle.Bottom < 0)
-            {
-                return BallMovementInstructionResult.Done;
-            }
-
-
             //the ball isnt in collision
             moveBall(gameTime);
-            return BallMovementInstructionResult.Running;
+            return -1;
         }
 
 
@@ -200,7 +194,12 @@ namespace UltimatePong
          *  -----------------
          */
 
-       
+        private bool checkSpawnTime(GameTime gameTime)
+        {
+            throw new NotImplementedException();
+        }
+
+
         /*
          *  MOVEBALL()
          *  Moves the ball 
@@ -208,7 +207,7 @@ namespace UltimatePong
 
         private void moveBall(GameTime gameTime)
         {
-            ball = ball.CreateMoved((int)(ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (int)(ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
+            ball.Offset((ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
         }
 
 
@@ -252,8 +251,8 @@ namespace UltimatePong
             {
                 case 0:
                     barCenter = bar.Center.X;
-                    ballCenter = ball.rectangle.Center.X;
-                    maxOffset = ((bar.Width / 2.0f) + ball.rectangle.Width + 2.0f);
+                    ballCenter = ball.Center.X;
+                    maxOffset = ((bar.Width / 2.0f) + ball.Width + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -280,8 +279,8 @@ namespace UltimatePong
 
                 case 1:
                     barCenter = bar.Center.X;
-                    ballCenter = ball.rectangle.Center.X;
-                    maxOffset = ((bar.Width / 2.0f) + ball.rectangle.Width + 2.0f);
+                    ballCenter = ball.Center.X;
+                    maxOffset = ((bar.Width / 2.0f) + ball.Width + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -312,8 +311,8 @@ namespace UltimatePong
 
                 case 2:
                     barCenter = bar.Center.Y;
-                    ballCenter = ball.rectangle.Center.Y;
-                    maxOffset = ((bar.Height / 2.0f) + ball.rectangle.Height + 2.0f);
+                    ballCenter = ball.Center.Y;
+                    maxOffset = ((bar.Height / 2.0f) + ball.Height + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)
@@ -344,8 +343,8 @@ namespace UltimatePong
 
                 case 3:
                     barCenter = bar.Center.Y;
-                    ballCenter = ball.rectangle.Center.Y;
-                    maxOffset = ((bar.Height / 2.0f) + ball.rectangle.Height + 2.0f);
+                    ballCenter = ball.Center.Y;
+                    maxOffset = ((bar.Height / 2.0f) + ball.Height + 2.0f);
                     offset = barCenter - ballCenter;
 
                     if (offset == 0)

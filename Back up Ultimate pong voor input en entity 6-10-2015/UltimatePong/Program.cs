@@ -34,25 +34,15 @@ namespace UltimatePong
         static void runLauncher() //this keeps looping until launcher is closed
         {
             //check if StartButton is pressed > start game. Else exit program.
-            if (launcher.StartPressed)
+            if (launcher.StartPressed == true)
             {
                 game = new UltimatePong(launcher.playerAmount, launcher.livesAmount, launcher.powerups,launcher.bounceType);
                 game.Run();
-                if (game.restart)
-                    restartGame();
 
                 // Restart the app passing "/restart [processId]" as cmd line args
                 Application.Exit();
                 Process.Start(Application.ExecutablePath, "/restart" + Process.GetCurrentProcess().Id);
             }
-        }
-
-        static void restartGame()
-        {
-            game = new UltimatePong(game.players, game.lives, game.powerupEnabled, game.classicBounce);
-            game.Run();
-            if (game.restart)
-                restartGame();
         }
 
 
