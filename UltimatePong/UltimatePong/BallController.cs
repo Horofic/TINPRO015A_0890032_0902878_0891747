@@ -27,7 +27,7 @@ namespace UltimatePong
         public bool classicBounce;
         public float ballXVelocity;
         public float ballYVelocity;
-        public BallEntity ball;
+        public Entity ball;
 
 
         //local use
@@ -59,7 +59,7 @@ namespace UltimatePong
             bleepLow = low;
             bleepHigh = high;
             ballStartPos = (fieldSize - ballSize) / 2;
-            ball = new BallEntity(texture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
+            ball = new Entity(texture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
             timer = new Timer();
 
             spriteBatch = sb;
@@ -79,7 +79,7 @@ namespace UltimatePong
         {
             ballSpeed = speed;
 
-            ball = new BallEntity(spriteTexture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
+            ball = new Entity(spriteTexture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
             timer.setTime(gameTime);
             spawning = true;
 

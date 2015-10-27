@@ -25,6 +25,13 @@ namespace UltimatePong
             this.rectangle = rectangle;
         }
 
+        //Contructor overload use this one for a ball
+        public Entity(Texture2D appearance, Rectangle rectangle)
+        {
+            this.appearance = appearance;
+            this.rectangle = rectangle;
+        }
+
         //Move by adding the pos
         public Entity CreateMoved(Point deltaPosition)
         {
@@ -36,6 +43,16 @@ namespace UltimatePong
                 appearance = this.appearance,
                 rectangle = temp
                 
+            };
+        }
+
+        //Overload for CreateMoved
+        public Entity CreateMoved(int deltaX, int deltaY)
+        {
+            return new Entity()
+            {
+                appearance = this.appearance,
+                rectangle = new Rectangle(this.rectangle.X + deltaX, this.rectangle.Y + deltaY, this.rectangle.Width, this.rectangle.Height)
             };
         }
 

@@ -256,7 +256,7 @@ namespace UltimatePong
                 newBall.spawnBall(spawnBallDirection(), ballSpeed, gameTime);
             }
 
-            //BAR ENTITIES
+            //BAR ENTITIES to be moved
             List<Entity> tempBars = new List<Entity>();
             for(int i=0;i<4;i++)
                 tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
