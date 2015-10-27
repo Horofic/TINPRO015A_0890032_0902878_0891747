@@ -15,9 +15,6 @@ namespace UltimatePong
         public int width { get { return width; } set { width = value; } }
         public int height { get { return height; } set { height = value; } }
 
-        public int X { get { return rectangle.X; } set { this.X = value; } }
-        public int Y { get { return rectangle.Y; } set { this.Y = value; } }
-
         public Entity(Texture2D appearance, Rectangle rectangle, int width, int height, Point pos)
         {
             this.appearance = appearance;
