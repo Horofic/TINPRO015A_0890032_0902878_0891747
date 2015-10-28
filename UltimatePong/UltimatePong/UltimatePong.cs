@@ -40,7 +40,8 @@ namespace UltimatePong
         List<Entity> borders;
         List<BallController> balls;
         List<Entity> playerBars;
-        List<Entity> powerups;
+        List<PowerupController> powerupControllers;
+
         
         //playing field properties
         const int fieldSize = 800;
@@ -103,7 +104,7 @@ namespace UltimatePong
             //Printlines
             System.Console.WriteLine("players:" + players);
             System.Console.WriteLine("lives:" + lives);
-            System.Console.WriteLine("powerups:" + powerups);
+            System.Console.WriteLine("powerups:" + powerupEnabled);
         }
 
         protected override void Initialize()
@@ -146,12 +147,10 @@ namespace UltimatePong
 
             //initialize player lives
             playerLives = new int[4] {lives,lives,lives,lives};
-
+            
             //Initialize powerups
-            powerups = new List<Entity>();
-            powerups.Insert(0, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Green Powerup
-            powerups.Insert(1, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Red Powerup
-            powerups.Insert(2, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Gold Powerup
+            powerupControllers = new List<PowerupController>();
+            powerupControllers.Insert(0, new PowerupController(barTexture,spriteBatch)); //Green Powerup
 
             //Inititialize borders
             borders = new List<Entity>();
@@ -279,7 +278,7 @@ namespace UltimatePong
             if (playersAlive < 2)
             {
                 updatedBalls.Clear();
-                powerups.Clear();
+                //powerups.Clear();
                 gameDone = true;
             }
             else if (updatedBalls.Count < 1)
@@ -287,7 +286,7 @@ namespace UltimatePong
                 updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow));
                 updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, elapsedTime);
             }
-
+            /*
             //Power-ups
             if (powerupEnabled)
                 foreach (BallController ball in balls)
@@ -304,7 +303,8 @@ namespace UltimatePong
                             tempBars = power_up.powerupEvent(tempBars, i, lastHitBar, ref playerLives); //LastHitBar parameter needs to be fixed. Temp value = 3
                             break;
                         }
-            
+            */
+          
             //this is used to test powerups, press Z to test
             if (input.test)
             {
@@ -374,10 +374,16 @@ namespace UltimatePong
             //entities bar
             foreach (Entity bar in playerBars)
                 spriteBatch.Draw(barTexture, bar.rectangle, Color.White);
-            //entities powerup
-            if(powerupEnabled)
-            for(int i=0;i<powerups.Count;i++)
-                spriteBatch.Draw(barTexture, powerups[i].rectangle, colorArray[i+2]);
+            /*
+             //entities powerup
+             if(powerupEnabled)
+             for(int i=0;i<powerups.Count;i++)
+                 spriteBatch.Draw(barTexture, powerups[i].rectangle, colorArray[i+2]);
+                 */
+            foreach (PowerupController powerup in powerupControllers)
+                powerup.DrawPowerup();
+
+            if (powerupEnabled)
 
             if(gameDone)
             {
