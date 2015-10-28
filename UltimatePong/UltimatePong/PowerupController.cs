@@ -8,7 +8,7 @@ namespace UltimatePong
 {
     abstract class PowerupController
     {
-        abstract public void powerupEvent(int lastHitPlayer, Entity playerBar);
+        abstract public void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives);
         abstract public void Draw();
         public Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
         public Entity powerup;
@@ -26,14 +26,17 @@ namespace UltimatePong
             this.barTexture = barTexture;
         }
 
-        public override void powerupEvent(int lastHitPlayer, Entity playerBar)
-        {
-            Console.WriteLine("GREEN HIT");
-        }
-
         public override void Draw()
         {
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
+        }
+
+        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        {
+            Console.WriteLine("GREEN HIT");
+            int difference = 50;
+            tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, difference).CreateMoved(new Point(0, -(difference / 2))));
+            tempBars.RemoveAt(lastHitPlayer+1);
         }
     }
     class RedPowerupController : PowerupController
@@ -48,14 +51,17 @@ namespace UltimatePong
             this.barTexture = barTexture;
         }
 
-        public override void powerupEvent(int lastHitPlayer, Entity playerBar)
-        {
-            Console.WriteLine("RED HIT");
-        }
-
         public override void Draw()
         {
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.Red);
+        }
+
+        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        {
+            Console.WriteLine("RED HIT");
+            int difference = 30;
+            tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, -difference).CreateMoved(new Point(0, (difference / 2))));
+            tempBars.RemoveAt(lastHitPlayer+1);
         }
     }
     class GoldPowerupController : PowerupController
@@ -70,14 +76,15 @@ namespace UltimatePong
             this.barTexture = barTexture;
         }
 
-        public override void powerupEvent(int lastHitPlayer, Entity playerBar)
-        {
-            Console.WriteLine("GOLD HIT");
-        }
-
         public override void Draw()
         {
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.Gold);
+        }
+
+        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        {
+            Console.WriteLine("GOLD HIT");
+            playerlives[lastHitPlayer] += 1;
         }
     }
 }

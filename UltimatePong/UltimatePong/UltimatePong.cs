@@ -237,8 +237,6 @@ namespace UltimatePong
             for(int i=0;i<4;i++)
                 tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
 
-
-
             //creation of a new list of balls
             List<BallController> updatedBalls = new List<BallController>();
 
@@ -262,7 +260,7 @@ namespace UltimatePong
                         playerLives[3] -= 1;
                         break;
                     case BallMovementInstructionResult.RunningAndPowerupHit:
-                        ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ball.lastHitPlayerBar);
+                        ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives);
                         updatedBalls.Add(ball);
                         powerupController.Remove(ball.hitPowerup);
                         break;
