@@ -48,7 +48,7 @@ namespace UltimatePong
         const int borderWidth = 5;
 
         //ball properties
-        float ballSpeed = 400.0f;
+        float ballSpeed = 500.0f;
         float ballSpeedLimit = 80000.0f;
         float ballSpeedInc = 20.0f;
         int ballSize = 16;

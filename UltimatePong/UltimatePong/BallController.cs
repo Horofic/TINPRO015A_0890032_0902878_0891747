@@ -26,6 +26,8 @@ namespace UltimatePong
         public float bounceCorrection;
         public float ballXVelocity;
         public float ballYVelocity;
+        public int lastHitPlayer;
+         
         public Entity ball;
 
 
@@ -121,7 +123,7 @@ namespace UltimatePong
         /*
          * Updates the ball position and makes the ball bounce on a collision. Returns an int to indicate that a player loses a live. default = -1, top = 0 bottom = 1
          */
-        public BallMovementInstructionResult updateBall(float deltaTime, double elapsedTime, List<Entity> bars, List<Entity> borders, int[] lives)
+        public BallMovementInstructionResult updateBall(float deltaTime, double elapsedTime, List<Entity> bars, List<Entity> borders, List<Entity> powerups, int[] lives)
         {
 
             if (spawning)
