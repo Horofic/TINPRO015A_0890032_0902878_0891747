@@ -9,7 +9,7 @@ namespace UltimatePong
 {
     interface InputController
     {
-        bool quit { get; }
+        bool newBall { get; }
         bool selection { get; }
         bool confirmation { get; }
         Point moveBar(int bar, int barType);
@@ -81,7 +81,7 @@ namespace UltimatePong
             
         }
       
-        public bool quit
+        public bool newBall
         {
             get
             {

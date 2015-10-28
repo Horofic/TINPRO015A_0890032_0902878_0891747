@@ -129,7 +129,6 @@ namespace UltimatePong
             balls = new List<BallController>();
             balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow));
             firstCycle = true;
-
             int barStartPos = (fieldSize - barLength) / 2;
 
             //bar start pos
@@ -224,7 +223,7 @@ namespace UltimatePong
             }
     
             input.Update(deltaTime);
-            if (input.quit)
+            if (input.newBall)
             {
                 BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow);
 
@@ -283,7 +282,6 @@ namespace UltimatePong
             {
                 updatedBalls.Clear();
                 powerupController.Clear();
-                //powerups.Clear();
                 gameDone = true;
             }
             else if (updatedBalls.Count < 1)
@@ -291,24 +289,6 @@ namespace UltimatePong
                 updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow));
                 updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, elapsedTime);
             }
-            /*
-            //Power-ups
-            if (powerupEnabled)
-                foreach (BallController ball in balls)
-                    for(int i=0;i<powerups.Count;i++)
-                        if (powerups[i].rectangle.Intersects(ball.ball.rectangle))
-                        {
-                            //Move the powerup if hit
-                            List<Entity> tempPowerups = powerups;
-                            tempPowerups.Insert(i, powerups[i].CreateNewPos(new Point(random.Next(100, 700), random.Next(100, 700))));
-                            tempPowerups.RemoveAt(i + 1);
-
-                            //Commit changes
-                            powerups = tempPowerups;
-                            tempBars = power_up.powerupEvent(tempBars, i, lastHitBar, ref playerLives); //LastHitBar parameter needs to be fixed. Temp value = 3
-                            break;
-                        }
-            */
           
             //this is used to test powerups, press Z to test
             if (input.test)
@@ -379,16 +359,9 @@ namespace UltimatePong
             //entities bar
             foreach (Entity bar in playerBars)
                 spriteBatch.Draw(barTexture, bar.rectangle, Color.White);
-            /*
-             //entities powerup
-             if(powerupEnabled)
-             for(int i=0;i<powerups.Count;i++)
-                 spriteBatch.Draw(barTexture, powerups[i].rectangle, colorArray[i+2]);
-                 */
+            //powerups
             foreach (PowerupController powerup in powerupController)
                 powerup.Draw();
-
-            if (powerupEnabled)
 
             if(gameDone)
             {
@@ -428,7 +401,7 @@ namespace UltimatePong
             }
 
             foreach(int p in playersAlive)
-            Console.WriteLine(p);
+                Console.WriteLine(p);
             int hussle1;
             int hussle2;
             int temp;  
