@@ -78,9 +78,8 @@ namespace UltimatePong
         /*
          *  Spawns the ball in the center of the playingfield and lets it move in a random direction
          */
-        public void spawnBall(int player, float speed, double elapsedTime)
+        public void spawnBall(int player, double elapsedTime)
         {
-            ballSpeed = speed;
 
             ball = new Entity(spriteTexture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
             timer.setTime(elapsedTime);

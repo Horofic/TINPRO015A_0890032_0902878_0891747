@@ -213,7 +213,7 @@ namespace UltimatePong
                     break;
             }
             lastSpawnedDirection = direction;
-            balls[0].spawnBall(direction, ballSpeed, deltaTime);
+            balls[0].spawnBall(direction, deltaTime);
             firstCycle = false;
         }
 
@@ -234,7 +234,7 @@ namespace UltimatePong
                 BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow);
 
                 balls.Add(newBall);
-                newBall.spawnBall(spawnBallDirection(), ballSpeed, elapsedTime);
+                newBall.spawnBall(spawnBallDirection(), elapsedTime);
             }
 
             //BAR ENTITIES to be moved
@@ -268,8 +268,13 @@ namespace UltimatePong
 
                         switch(ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives))
                         {
-                            case PowerupResponse.AddBall:
-
+                            case PowerupResponse.addBall:
+                                BallController tmpBallController = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow);
+                                tmpBallController.spawnBall(spawnBallDirection(), elapsedTime);
+                                updatedBalls.Add(tmpBallController);
+                                break;
+                            default:
+                                break;
                         }
 
 
@@ -301,7 +306,7 @@ namespace UltimatePong
             else if (updatedBalls.Count < 1)
             {
                 updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow));
-                updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, elapsedTime);
+                updatedBalls[0].spawnBall(spawnBallDirection(), elapsedTime);
             }
           
             //this is used to test powerups, press Z to test
