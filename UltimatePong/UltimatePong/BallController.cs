@@ -63,7 +63,7 @@ namespace UltimatePong
             ballStartPos = (fieldSize - ballSize) / 2;
             ball = new Entity(texture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
             timer = new Timer();
-
+            lastHitPlayer = -1;
             spriteBatch = sb;
             spriteTexture = texture;
             lastHitPlayer = -1;

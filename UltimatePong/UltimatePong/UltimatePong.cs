@@ -266,19 +266,23 @@ namespace UltimatePong
                         break;
                     case BallMovementInstructionResult.RunningAndPowerupHit:
 
-                        switch(ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives))
+                        if (ball.lastHitPlayer != -1)
                         {
-                            case PowerupResponse.addBall:
-                                BallController tmpBallController = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow);
-                                tmpBallController.spawnBall(spawnBallDirection(), elapsedTime);
-                                updatedBalls.Add(tmpBallController);
-                                break;
-                            case PowerupResponse.changeBallDirection:
-                                ball.simpleBounce(random.Next(0, 3));
-                                break;
-                            default:
-                                break;
+                            switch (ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives))
+                            {
+                                case PowerupResponse.addBall:
+                                    BallController tmpBallController = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow);
+                                    tmpBallController.spawnBall(spawnBallDirection(), elapsedTime);
+                                    updatedBalls.Add(tmpBallController);
+                                    break;
+                                case PowerupResponse.changeBallDirection:
+                                    ball.simpleBounce(random.Next(0, 3));
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                        
                         
                         updatedBalls.Add(ball);
                         powerupController.Remove(ball.hitPowerup);
