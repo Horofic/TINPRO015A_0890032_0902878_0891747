@@ -8,26 +8,26 @@ namespace UltimatePong
 {
     abstract class PowerupController
     {
+        public Color color;
         abstract public PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives);
-        abstract public void Draw();
+        public void Draw()
+        {
+            spriteBatch.Draw(barTexture, powerup.rectangle, color);
+        }
         public Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
         public Entity powerup;
+        public SpriteBatch spriteBatch;
+        public Texture2D barTexture;
     }
 
     class GreenPowerupController : PowerupController
     {
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public GreenPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
             powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100,650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
-        }
-
-        public override void Draw()
-        {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
+            color = Color.Green;
         }
 
         public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
@@ -41,19 +41,12 @@ namespace UltimatePong
     }
     class RedPowerupController : PowerupController
     {
-        //public Entity powerup;
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public RedPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
             powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
-        }
-
-        public override void Draw()
-        {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Red);
+            color = Color.Red;
         }
 
         public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
@@ -67,19 +60,12 @@ namespace UltimatePong
     }
     class GoldPowerupController : PowerupController
     {
-        //public Entity powerup;
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public GoldPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
             powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
-        }
-
-        public override void Draw()
-        {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Gold);
+            color = Color.Gold;
         }
 
         public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
@@ -91,19 +77,12 @@ namespace UltimatePong
     }
     class PinkPowerupController : PowerupController
     {
-        //public Entity powerup;
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public PinkPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
             powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
-        }
-
-        public override void Draw()
-        {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.HotPink);
+            color = Color.HotPink;
         }
 
         public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
@@ -114,19 +93,12 @@ namespace UltimatePong
     }
     class BluePowerupController : PowerupController
     {
-        //public Entity powerup;
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public BluePowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
             powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
-        }
-
-        public override void Draw()
-        {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Blue);
+            color = Color.Gold;
         }
 
         public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
