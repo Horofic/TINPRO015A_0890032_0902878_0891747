@@ -19,6 +19,12 @@ namespace UltimatePong
         DoneAndPlayer2LostALife,
         DoneAndPlayer3LostALife
     }
+    enum PowerupResponse
+    {
+        done,
+        addBall,
+        changeBallDirection
+    }
 
     public class UltimatePong : Game
     {
