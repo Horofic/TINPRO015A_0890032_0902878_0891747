@@ -151,7 +151,8 @@ namespace UltimatePong
             //Initialize powerups
             powerupController = new List<PowerupController>();
             powerupController.Insert(0, new GreenPowerupController(barTexture,spriteBatch));
-            //powerupControllers.Insert(0, new PowerupController(barTexture,spriteBatch)); //Green Powerup
+            powerupController.Insert(1, new RedPowerupController(barTexture, spriteBatch));
+            powerupController.Insert(2, new GoldPowerupController(barTexture, spriteBatch));
 
             //Inititialize borders
             borders = new List<Entity>();
