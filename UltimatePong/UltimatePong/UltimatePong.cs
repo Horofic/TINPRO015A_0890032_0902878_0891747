@@ -149,7 +149,7 @@ namespace UltimatePong
 
             //Initialize powerups
             powerups = new List<Entity>();
-            powerups.Insert(0, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150,650), random.Next(150, 650)))); //Green Powerup
+            powerups.Insert(0, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Green Powerup
             powerups.Insert(1, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Red Powerup
             powerups.Insert(2, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Gold Powerup
 
