@@ -9,7 +9,7 @@ namespace UltimatePong
     class PowerupController
     {
         Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
-        Entity powerup;
+        public Entity powerup;
         SpriteBatch spriteBatch;
         Texture2D barTexture;
 

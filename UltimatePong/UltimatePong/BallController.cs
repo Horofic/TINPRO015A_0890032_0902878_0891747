@@ -185,11 +185,11 @@ namespace UltimatePong
                 }
             }
             //powerup collision
-            foreach(PowerupController powerup in powerups)
+            foreach(PowerupController powerupController in powerups)
             {
-                if (powerup.powerup.rectangle.intersects(ball.rectangle))
+                if (powerupController.powerup.rectangle.Intersects(ball.rectangle))
                 {
-                    hitPowerup = powerup;
+                    hitPowerup = powerupController;
                     return BallMovementInstructionResult.RunningAndPowerupHit;
                 }
             }
