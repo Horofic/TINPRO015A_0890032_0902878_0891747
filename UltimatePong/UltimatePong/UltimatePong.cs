@@ -86,9 +86,6 @@ namespace UltimatePong
         //color array
         Color[] colorArray = {Color.White,Color.TransparentBlack,Color.Green,Color.Red,Color.Goldenrod };
 
-        //The last hit bar
-        int lastHitBar = 2;
-
         //Victory screen values
         int[] selectionLocation = {130, 500, 250, 600};
         int selection = 0;
@@ -158,6 +155,9 @@ namespace UltimatePong
             powerupController.Insert(0, new GreenPowerupController(barTexture,spriteBatch));
             powerupController.Insert(1, new RedPowerupController(barTexture, spriteBatch));
             powerupController.Insert(2, new GoldPowerupController(barTexture, spriteBatch));
+            powerupController.Insert(3, new PinkPowerupController(barTexture, spriteBatch));
+            powerupController.Insert(4, new BluePowerupController(barTexture, spriteBatch));
+
 
             //Inititialize borders
             borders = new List<Entity>();

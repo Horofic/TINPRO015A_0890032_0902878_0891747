@@ -9,7 +9,7 @@ namespace UltimatePong
     abstract class PowerupController
     {
         public Color color;
-        public Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
+        public Random random = new Random(DateTime.Now.Millisecond);
         public Entity powerup;
         public SpriteBatch spriteBatch;
         public Texture2D barTexture;
@@ -80,7 +80,7 @@ namespace UltimatePong
     {
         public PinkPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
-            powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
+            powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
             color = Color.HotPink;
@@ -96,10 +96,10 @@ namespace UltimatePong
     {
         public BluePowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
-            powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
+            powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
-            color = Color.Gold;
+            color = Color.Blue;
         }
 
         public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
