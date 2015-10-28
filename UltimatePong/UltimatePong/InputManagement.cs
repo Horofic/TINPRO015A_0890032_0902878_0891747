@@ -92,17 +92,6 @@ namespace UltimatePong
             }
         }
 
-        public bool test
-        {
-            get
-            {
-                if (ks.IsKeyDown(Keys.Z))
-                    return true;
-                else
-                    return false;
-            }
-        }
-
         public bool selection
         {
             get

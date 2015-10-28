@@ -86,9 +86,6 @@ namespace UltimatePong
         //color array
         Color[] colorArray = {Color.White,Color.TransparentBlack,Color.Green,Color.Red,Color.Goldenrod };
 
-        //The last hit bar
-        int lastHitBar = 2;
-
         //Victory screen values
         int[] selectionLocation = {130, 500, 250, 600};
         int selection = 0;
@@ -158,6 +155,9 @@ namespace UltimatePong
             powerupController.Insert(0, new GreenPowerupController(barTexture,spriteBatch));
             powerupController.Insert(1, new RedPowerupController(barTexture, spriteBatch));
             powerupController.Insert(2, new GoldPowerupController(barTexture, spriteBatch));
+            powerupController.Insert(3, new PinkPowerupController(barTexture, spriteBatch));
+            powerupController.Insert(4, new BluePowerupController(barTexture, spriteBatch));
+
 
             //Inititialize borders
             borders = new List<Entity>();
@@ -281,19 +281,23 @@ namespace UltimatePong
                         break;
                     case BallMovementInstructionResult.RunningAndPowerupHit:
 
-                        switch(ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives))
+                        if (ball.lastHitPlayer != -1)
                         {
-                            case PowerupResponse.addBall:
-                                BallController tmpBallController = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow);
-                                tmpBallController.spawnBall(spawnBallDirection(), elapsedTime);
-                                updatedBalls.Add(tmpBallController);
-                                break;
-                            case PowerupResponse.changeBallDirection:
-                                ball.simpleBounce(random.Next(0, 3));
-                                break;
-                            default:
-                                break;
+                            switch (ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives))
+                            {
+                                case PowerupResponse.addBall:
+                                    BallController tmpBallController = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow);
+                                    tmpBallController.spawnBall(spawnBallDirection(), elapsedTime);
+                                    updatedBalls.Add(tmpBallController);
+                                    break;
+                                case PowerupResponse.changeBallDirection:
+                                    ball.simpleBounce(random.Next(0, 3));
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
+                        
                         
                         updatedBalls.Add(ball);
                         powerupController.Remove(ball.hitPowerup);
@@ -327,12 +331,6 @@ namespace UltimatePong
                 updatedBalls[0].spawnBall(spawnBallDirection(), elapsedTime);
             }
           
-            //this is used to test powerups, press Z to test
-            if (input.test)
-            {
-                tempBars = power_up.powerupEvent(tempBars, 0,lastHitBar,ref playerLives);
-            }
-
             //move player to void if dead
             for(int i=0;i<playerLives.Length;i++)
                 if (playerLives[i] < 1)
