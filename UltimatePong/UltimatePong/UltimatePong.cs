@@ -273,15 +273,18 @@ namespace UltimatePong
                                 tmpBallController.spawnBall(spawnBallDirection(), elapsedTime);
                                 updatedBalls.Add(tmpBallController);
                                 break;
+                            case PowerupResponse.changeBallDirection:
+                                ball.simpleBounce(random.Next(0, 3));
+                                break;
                             default:
                                 break;
                         }
-
-
-
+                        
                         updatedBalls.Add(ball);
                         powerupController.Remove(ball.hitPowerup);
                         break;
+
+
                     case BallMovementInstructionResult.OutOfBounds:
 
                     default:
