@@ -75,7 +75,6 @@ namespace UltimatePong
 
         //input
         InputManagement input;
-        Keys[,] controls = new Keys[4,3];
 
         //color array
         Color[] colorArray = {Color.White,Color.TransparentBlack,Color.Green,Color.Red,Color.Goldenrod };
@@ -124,28 +123,6 @@ namespace UltimatePong
             fontVictoryScreen = Content.Load<SpriteFont>("fontVictoryScreen");
 
             base.Window.AllowUserResizing = false;
-         
-            //initialize bar controls
-            //TopBar controls
-            controls[0, 0] = Keys.T; //LEFT
-            controls[0, 1] = Keys.U; //RIGHT
-            controls[0, 2] = Keys.Y; //BOOST
-
-            //BotBar controls
-            controls[1, 0] = Keys.V; //LEFT
-            controls[1, 1] = Keys.N; //RIGHT
-            controls[1, 2] = Keys.B; //BOOST
-
-            //LeftBar controls
-            controls[2, 0] = Keys.A; //UP
-            controls[2, 1] = Keys.D; //DOWN
-            controls[2, 2] = Keys.S; //BOOST
-
-            //RightBar controls
-            controls[3, 0] = Keys.L; //UP
-            controls[3, 1] = Keys.J; //DOWN
-            controls[3, 2] = Keys.K; //BOOST
-
 
             //initialize ball
             balls = new List<BallController>();
@@ -172,7 +149,7 @@ namespace UltimatePong
 
             //Initialize powerups
             powerups = new List<Entity>();
-            powerups.Insert(0, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150,650), random.Next(150, 650)))); //Green Powerup
+            powerups.Insert(0, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Green Powerup
             powerups.Insert(1, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Red Powerup
             powerups.Insert(2, new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)))); //Gold Powerup
 
@@ -184,7 +161,7 @@ namespace UltimatePong
             borders.Insert(3, new Entity(borderTexture, new Rectangle(), borderWidth, fieldSize, new Point(fieldSize - borderWidth, 0))); //Right Border
 
             //Initialize input
-            input = new InputManagement(controls);
+            input = new InputManagement();
 
             Console.WriteLine("initialize");
             base.Initialize();
@@ -398,6 +375,7 @@ namespace UltimatePong
             foreach (Entity bar in playerBars)
                 spriteBatch.Draw(barTexture, bar.rectangle, Color.White);
             //entities powerup
+            if(powerupEnabled)
             for(int i=0;i<powerups.Count;i++)
                 spriteBatch.Draw(barTexture, powerups[i].rectangle, colorArray[i+2]);
 
