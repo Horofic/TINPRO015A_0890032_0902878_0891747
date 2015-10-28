@@ -24,7 +24,6 @@ namespace UltimatePong
         public float ballSpeedLimit;
         public float ballSpeedInc;
         public float bounceCorrection;
-        public bool classicBounce;
         public float ballXVelocity;
         public float ballYVelocity;
         public Entity ball;
@@ -47,7 +46,7 @@ namespace UltimatePong
          *  CONSTRUCTORS
          */
 
-        public BallController(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, bool classicBounce_, SpriteBatch sb, Texture2D texture, SoundEffect high, SoundEffect low)
+        public BallController(int fieldSize_, int ballSize_, float ballSpeed_, float ballSpeedLimit_, float ballSpeedInc_, float bounceCorrection_, SpriteBatch sb, Texture2D texture, SoundEffect high, SoundEffect low)
         {
             this.fieldSize = fieldSize_;
             this.ballSize = ballSize_;
@@ -55,7 +54,6 @@ namespace UltimatePong
             this.ballSpeedLimit = ballSpeedLimit_;
             this.ballSpeedInc = ballSpeedInc_;
             this.bounceCorrection = bounceCorrection_;
-            this.classicBounce = classicBounce_;
             bleepLow = low;
             bleepHigh = high;
             ballStartPos = (fieldSize - ballSize) / 2;
@@ -75,12 +73,12 @@ namespace UltimatePong
         /*
          *  Spawns the ball in the center of the playingfield and lets it move in a random direction
          */
-        public void spawnBall(int player, float speed, GameTime gameTime)
+        public void spawnBall(int player, float speed, double elapsedTime)
         {
             ballSpeed = speed;
 
             ball = new Entity(spriteTexture, new Rectangle(ballStartPos, ballStartPos, ballSize, ballSize));
-            timer.setTime(gameTime);
+            timer.setTime(elapsedTime);
             spawning = true;
 
             switch (player)
@@ -123,12 +121,12 @@ namespace UltimatePong
         /*
          * Updates the ball position and makes the ball bounce on a collision. Returns an int to indicate that a player loses a live. default = -1, top = 0 bottom = 1
          */
-        public BallMovementInstructionResult updateBall(GameTime gameTime, List<Entity> bars, List<Entity> borders, int[] lives)
+        public BallMovementInstructionResult updateBall(float deltaTime, double elapsedTime, List<Entity> bars, List<Entity> borders, int[] lives)
         {
 
             if (spawning)
             {
-                if (!timer.getTimeDone(gameTime, 2))
+                if (!timer.getTimeDone(elapsedTime, 2000))
                 {
                     return BallMovementInstructionResult.Running;
                 }
@@ -144,7 +142,8 @@ namespace UltimatePong
                 {
                     barBounce(i, bars[i].rectangle);
                     while (ball.rectangle.Intersects(bars[i].rectangle))
-                        moveBall(gameTime);
+                        moveBall(deltaTime);
+                    bleepHigh.Play();
                     return BallMovementInstructionResult.Running;
                 }
             }
@@ -160,7 +159,7 @@ namespace UltimatePong
                     {
                         simpleBounce(i);
                         while (ball.rectangle.Intersects(borders[i].rectangle))
-                            moveBall(gameTime);
+                            moveBall(deltaTime);
                             bleepLow.Play();
                         return BallMovementInstructionResult.Running;
                     }
@@ -177,7 +176,7 @@ namespace UltimatePong
                             case 3:
                                 return BallMovementInstructionResult.DoneAndPlayer3LostALife;
                             default:
-                                return BallMovementInstructionResult.Done;
+                                return BallMovementInstructionResult.OutOfBounds;
                         }
                     }
                 }
@@ -186,12 +185,12 @@ namespace UltimatePong
             //ball is out of bounds
             if (ball.rectangle.Left > fieldSize || ball.rectangle.Right < 0 || ball.rectangle.Top > fieldSize || ball.rectangle.Bottom < 0)
             {
-                return BallMovementInstructionResult.Done;
+                return BallMovementInstructionResult.OutOfBounds;
             }
 
 
             //the ball isnt in collision
-            moveBall(gameTime);
+            moveBall(deltaTime);
             return BallMovementInstructionResult.Running;
         }
 
@@ -213,9 +212,9 @@ namespace UltimatePong
          *  Moves the ball 
          */
 
-        private void moveBall(GameTime gameTime)
+        private void moveBall(float deltaTime)
         {
-            ball = ball.CreateMoved((int)(ballXVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds), (int)(ballYVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds));
+            ball = ball.CreateMoved((int)(ballXVelocity * deltaTime), (int)(ballYVelocity * deltaTime));
         }
 
 
@@ -241,14 +240,10 @@ namespace UltimatePong
             //increase speed
             if (ballSpeed < ballSpeedLimit)
                 ballSpeed += ballSpeedInc;
-            bleepHigh.Play();
             Console.WriteLine(ballSpeed);
 
 
-            //classic Bounce type
-            if (classicBounce)
-                simpleBounce(i);
-
+          
 
             // Advanced bounce
 

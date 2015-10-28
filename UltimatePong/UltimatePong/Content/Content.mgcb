@@ -16,13 +16,13 @@
 #begin font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
+/processorParam:TextureFormat=Color
 /build:font.spritefont
 
 #begin fontVictoryScreen.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
+/processorParam:TextureFormat=Color
 /build:fontVictoryScreen.spritefont
 
 #begin bleep-high.wav
@@ -36,3 +36,4 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:bleep-low.wav
+

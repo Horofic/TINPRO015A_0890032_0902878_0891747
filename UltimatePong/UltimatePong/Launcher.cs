@@ -17,9 +17,8 @@ namespace UltimatePong
         public int playerAmount;
         public int livesAmount;
         public bool powerups;
-        public bool bounceType;
 
-        public Launcher(int playerAmount, int livesAmount, bool powerups,bool bounceType)
+        public Launcher(int playerAmount, int livesAmount, bool powerups)
         {
             InitializeComponent();
             StartPressed = false;
@@ -27,7 +26,6 @@ namespace UltimatePong
             PlayerAmountBox.SelectedIndex = playerAmount - 2;
             LivesAmountBox.Value = livesAmount;
             PowerupsBox.Checked = powerups;
-            BounceTypeBox.Checked = bounceType;
         }
         public Launcher()
         {
@@ -40,7 +38,6 @@ namespace UltimatePong
             playerAmount = PlayerAmountBox.SelectedIndex + 2;
             livesAmount = Convert.ToInt32(LivesAmountBox.Value);
             powerups = PowerupsBox.Checked;
-            bounceType = BounceTypeBox.Checked;
 
             StartPressed = true;
             Close();

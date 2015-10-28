@@ -34,11 +34,11 @@ namespace UltimatePong
         }
         //run this method continuosly to run the timer
         //runtimer with a given set time 
-        public bool runTimerMs(GameTime gameTime, int time)
+        public bool runTimerMs(float deltaTime, int time)
         {
-            if (savedGameTime < (int)gameTime.TotalGameTime.Milliseconds && done == false)
+            if (savedGameTime < (int)deltaTime && done == false)
             {
-                savedGameTime = (int)gameTime.TotalGameTime.Milliseconds;
+                savedGameTime = (int)deltaTime;
                 elapsedTime++;
                 Console.WriteLine(elapsedTime);
             }
@@ -52,11 +52,11 @@ namespace UltimatePong
 
         //run this method continuosly to run the timer
         //runtimer with a given set time 
-        public bool runTimer(GameTime gameTime, int time)
+        public bool runTimer(float deltaTime, int time)
         {
-            if (savedGameTime < (int)gameTime.TotalGameTime.TotalSeconds && done == false)
+            if (savedGameTime < (int)deltaTime && done == false)
             {
-                savedGameTime = (int)gameTime.TotalGameTime.TotalSeconds;
+                savedGameTime = (int)deltaTime;
                 elapsedTime++;
             }
             if (elapsedTime >= time)
@@ -67,11 +67,11 @@ namespace UltimatePong
         }
 
         //runtimer without a set time
-        public void runTimer(GameTime gameTime)
+        public void runTimer(float deltaTime)
         {
-            if (savedGameTime < (int)gameTime.TotalGameTime.TotalSeconds && done == false)
+            if (savedGameTime < (int)deltaTime && done == false)
             {
-                savedGameTime = (int)gameTime.TotalGameTime.TotalSeconds;
+                savedGameTime = (int)deltaTime;
                 elapsedTime++;
             }
         }
@@ -100,16 +100,16 @@ namespace UltimatePong
         }
 
         //set current time
-        public void setTime(GameTime gameTime)
+        public void setTime(double elapsedTime)
         {
-            savedGameTime = (int)gameTime.TotalGameTime.Seconds;
+            savedGameTime = (int)elapsedTime;
             done = false;
         }
 
         //get true when given time is met. else false
-        public bool getTimeDone(GameTime gameTime, int time)
+        public bool getTimeDone(double elapsedTime, int time)
         {
-            if ((int)gameTime.TotalGameTime.Seconds - savedGameTime >= time)
+            if ((int)elapsedTime - savedGameTime >= time)
                 return true;
             else
                 return false;

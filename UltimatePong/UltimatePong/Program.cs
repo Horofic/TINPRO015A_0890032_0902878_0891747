@@ -36,7 +36,7 @@ namespace UltimatePong
             //check if StartButton is pressed > start game. Else exit program.
             if (launcher.StartPressed)
             {
-                game = new UltimatePong(launcher.playerAmount, launcher.livesAmount, launcher.powerups,launcher.bounceType);
+                game = new UltimatePong(launcher.playerAmount, launcher.livesAmount, launcher.powerups);
                 game.Run();
                 if (game.restart)
                     restartGame();
@@ -49,7 +49,7 @@ namespace UltimatePong
 
         static void restartGame()
         {
-            game = new UltimatePong(game.players, game.lives, game.powerupEnabled, game.classicBounce);
+            game = new UltimatePong(game.players, game.lives, game.powerupEnabled);
             game.Run();
             if (game.restart)
                 restartGame();

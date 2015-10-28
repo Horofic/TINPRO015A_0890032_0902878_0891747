@@ -31,7 +31,6 @@
             this.StartButton = new System.Windows.Forms.Button();
             this.PowerupsBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.BounceTypeBox = new System.Windows.Forms.CheckBox();
             this.LivesAmountBox = new System.Windows.Forms.NumericUpDown();
             this.PlayerAmountText = new System.Windows.Forms.Label();
             this.LivesAmountText = new System.Windows.Forms.Label();
@@ -64,7 +63,6 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.BounceTypeBox);
             this.panel1.Controls.Add(this.LivesAmountBox);
             this.panel1.Controls.Add(this.PlayerAmountText);
             this.panel1.Controls.Add(this.LivesAmountText);
@@ -74,16 +72,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(226, 144);
             this.panel1.TabIndex = 3;
-            // 
-            // BounceTypeBox
-            // 
-            this.BounceTypeBox.AutoSize = true;
-            this.BounceTypeBox.Location = new System.Drawing.Point(103, 79);
-            this.BounceTypeBox.Name = "BounceTypeBox";
-            this.BounceTypeBox.Size = new System.Drawing.Size(99, 17);
-            this.BounceTypeBox.TabIndex = 9;
-            this.BounceTypeBox.Text = "Classic Bounce";
-            this.BounceTypeBox.UseVisualStyleBackColor = true;
             // 
             // LivesAmountBox
             // 
@@ -163,6 +151,5 @@
         private System.Windows.Forms.Label LivesAmountText;
         private System.Windows.Forms.Label PlayerAmountText;
         private System.Windows.Forms.NumericUpDown LivesAmountBox;
-        private System.Windows.Forms.CheckBox BounceTypeBox;
     }
 }

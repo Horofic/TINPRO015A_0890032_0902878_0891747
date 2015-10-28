@@ -12,7 +12,7 @@ namespace UltimatePong
     enum BallMovementInstructionResult
     {
         Running,
-        Done,
+        OutOfBounds,
         DoneAndPlayer0LostALife,
         DoneAndPlayer1LostALife,
         DoneAndPlayer2LostALife,
@@ -67,7 +67,6 @@ namespace UltimatePong
         public int players;
         public int lives;
         public bool powerupEnabled;
-        public bool classicBounce;
         private bool firstCycle;
         private bool gameDone;
 
@@ -90,7 +89,7 @@ namespace UltimatePong
         double selectionTimer = 0;
         public bool restart = false;
 
-        public UltimatePong(int playerAmount, int livesAmount, bool powerup, bool bounceType)
+        public UltimatePong(int playerAmount, int livesAmount, bool powerup)
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = fieldSize;
@@ -100,14 +99,12 @@ namespace UltimatePong
             this.players = playerAmount;
             this.lives = livesAmount;
             this.powerupEnabled = powerup;
-            this.classicBounce = bounceType;
             this.gameDone = false;
 
             //Printlines
             System.Console.WriteLine("players:" + players);
             System.Console.WriteLine("lives:" + lives);
             System.Console.WriteLine("powerups:" + powerups);
-            System.Console.WriteLine("bounceType:" + bounceType);
         }
 
         protected override void Initialize()
@@ -152,7 +149,7 @@ namespace UltimatePong
 
             //initialize ball
             balls = new List<BallController>();
-            balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture, bleepHigh, bleepLow));
+            balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow));
             firstCycle = true;
 
             int barStartPos = (fieldSize - barLength) / 2;
@@ -217,7 +214,7 @@ namespace UltimatePong
             playerBars = temp;
         }
 
-        protected void firstSpawnBall(GameTime gameTime)
+        protected void firstSpawnBall(float deltaTime)
         {
             int direction = 0;
             switch(players)
@@ -233,27 +230,29 @@ namespace UltimatePong
                     break;
             }
             lastSpawnedDirection = direction;
-            balls[0].spawnBall(direction, ballSpeed, gameTime);
+            balls[0].spawnBall(direction, ballSpeed, deltaTime);
             firstCycle = false;
         }
 
         protected override void Update(GameTime gameTime)
         {
+
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            double elapsedTime = gameTime.TotalGameTime.TotalMilliseconds;
 
             if (firstCycle)
             {
                 setPlayersAmount();
-                firstSpawnBall(gameTime);
+                firstSpawnBall(deltaTime);
             }
     
             input.Update(deltaTime);
             if (input.quit)
             {
-                BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture,bleepHigh,bleepLow);
+                BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow);
 
                 balls.Add(newBall);
-                newBall.spawnBall(spawnBallDirection(), ballSpeed, gameTime);
+                newBall.spawnBall(spawnBallDirection(), ballSpeed, elapsedTime);
             }
 
             //BAR ENTITIES to be moved
@@ -268,7 +267,7 @@ namespace UltimatePong
 
             foreach (BallController ball in balls)
             {
-                switch (ball.updateBall(gameTime, playerBars, borders, playerLives))
+                switch (ball.updateBall(deltaTime, elapsedTime, playerBars, borders, playerLives))
                 {
                     case BallMovementInstructionResult.Running:
                         updatedBalls.Add(ball);
@@ -286,7 +285,7 @@ namespace UltimatePong
                         playerLives[3] -= 1;
                         break;
 
-                    case BallMovementInstructionResult.Done:
+                    case BallMovementInstructionResult.OutOfBounds:
 
                     default:
                         break;
@@ -308,8 +307,8 @@ namespace UltimatePong
             }
             else if (updatedBalls.Count < 1)
             {
-                updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, false, spriteBatch, spriteTexture,bleepHigh,bleepLow));
-                updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, gameTime);
+                updatedBalls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow));
+                updatedBalls[0].spawnBall(spawnBallDirection(), ballSpeed, elapsedTime);
             }
 
             //Power-ups
