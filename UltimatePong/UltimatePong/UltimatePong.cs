@@ -312,12 +312,6 @@ namespace UltimatePong
                 updatedBalls[0].spawnBall(spawnBallDirection(), elapsedTime);
             }
           
-            //this is used to test powerups, press Z to test
-            if (input.test)
-            {
-                tempBars = power_up.powerupEvent(tempBars, 0,lastHitBar,ref playerLives);
-            }
-
             //move player to void if dead
             for(int i=0;i<playerLives.Length;i++)
                 if (playerLives[i] < 1)

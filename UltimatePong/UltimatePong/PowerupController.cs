@@ -9,15 +9,16 @@ namespace UltimatePong
     abstract class PowerupController
     {
         public Color color;
+        public Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
+        public Entity powerup;
+        public SpriteBatch spriteBatch;
+        public Texture2D barTexture;
         abstract public PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives);
         public void Draw()
         {
             spriteBatch.Draw(barTexture, powerup.rectangle, color);
         }
-        public Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
-        public Entity powerup;
-        public SpriteBatch spriteBatch;
-        public Texture2D barTexture;
+        
     }
 
     class GreenPowerupController : PowerupController
