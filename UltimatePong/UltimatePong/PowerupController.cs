@@ -8,7 +8,7 @@ namespace UltimatePong
 {
     abstract class PowerupController
     {
-        abstract public void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives);
+        abstract public PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives);
         abstract public void Draw();
         public Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
         public Entity powerup;
@@ -16,7 +16,6 @@ namespace UltimatePong
 
     class GreenPowerupController : PowerupController
     {
-        //public Entity powerup;
         SpriteBatch spriteBatch;
         Texture2D barTexture;
         public GreenPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
@@ -31,12 +30,13 @@ namespace UltimatePong
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
         }
 
-        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("GREEN HIT");
             int difference = 50;
             tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, difference).CreateMoved(new Point(0, -(difference / 2))));
             tempBars.RemoveAt(lastHitPlayer+1);
+            return PowerupResponse.done;
         }
     }
     class RedPowerupController : PowerupController
@@ -56,12 +56,13 @@ namespace UltimatePong
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.Red);
         }
 
-        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("RED HIT");
             int difference = 30;
             tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, -difference).CreateMoved(new Point(0, (difference / 2))));
             tempBars.RemoveAt(lastHitPlayer+1);
+            return PowerupResponse.done;
         }
     }
     class GoldPowerupController : PowerupController
@@ -81,10 +82,11 @@ namespace UltimatePong
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.Gold);
         }
 
-        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("GOLD HIT");
             playerlives[lastHitPlayer] += 1;
+            return PowerupResponse.done;
         }
     }
     class PinkPowerupController : PowerupController
@@ -104,10 +106,33 @@ namespace UltimatePong
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.HotPink);
         }
 
-        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("PINK HIT");
+            return PowerupResponse.addBall;
+        }
+    }
+    class BluePowerupController : PowerupController
+    {
+        //public Entity powerup;
+        SpriteBatch spriteBatch;
+        Texture2D barTexture;
+        public BluePowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
+        {
+            powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
+            this.spriteBatch = spriteBatch;
+            this.barTexture = barTexture;
+        }
 
+        public override void Draw()
+        {
+            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Blue);
+        }
+
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        {
+            Console.WriteLine("BLUE HIT");
+            return PowerupResponse.changeBallDirection;
         }
     }
 }
