@@ -259,7 +259,15 @@ namespace UltimatePong
                         playerLives[3] -= 1;
                         break;
                     case BallMovementInstructionResult.RunningAndPowerupHit:
-                        ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives);
+
+                        switch(ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ref tempBars, ref playerLives))
+                        {
+                            case PowerupResponse.AddBall:
+
+                        }
+
+
+
                         updatedBalls.Add(ball);
                         powerupController.Remove(ball.hitPowerup);
                         break;
