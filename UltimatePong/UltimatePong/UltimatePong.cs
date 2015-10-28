@@ -284,6 +284,7 @@ namespace UltimatePong
             if (playersAlive < 2)
             {
                 updatedBalls.Clear();
+                powerupController.Clear();
                 //powerups.Clear();
                 gameDone = true;
             }
