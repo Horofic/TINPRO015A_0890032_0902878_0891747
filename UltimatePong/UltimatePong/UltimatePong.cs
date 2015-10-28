@@ -12,11 +12,13 @@ namespace UltimatePong
     enum BallMovementInstructionResult
     {
         Running,
+        RunningAndPowerupHit,
         OutOfBounds,
         DoneAndPlayer0LostALife,
         DoneAndPlayer1LostALife,
         DoneAndPlayer2LostALife,
         DoneAndPlayer3LostALife
+
     }
 
     public class UltimatePong : Game
