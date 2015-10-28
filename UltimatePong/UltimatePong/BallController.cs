@@ -27,7 +27,7 @@ namespace UltimatePong
         public float ballXVelocity;
         public float ballYVelocity;
         public int lastHitPlayer;
-         
+        public PowerupController hitPowerup; 
         public Entity ball;
 
 
@@ -64,6 +64,7 @@ namespace UltimatePong
 
             spriteBatch = sb;
             spriteTexture = texture;
+            lastHitPlayer = -1;
         }
 
         /*
@@ -123,7 +124,7 @@ namespace UltimatePong
         /*
          * Updates the ball position and makes the ball bounce on a collision. Returns an int to indicate that a player loses a live. default = -1, top = 0 bottom = 1
          */
-        public BallMovementInstructionResult updateBall(float deltaTime, double elapsedTime, List<Entity> bars, List<Entity> borders, List<Entity> powerups, int[] lives)
+        public BallMovementInstructionResult updateBall(float deltaTime, double elapsedTime, List<Entity> bars, List<Entity> borders, List<PowerupController> powerups, int[] lives)
         {
 
             if (spawning)
@@ -145,13 +146,13 @@ namespace UltimatePong
                     barBounce(i, bars[i].rectangle);
                     while (ball.rectangle.Intersects(bars[i].rectangle))
                         moveBall(deltaTime);
+                    lastHitPlayer = i;
                     bleepHigh.Play();
                     return BallMovementInstructionResult.Running;
                 }
             }
 
-
-            // check if ball touches the border if does that player loses a life and ball is reset
+            //bordercollision
 
             for (int i = 0; i < 4; i++)
             {
@@ -183,6 +184,17 @@ namespace UltimatePong
                     }
                 }
             }
+            //powerup collision
+            foreach(PowerupController powerupController in powerups)
+            {
+                if (powerupController.powerup.rectangle.Intersects(ball.rectangle))
+                {
+                    hitPowerup = powerupController;
+                    return BallMovementInstructionResult.RunningAndPowerupHit;
+                }
+            }
+
+
 
             //ball is out of bounds
             if (ball.rectangle.Left > fieldSize || ball.rectangle.Right < 0 || ball.rectangle.Top > fieldSize || ball.rectangle.Bottom < 0)

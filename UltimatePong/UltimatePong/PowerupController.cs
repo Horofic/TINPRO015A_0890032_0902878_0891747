@@ -23,7 +23,7 @@ namespace UltimatePong
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
         }
- 
+
         public override void powerupEvent()
         {
             throw new NotImplementedException();

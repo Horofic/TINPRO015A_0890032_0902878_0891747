@@ -12,6 +12,7 @@ namespace UltimatePong
     enum BallMovementInstructionResult
     {
         Running,
+        RunningAndPowerupHit,
         OutOfBounds,
         DoneAndPlayer0LostALife,
         DoneAndPlayer1LostALife,
@@ -83,7 +84,7 @@ namespace UltimatePong
         int lastHitBar = 2;
 
         //Victory screen values
-        int[] selectionLocation = { 130, 500, 250, 600 };
+        int[] selectionLocation = {130, 500, 250, 600};
         int selection = 0;
         double selectionTimer = 0;
         public bool restart = false;
@@ -242,7 +243,7 @@ namespace UltimatePong
 
             foreach (BallController ball in balls)
             {
-                switch (ball.updateBall(deltaTime, elapsedTime, playerBars, borders, playerLives))
+                switch (ball.updateBall(deltaTime, elapsedTime, playerBars, borders, powerupControllers, playerLives))
                 {
                     case BallMovementInstructionResult.Running:
                         updatedBalls.Add(ball);
@@ -259,11 +260,16 @@ namespace UltimatePong
                     case BallMovementInstructionResult.DoneAndPlayer3LostALife:
                         playerLives[3] -= 1;
                         break;
-
+                    case BallMovementInstructionResult.RunningAndPowerupHit:
+                        ball.hitPowerup.powerupEvent();
+                        updatedBalls.Add(ball);
+                        powerupControllers.Add(new greenPowerup)
+                        break;
                     case BallMovementInstructionResult.OutOfBounds:
 
                     default:
                         break;
+
                 }
 
             }
