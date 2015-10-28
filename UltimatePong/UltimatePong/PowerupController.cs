@@ -87,4 +87,27 @@ namespace UltimatePong
             playerlives[lastHitPlayer] += 1;
         }
     }
+    class PinkPowerupController : PowerupController
+    {
+        //public Entity powerup;
+        SpriteBatch spriteBatch;
+        Texture2D barTexture;
+        public PinkPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
+        {
+            powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
+            this.spriteBatch = spriteBatch;
+            this.barTexture = barTexture;
+        }
+
+        public override void Draw()
+        {
+            spriteBatch.Draw(barTexture, powerup.rectangle, Color.HotPink);
+        }
+
+        public override void powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        {
+            Console.WriteLine("PINK HIT");
+
+        }
+    }
 }
