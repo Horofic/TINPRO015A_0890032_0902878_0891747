@@ -261,9 +261,9 @@ namespace UltimatePong
                         playerLives[3] -= 1;
                         break;
                     case BallMovementInstructionResult.RunningAndPowerupHit:
-                        ball.hitPowerup.powerupEvent();
+                        ball.hitPowerup.powerupEvent(ball.lastHitPlayer, ball.lastHitPlayerBar);
                         updatedBalls.Add(ball);
-                        powerupController.Add(new GreenPowerupController(barTexture,spriteBatch));
+                        powerupController.Remove(ball.hitPowerup);
                         break;
                     case BallMovementInstructionResult.OutOfBounds:
 
