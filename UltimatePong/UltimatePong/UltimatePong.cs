@@ -243,7 +243,7 @@ namespace UltimatePong
 
             foreach (BallController ball in balls)
             {
-                switch (ball.updateBall(deltaTime, elapsedTime, playerBars, borders, powerupControllers, playerLives))
+                switch (ball.updateBall(deltaTime, elapsedTime, playerBars, borders, powerupController, playerLives))
                 {
                     case BallMovementInstructionResult.Running:
                         updatedBalls.Add(ball);
@@ -263,7 +263,7 @@ namespace UltimatePong
                     case BallMovementInstructionResult.RunningAndPowerupHit:
                         ball.hitPowerup.powerupEvent();
                         updatedBalls.Add(ball);
-                        powerupControllers.Add(new greenPowerup)
+                        powerupController.Add(new GreenPowerupController(barTexture,spriteBatch));
                         break;
                     case BallMovementInstructionResult.OutOfBounds:
 
