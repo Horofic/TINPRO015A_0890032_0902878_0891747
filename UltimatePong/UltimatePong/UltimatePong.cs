@@ -237,10 +237,25 @@ namespace UltimatePong
                 newBall.spawnBall(spawnBallDirection(), elapsedTime);
             }
 
+
+
             //BAR ENTITIES to be moved
             List<Entity> tempBars = new List<Entity>();
             for(int i=0;i<4;i++)
                 tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
+
+            foreach (Entity player in tempBars)
+            {
+                if (player.rectangle.Intersects(borders[0].rectangle) || player.rectangle.Intersects(borders[1].rectangle) || player.rectangle.Intersects(borders[2].rectangle) || player.rectangle.Intersects(borders[3].rectangle))
+                {
+                    Console.WriteLine("Collision with border");
+                }
+            }
+
+
+
+
+
 
             //creation of a new list of balls
             List<BallController> updatedBalls = new List<BallController>();
