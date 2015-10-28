@@ -19,14 +19,33 @@ namespace UltimatePong
     class InputManagement : InputController
     {
         KeyboardState ks;
-        private Keys[,] controls;
+        private Keys[,] controls = new Keys[4, 3];
+
         Vector2 barMovement { get; set; }
         int normalSpeed = 8;
         int boostSpeed = 12;
 
-        public InputManagement(Keys[,] controls)
+        public InputManagement()
         {
-            this.controls = controls;
+            //this.controls = controls;
+            controls[0, 0] = Keys.T; //LEFT
+            controls[0, 1] = Keys.U; //RIGHT
+            controls[0, 2] = Keys.Y; //BOOST
+
+            //BotBar controls
+            controls[1, 0] = Keys.V; //LEFT
+            controls[1, 1] = Keys.N; //RIGHT
+            controls[1, 2] = Keys.B; //BOOST
+
+            //LeftBar controls
+            controls[2, 0] = Keys.A; //UP
+            controls[2, 1] = Keys.D; //DOWN
+            controls[2, 2] = Keys.S; //BOOST
+
+            //RightBar controls
+            controls[3, 0] = Keys.L; //UP
+            controls[3, 1] = Keys.J; //DOWN
+            controls[3, 2] = Keys.K; //BOOST
         }
 
         //returns delta location
