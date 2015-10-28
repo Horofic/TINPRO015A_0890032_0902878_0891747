@@ -6,21 +6,30 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 namespace UltimatePong
 {
-    class PowerupController
+    abstract class PowerupController
     {
-        Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
+        abstract public void powerupEvent();
+        abstract public void Draw();
+    }
+
+    class GreenPowerupController : PowerupController
+    {
         Entity powerup;
         SpriteBatch spriteBatch;
         Texture2D barTexture;
-
-        public PowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
+        public GreenPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
-            powerup = new Entity(barTexture, new Rectangle(), 100, 100, new Point(random.Next(150, 650), random.Next(150, 650)));
+            powerup = new Entity(barTexture, new Rectangle(), 100, 100, new Point(150, 650));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
         }
+ 
+        public override void powerupEvent()
+        {
+            throw new NotImplementedException();
+        }
 
-        public void DrawPowerup()
+        public override void Draw()
         {
             spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
         }

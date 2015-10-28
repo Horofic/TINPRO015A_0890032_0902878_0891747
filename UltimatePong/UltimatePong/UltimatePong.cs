@@ -40,8 +40,7 @@ namespace UltimatePong
         List<Entity> borders;
         List<BallController> balls;
         List<Entity> playerBars;
-        List<PowerupController> powerupControllers;
-
+        List<PowerupController> powerupController;
         
         //playing field properties
         const int fieldSize = 800;
@@ -147,10 +146,11 @@ namespace UltimatePong
 
             //initialize player lives
             playerLives = new int[4] {lives,lives,lives,lives};
-            
+
             //Initialize powerups
-            powerupControllers = new List<PowerupController>();
-            powerupControllers.Insert(0, new PowerupController(barTexture,spriteBatch)); //Green Powerup
+            powerupController = new List<PowerupController>();
+            powerupController.Insert(0, new GreenPowerupController(barTexture,spriteBatch));
+            //powerupControllers.Insert(0, new PowerupController(barTexture,spriteBatch)); //Green Powerup
 
             //Inititialize borders
             borders = new List<Entity>();
@@ -212,7 +212,6 @@ namespace UltimatePong
 
         protected override void Update(GameTime gameTime)
         {
-
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             double elapsedTime = gameTime.TotalGameTime.TotalMilliseconds;
 
@@ -380,8 +379,8 @@ namespace UltimatePong
              for(int i=0;i<powerups.Count;i++)
                  spriteBatch.Draw(barTexture, powerups[i].rectangle, colorArray[i+2]);
                  */
-            foreach (PowerupController powerup in powerupControllers)
-                powerup.DrawPowerup();
+            foreach (PowerupController powerup in powerupController)
+                powerup.Draw();
 
             if (powerupEnabled)
 
