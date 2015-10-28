@@ -27,8 +27,10 @@ namespace UltimatePong
         public float ballXVelocity;
         public float ballYVelocity;
         public int lastHitPlayer;
+        public Entity lastHitPlayerBar;
         public PowerupController hitPowerup; 
         public Entity ball;
+
 
 
         //local use
@@ -147,6 +149,7 @@ namespace UltimatePong
                     while (ball.rectangle.Intersects(bars[i].rectangle))
                         moveBall(deltaTime);
                     lastHitPlayer = i;
+                    lastHitPlayerBar = bars[i];
                     bleepHigh.Play();
                     return BallMovementInstructionResult.Running;
                 }
