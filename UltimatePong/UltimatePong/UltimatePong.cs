@@ -284,7 +284,6 @@ namespace UltimatePong
             {
                 updatedBalls.Clear();
                 powerupController.Clear();
-                //powerups.Clear();
                 gameDone = true;
             }
             else if (updatedBalls.Count < 1)
