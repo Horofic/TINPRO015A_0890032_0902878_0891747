@@ -57,8 +57,7 @@ namespace UltimatePong
                 barType = 0;
             else
                 barType = 1;
-            Rectangle r = new Rectangle();
-            r.Location = new Point(0, 0);
+            Point r = new Point(0,0);
             int speed = normalSpeed;
 
             int[] locationX = { speed,0 };
@@ -75,13 +74,13 @@ namespace UltimatePong
                 locationY[1] = normalSpeed;
             }
             if (ks.IsKeyDown(controls[bar, 0]))//left/up
-                r.Location = r.Location + new Point(-locationX[barType], -locationY[barType]);
+                r = new Point(-locationX[barType], -locationY[barType]);
             if (ks.IsKeyDown(controls[bar, 1]))//right/down
-                r.Location = r.Location + new Point(locationX[barType], locationY[barType]);
-            return r.Location;
+                r += new Point(locationX[barType], locationY[barType]);
+            return r;
             
         }
-      
+        //In-game key to exit the game
         public bool exit
         {
             get
@@ -92,7 +91,7 @@ namespace UltimatePong
                     return false;
             }
         }
-
+        //End game selection keys
         public bool selection
         {
             get
@@ -103,7 +102,7 @@ namespace UltimatePong
                     return false;
             }
         }
-
+        //End game confirmation key
         public bool confirmation
         {
             get
@@ -114,7 +113,6 @@ namespace UltimatePong
                     return false;
             }
         }
-        //need to make pause input and events
 
         public void Update(float gameTime)
         {
