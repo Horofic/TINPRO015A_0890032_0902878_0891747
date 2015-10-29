@@ -265,7 +265,6 @@ namespace UltimatePong
                     {
                         tempBars.Insert(i, tempBar);
                         tempBars.RemoveAt(i + 1);
-                        break;
                     }
             }
 
