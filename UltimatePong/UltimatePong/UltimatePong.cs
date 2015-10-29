@@ -62,17 +62,17 @@ namespace UltimatePong
         const int borderWidth = 5;
 
         //ball properties
-        float ballSpeed = 500.0f;
-        float ballSpeedLimit = 80000.0f;
-        float ballSpeedInc = 20.0f;
-        int ballSize = 16;
+        const float ballSpeed = 500.0f;
+        const float ballSpeedLimit = 80000.0f;
+        const float ballSpeedInc = 20.0f;
+        const int ballSize = 16;
+        const float bounceCorrection = 0.6f;
         int lastSpawnedDirection;
 
         //default bar properties
         const int barLength = 128;
         const int barWidth = 8;
         const float barSpeed = 400;
-        const float bounceCorrection = 0.6f;
 
         //Player lives
         int[] playerLives;
@@ -99,12 +99,10 @@ namespace UltimatePong
 
         //gameLogic for powerup
         Instruction gameLogic =
+            new Wait(() => 5) +
         new Repeat(
-
-          new For(0, 4, i =>
-                new Wait(() => i * 1f) +
-                new CreatePowerup()) +
-          new Wait(() => 1));
+            new CreatePowerup() +
+            new Wait(() => 3));
 
         public UltimatePong(int playerAmount, int livesAmount, bool powerup, int maxPowerupCount)
         {
@@ -147,9 +145,9 @@ namespace UltimatePong
             balls = new List<BallController>();
             balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow));
             firstCycle = true;
-            int barStartPos = (fieldSize - barLength) / 2;
 
             //bar start pos
+            int barStartPos = (fieldSize - barLength) / 2;
             Point topBarPos = new Point(barStartPos, barToBorderDist);
             Point botBarPos = new Point(barStartPos, fieldSize - barToBorderDist - barWidth);
             Point leftBarPos = new Point(barToBorderDist, barStartPos);
@@ -232,7 +230,7 @@ namespace UltimatePong
             double elapsedTime = gameTime.TotalGameTime.TotalMilliseconds;
 
             List<PowerupController> updatedPowerupControllers = powerupControllers;
-            List<Entity> updatedPlayerBars = playerBars;
+            List<Entity> updatedPlayerBars = new List<Entity>();
             List<BallController> updatedBalls = new List<BallController>();
 
             if (firstCycle)
@@ -247,21 +245,48 @@ namespace UltimatePong
                 base.Exit();
             }
 
-           
-
             //BAR ENTITIES to be moved
             for(int i=0;i<4;i++)
             {
-                Entity tempBar = updatedPlayerBars[i]; //temp bar to save previous pos
-                updatedPlayerBars.Insert(i, updatedPlayerBars[i].CreateMoved(input.moveBar(i))); //Move the bar
-                updatedPlayerBars.RemoveAt(i + 1);
-
-                //check if the movement results in collision with border, then give the previous pos. back to the playerbar
-                foreach (Entity border in borders)
-                    if (updatedPlayerBars[i].rectangle.Intersects(border.rectangle))
+                Entity tempOldBar = playerBars[i]; //temp bar to save previous pos
+                Entity tempNewBar = tempOldBar.CreateMoved(input.moveBar(i));
+                if(i < 2)
+                {
+                    if (tempNewBar.rectangle.Intersects(borders[2].rectangle))
                     {
-                        updatedPlayerBars.Insert(i, tempBar);
-                        updatedPlayerBars.RemoveAt(i + 1);
+                        if (tempNewBar.rectangle.Left > tempOldBar.rectangle.Left)
+                            updatedPlayerBars.Insert(i, tempNewBar);
+                        else
+                            updatedPlayerBars.Insert(i, tempOldBar);
+                    }
+                    else if(tempNewBar.rectangle.Intersects(borders[3].rectangle))
+                    {
+                        if (tempNewBar.rectangle.Right < tempOldBar.rectangle.Right)
+                            updatedPlayerBars.Insert(i, tempNewBar);
+                        else
+                            updatedPlayerBars.Insert(i, tempOldBar);
+                    }
+                    else
+                        updatedPlayerBars.Insert(i, tempNewBar);
+                }
+                else
+                {
+                    if (tempNewBar.rectangle.Intersects(borders[0].rectangle))
+                    {
+                        if (tempNewBar.rectangle.Top > tempOldBar.rectangle.Top)
+                            updatedPlayerBars.Insert(i, tempNewBar);
+                        else
+                            updatedPlayerBars.Insert(i, tempOldBar);
+                    }
+                    else if (tempNewBar.rectangle.Intersects(borders[1].rectangle))
+                    {
+                        if (tempNewBar.rectangle.Bottom < tempOldBar.rectangle.Bottom)
+                            updatedPlayerBars.Insert(i, tempNewBar);
+                        else
+                            updatedPlayerBars.Insert(i, tempOldBar);
+                    }
+                    else
+                        updatedPlayerBars.Insert(i, tempNewBar);
                     }
             }
 
@@ -323,7 +348,7 @@ namespace UltimatePong
                 case InstructionResult.RunningAndCreatePowerup:
                     if (updatedPowerupControllers.Count < maxPowerupCount)
                     {
-                        switch (random.Next(0, 5))
+                        switch (random.Next(0,5))
                         {
                             case 0:
                                 updatedPowerupControllers.Add(new GreenPowerupController(barTexture, spriteBatch));
