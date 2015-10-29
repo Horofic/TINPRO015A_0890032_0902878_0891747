@@ -244,13 +244,7 @@ namespace UltimatePong
             for(int i=0;i<4;i++)
                 tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
 
-            foreach (Entity player in tempBars)
-            {
-                if (player.rectangle.Intersects(borders[0].rectangle) || player.rectangle.Intersects(borders[1].rectangle) || player.rectangle.Intersects(borders[2].rectangle) || player.rectangle.Intersects(borders[3].rectangle))
-                {
-                    Console.WriteLine("Collision with border");
-                }
-            }
+
 
 
 
@@ -338,8 +332,23 @@ namespace UltimatePong
                     tempBars.Insert(i, playerBars[i].CreateNewPos(new Point(-100, -100)));
                     tempBars.RemoveAt(i+1);
                 }
+
+            foreach (Entity player in playerBars)
+            {
+                foreach (Entity border in borders)
+                {
+                    if (player.rectangle.Intersects(border.rectangle))
+                    {
+                        tempBars.Insert(tempBars.Count, player.CreateNewPos(new Point(400, 400)));
+
+                        Console.WriteLine("Collision with border");
+                    }
+                }
+            }
+
+
             //inputs for victory screen selection
-            if(gameDone)
+            if (gameDone)
             {
                 if (input.selection && gameTime.TotalGameTime.TotalMilliseconds - selectionTimer > 200)
                 {
