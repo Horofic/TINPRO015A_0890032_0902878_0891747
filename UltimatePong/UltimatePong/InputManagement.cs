@@ -21,7 +21,6 @@ namespace UltimatePong
         KeyboardState ks;
         private Keys[,] controls = new Keys[4, 3];
 
-        Vector2 barMovement { get; set; }
         int normalSpeed = 8;
         int boostSpeed = 12;
 
