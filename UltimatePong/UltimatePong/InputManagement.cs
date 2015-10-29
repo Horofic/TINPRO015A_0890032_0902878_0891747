@@ -12,7 +12,7 @@ namespace UltimatePong
         bool exit { get; }
         bool selection { get; }
         bool confirmation { get; }
-        Point moveBar(int bar, int barType);
+        Point moveBar(int bar);
         void Update(float gameTime);
     }
 
@@ -50,8 +50,9 @@ namespace UltimatePong
 
         //returns delta location
         //barType 0 = Top/Bot , 1 = Left/Right
-        public Point moveBar(int bar,int barType)
+        public Point moveBar(int bar)
         {
+            int barType = bar;
             if (barType < 2)
                 barType = 0;
             else
