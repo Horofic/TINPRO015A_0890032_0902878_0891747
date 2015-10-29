@@ -253,7 +253,7 @@ namespace UltimatePong
             for(int i=0;i<4;i++)
             {
                 Entity tempBar = updatedPlayerBars[i]; //temp bar to save previous pos
-                updatedPlayerBars.Insert(i, updatedPlayerBars[i].CreateMoved(input.moveBar(i, i))); //Move the bar
+                updatedPlayerBars.Insert(i, updatedPlayerBars[i].CreateMoved(input.moveBar(i))); //Move the bar
                 updatedPlayerBars.RemoveAt(i + 1);
 
                 //check if the movement results in collision with border, then give the previous pos. back to the playerbar
