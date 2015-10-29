@@ -34,9 +34,17 @@ namespace UltimatePong
         public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("GREEN HIT");
-            int difference = 50;
-            tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, difference).CreateMoved(new Point(0, -(difference / 2))));
-            tempBars.RemoveAt(lastHitPlayer+1);
+            int difference = 30;
+            if(lastHitPlayer>1)
+            {
+                tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, difference).CreateMoved(new Point(0, -(difference / 2))));
+                tempBars.RemoveAt(lastHitPlayer + 1);
+            }
+            else
+            {
+                tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(difference, 0).CreateMoved(new Point(-(difference / 2),0 )));
+                tempBars.RemoveAt(lastHitPlayer + 1);
+            }
             return PowerupResponse.done;
         }
     }
@@ -54,8 +62,16 @@ namespace UltimatePong
         {
             Console.WriteLine("RED HIT");
             int difference = 30;
-            tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, -difference).CreateMoved(new Point(0, (difference / 2))));
-            tempBars.RemoveAt(lastHitPlayer+1);
+            if (lastHitPlayer > 1)
+            {
+                tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, -difference).CreateMoved(new Point(0, -(difference / 2))));
+                tempBars.RemoveAt(lastHitPlayer + 1);
+            }
+            else
+            {
+                tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(-difference, 0).CreateMoved(new Point(-(difference / 2), 0)));
+                tempBars.RemoveAt(lastHitPlayer + 1);
+            }
             return PowerupResponse.done;
         }
     }
@@ -63,7 +79,7 @@ namespace UltimatePong
     {
         public GoldPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
-            powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
+            powerup = new Entity(barTexture, new Rectangle(), 15, 15, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
             color = Color.Gold;
