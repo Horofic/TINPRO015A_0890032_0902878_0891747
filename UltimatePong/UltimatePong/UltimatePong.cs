@@ -229,12 +229,9 @@ namespace UltimatePong
             }
     
             input.Update(deltaTime);
-            if (input.newBall)
+            if (input.exit)
             {
-                BallController newBall = new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture,bleepHigh,bleepLow);
-
-                balls.Add(newBall);
-                newBall.spawnBall(spawnBallDirection(), elapsedTime);
+                base.Exit();
             }
 
            
