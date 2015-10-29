@@ -17,6 +17,7 @@ namespace UltimatePong
         public int playerAmount;
         public int livesAmount;
         public bool powerups;
+        public int maxPowerupCount;
 
         public Launcher(int playerAmount, int livesAmount, bool powerups)
         {
@@ -38,6 +39,7 @@ namespace UltimatePong
             playerAmount = PlayerAmountBox.SelectedIndex + 2;
             livesAmount = Convert.ToInt32(LivesAmountBox.Value);
             powerups = PowerupsBox.Checked;
+            maxPowerupCount = Convert.ToInt32(powerupCount.Value);
 
             StartPressed = true;
             Close();

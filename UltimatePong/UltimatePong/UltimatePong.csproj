@@ -65,7 +65,6 @@
     <Compile Include="Launcher.Designer.cs">
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
-    <Compile Include="Power-up.cs" />
     <Compile Include="PowerupController.cs" />
     <Compile Include="Scripts\Repeat.cs" />
     <Compile Include="Scripts\Semicolon.cs" />
