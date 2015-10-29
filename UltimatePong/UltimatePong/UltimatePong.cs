@@ -100,11 +100,8 @@ namespace UltimatePong
         //gameLogic for powerup
         Instruction gameLogic =
         new Repeat(
-
-          new For(0, 4, i =>
-                new Wait(() => i * 1f) +
-                new CreatePowerup()) +
-          new Wait(() => 1));
+            new CreatePowerup() +
+            new Wait(() => 3));
 
         public UltimatePong(int playerAmount, int livesAmount, bool powerup, int maxPowerupCount)
         {

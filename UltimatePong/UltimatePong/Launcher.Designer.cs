@@ -31,14 +31,14 @@
             this.StartButton = new System.Windows.Forms.Button();
             this.PowerupsBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.powerupCount = new System.Windows.Forms.NumericUpDown();
             this.LivesAmountBox = new System.Windows.Forms.NumericUpDown();
             this.PlayerAmountText = new System.Windows.Forms.Label();
             this.LivesAmountText = new System.Windows.Forms.Label();
             this.PlayerAmountBox = new System.Windows.Forms.ComboBox();
-            this.powerupCount = new System.Windows.Forms.NumericUpDown();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.powerupCount)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).BeginInit();
             this.SuspendLayout();
             // 
             // StartButton
@@ -75,6 +75,23 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(226, 144);
             this.panel1.TabIndex = 3;
+            // 
+            // powerupCount
+            // 
+            this.powerupCount.Location = new System.Drawing.Point(103, 73);
+            this.powerupCount.Minimum = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            this.powerupCount.Name = "powerupCount";
+            this.powerupCount.Size = new System.Drawing.Size(100, 20);
+            this.powerupCount.TabIndex = 9;
+            this.powerupCount.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
             // 
             // LivesAmountBox
             // 
@@ -128,23 +145,6 @@
             this.PlayerAmountBox.Size = new System.Drawing.Size(100, 21);
             this.PlayerAmountBox.TabIndex = 5;
             // 
-            // powerupCount
-            // 
-            this.powerupCount.Location = new System.Drawing.Point(103, 73);
-            this.powerupCount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.powerupCount.Name = "powerupCount";
-            this.powerupCount.Size = new System.Drawing.Size(100, 20);
-            this.powerupCount.TabIndex = 9;
-            this.powerupCount.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -157,8 +157,8 @@
             this.Text = "Ultimate Pong Launcher";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.powerupCount)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).EndInit();
             this.ResumeLayout(false);
 
         }
