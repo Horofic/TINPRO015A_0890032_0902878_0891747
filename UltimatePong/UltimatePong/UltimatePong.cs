@@ -326,24 +326,24 @@ namespace UltimatePong
                     {
                         switch (random.Next(0, 5))
                         {
-                        case 0:
-                            newPowerups.Add(new GreenPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 1:
-                            newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 2:
-                            newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 3:
-                            newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 4:
-                            newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
-                            break;
-                        default:
-                            break;
-                    }
+                            case 0:
+                                newPowerups.Add(new GreenPowerupController(barTexture, spriteBatch));
+                                break;
+                            case 1:
+                                newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
+                                break;
+                            case 2:
+                                newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
+                                break;
+                            case 3:
+                                newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
+                                break;
+                            case 4:
+                                newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     else
                     {

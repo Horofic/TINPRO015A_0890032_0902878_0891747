@@ -12,8 +12,8 @@ namespace UltimatePong
         public Rectangle rectangle { get; set; }
         public Texture2D appearance { get; private set; }
 
-        public int width { get { return width; } set { width = value; } }
-        public int height { get { return height; } set { height = value; } }
+        public int width { get { return rectangle.Width; } set { width = value; } }
+        public int height { get { return rectangle.Height; } set { height = value; } }
 
         public Entity(Texture2D appearance, Rectangle rectangle, int width, int height, Point pos)
         {
