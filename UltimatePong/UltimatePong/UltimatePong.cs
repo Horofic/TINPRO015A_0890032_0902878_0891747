@@ -245,8 +245,6 @@ namespace UltimatePong
                 base.Exit();
             }
 
-           
-
             //BAR ENTITIES to be moved
             for(int i=0;i<4;i++)
             {
