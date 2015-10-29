@@ -62,17 +62,17 @@ namespace UltimatePong
         const int borderWidth = 5;
 
         //ball properties
-        float ballSpeed = 500.0f;
-        float ballSpeedLimit = 80000.0f;
-        float ballSpeedInc = 20.0f;
-        int ballSize = 16;
+        const float ballSpeed = 500.0f;
+        const float ballSpeedLimit = 80000.0f;
+        const float ballSpeedInc = 20.0f;
+        const int ballSize = 16;
+        const float bounceCorrection = 0.6f;
         int lastSpawnedDirection;
 
         //default bar properties
         const int barLength = 128;
         const int barWidth = 8;
         const float barSpeed = 400;
-        const float bounceCorrection = 0.6f;
 
         //Player lives
         int[] playerLives;
@@ -99,12 +99,10 @@ namespace UltimatePong
 
         //gameLogic for powerup
         Instruction gameLogic =
-        new Repeat(
-
-          new For(0, 4, i =>
-                new Wait(() => i * 1f) +
-                new CreatePowerup()) +
-          new Wait(() => 1));
+            new Wait(() => 5) +
+            new Repeat(
+                new CreatePowerup() +
+                new Wait(() => 3));
 
         public UltimatePong(int playerAmount, int livesAmount, bool powerup, int maxPowerupCount)
         {
@@ -147,9 +145,9 @@ namespace UltimatePong
             balls = new List<BallController>();
             balls.Insert(0, new BallController(fieldSize, ballSize, ballSpeed, ballSpeedLimit, ballSpeedInc, bounceCorrection, spriteBatch, spriteTexture, bleepHigh, bleepLow));
             firstCycle = true;
-            int barStartPos = (fieldSize - barLength) / 2;
 
             //bar start pos
+            int barStartPos = (fieldSize - barLength) / 2;
             Point topBarPos = new Point(barStartPos, barToBorderDist);
             Point botBarPos = new Point(barStartPos, fieldSize - barToBorderDist - barWidth);
             Point leftBarPos = new Point(barToBorderDist, barStartPos);
