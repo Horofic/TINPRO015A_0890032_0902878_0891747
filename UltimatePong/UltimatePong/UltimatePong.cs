@@ -242,6 +242,7 @@ namespace UltimatePong
             //BAR ENTITIES to be moved
             List<Entity> tempBars = new List<Entity>();
             for(int i=0;i<4;i++)
+                if(tempBars)
                 tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
 
 
@@ -329,23 +330,34 @@ namespace UltimatePong
             for(int i=0;i<playerLives.Length;i++)
                 if (playerLives[i] < 1)
                 {
-                    tempBars.Insert(i, playerBars[i].CreateNewPos(new Point(-100, -100)));
+                    tempBars.Insert(i, playerBars[i].CreateNewPos(new Point(900, 900)));
                     tempBars.RemoveAt(i+1);
                 }
 
+
+
+            foreach(Entity player in playerBars)
+            {
+                if(player.rectangle.Y < 0)
+                {
+                    Console.WriteLine("COLLISION");
+                }
+            }
+
+            
             foreach (Entity player in playerBars)
             {
                 foreach (Entity border in borders)
                 {
                     if (player.rectangle.Intersects(border.rectangle))
                     {
-                        tempBars.Insert(tempBars.Count, player.CreateNewPos(new Point(400, 400)));
-
+                        tempBars.Insert(tempBars.Count, player.CreateNewPos(new Point(player.rectangle.X, player.rectangle.Y+50)));
+                        tempBars.RemoveAt(playerBars.IndexOf(player));
                         Console.WriteLine("Collision with border");
                     }
                 }
             }
-
+            
 
             //inputs for victory screen selection
             if (gameDone)
