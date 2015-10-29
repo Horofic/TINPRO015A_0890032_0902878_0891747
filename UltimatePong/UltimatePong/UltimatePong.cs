@@ -107,7 +107,7 @@ namespace UltimatePong
                 new CreatePowerup()) +
           new Wait(() => 1));
 
-        public UltimatePong(int playerAmount, int livesAmount, bool powerup)
+        public UltimatePong(int playerAmount, int livesAmount, bool powerup, int maxPowerupCount)
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = fieldSize;
@@ -118,6 +118,7 @@ namespace UltimatePong
             this.lives = livesAmount;
             this.powerupEnabled = powerup;
             this.gameDone = false;
+            this.maxPowerupCount = maxPowerupCount;
 
             //Printlines
             System.Console.WriteLine("players:" + players);
@@ -319,29 +320,6 @@ namespace UltimatePong
             switch (gameLogic.Execute(deltaTime))
             {
                 case InstructionResult.DoneAndCreatePowerup:
-                    switch(random.Next(0,5))
-                    {
-                        case 0:
-                            newPowerups.Add(new GreenPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 1:
-                            newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 2:
-                            newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 3:
-                            newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
-                            break;
-                        case 4:
-                            newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
-                            break;
-                        default:
-                            break;
-                    }
-
-                    Console.WriteLine("newPowerup done");
-                    break;
                 case InstructionResult.RunningAndCreatePowerup:
                     switch (random.Next(0, 5))
                     {
@@ -363,9 +341,6 @@ namespace UltimatePong
                         default:
                             break;
                     }
-
-
-                    Console.WriteLine("newPowerup running");
                     break;
             }
             int playersAlive = 0;
