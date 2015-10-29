@@ -8,76 +8,104 @@ namespace UltimatePong
 {
     abstract class PowerupController
     {
-        abstract public void powerupEvent();
-        abstract public void Draw();
-        public Random random = new Random(DateTime.Now.Millisecond + DateTime.Now.Second);
+        public Color color;
+        public Random random = new Random(DateTime.Now.Millisecond);
         public Entity powerup;
+        public SpriteBatch spriteBatch;
+        public Texture2D barTexture;
+        abstract public PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives);
+        public void Draw()
+        {
+            spriteBatch.Draw(barTexture, powerup.rectangle, color);
+        }
+        
     }
 
     class GreenPowerupController : PowerupController
     {
-        //public Entity powerup;
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public GreenPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
             powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100,650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
+            color = Color.Green;
         }
 
-        public override void powerupEvent()
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("GREEN HIT");
-        }
-
-        public override void Draw()
-        {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
+            int difference = 50;
+            tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, difference).CreateMoved(new Point(0, -(difference / 2))));
+            tempBars.RemoveAt(lastHitPlayer+1);
+            return PowerupResponse.done;
         }
     }
     class RedPowerupController : PowerupController
     {
-        //public Entity powerup;
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public RedPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
-            powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(100, 650));
+            powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
+            color = Color.Red;
         }
 
-        public override void powerupEvent()
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("RED HIT");
-        }
-
-        public override void Draw()
-        {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
+            int difference = 30;
+            tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, -difference).CreateMoved(new Point(0, (difference / 2))));
+            tempBars.RemoveAt(lastHitPlayer+1);
+            return PowerupResponse.done;
         }
     }
     class GoldPowerupController : PowerupController
     {
-        //public Entity powerup;
-        SpriteBatch spriteBatch;
-        Texture2D barTexture;
         public GoldPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
         {
-            powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(100, 650));
+            powerup = new Entity(barTexture, new Rectangle(), 30, 30, new Point(random.Next(100, 650), random.Next(100, 650)));
             this.spriteBatch = spriteBatch;
             this.barTexture = barTexture;
+            color = Color.Gold;
         }
 
-        public override void powerupEvent()
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
             Console.WriteLine("GOLD HIT");
+            playerlives[lastHitPlayer] += 1;
+            return PowerupResponse.done;
+        }
+    }
+    class PinkPowerupController : PowerupController
+    {
+        public PinkPowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
+        {
+            powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100, 650), random.Next(100, 650)));
+            this.spriteBatch = spriteBatch;
+            this.barTexture = barTexture;
+            color = Color.HotPink;
         }
 
-        public override void Draw()
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
         {
-            spriteBatch.Draw(barTexture, powerup.rectangle, Color.Green);
+            Console.WriteLine("PINK HIT");
+            return PowerupResponse.addBall;
+        }
+    }
+    class BluePowerupController : PowerupController
+    {
+        public BluePowerupController(Texture2D barTexture, SpriteBatch spriteBatch)
+        {
+            powerup = new Entity(barTexture, new Rectangle(), 50, 50, new Point(random.Next(100, 650), random.Next(100, 650)));
+            this.spriteBatch = spriteBatch;
+            this.barTexture = barTexture;
+            color = Color.Blue;
+        }
+
+        public override PowerupResponse powerupEvent(int lastHitPlayer, ref List<Entity> tempBars, ref int[] playerlives)
+        {
+            Console.WriteLine("BLUE HIT");
+            return PowerupResponse.changeBallDirection;
         }
     }
 }
