@@ -83,6 +83,8 @@ namespace UltimatePong
         public bool powerupEnabled;
         private bool firstCycle;
         private bool gameDone;
+        private int maxPowerupCount;
+
 
         //powerup
         Power_up power_up = new Power_up();
@@ -318,59 +320,40 @@ namespace UltimatePong
             //create powerup
             if(powerupEnabled)
             {
-                List<PowerupController> newPowerups = powerupController;
-                switch (gameLogic.Execute(deltaTime))
-                {
-                    case InstructionResult.DoneAndCreatePowerup:
+            List<PowerupController> newPowerups = powerupController;
+            switch (gameLogic.Execute(deltaTime))
+            {
+                case InstructionResult.DoneAndCreatePowerup:
+                case InstructionResult.RunningAndCreatePowerup:
+                    if (newPowerups.Count < maxPowerupCount)
+                    {
                         switch (random.Next(0, 5))
                         {
-                            case 0:
-                                newPowerups.Add(new GreenPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 1:
-                                newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 2:
-                                newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 3:
-                                newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 4:
-                                newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
-                                break;
-                            default:
-                                break;
-                        }
-
-                        Console.WriteLine("newPowerup done");
-                        break;
-                    case InstructionResult.RunningAndCreatePowerup:
-                        switch (random.Next(0, 5))
-                        {
-                            case 0:
-                                newPowerups.Add(new GreenPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 1:
-                                newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 2:
-                                newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 3:
-                                newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
-                                break;
-                            case 4:
-                                newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
-                                break;
-                            default:
-                                break;
-                        }
-
-
-                        Console.WriteLine("newPowerup running");
-                        break;
-                }
+                        case 0:
+                            newPowerups.Add(new GreenPowerupController(barTexture, spriteBatch));
+                            break;
+                        case 1:
+                            newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
+                            break;
+                        case 2:
+                            newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
+                            break;
+                        case 3:
+                            newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
+                            break;
+                        case 4:
+                            newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
+                            break;
+                        default:
+                            break;
+                    }
+                    }
+                    else
+                    {
+                        newPowerups.RemoveAt(0);
+                    }
+                    break;
+            }
                 powerupController = newPowerups;
             }
             
