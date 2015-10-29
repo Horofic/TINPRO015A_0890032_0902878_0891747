@@ -25,12 +25,19 @@ namespace UltimatePong
         addBall,
         changeBallDirection
     }
+    enum InstructionResult
+    {
+        Done,
+        DoneAndCreatePowerup,
+        Running,
+        RunningAndCreatePowerup
+    }
 
     public class UltimatePong : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Random random = new Random(DateTime.Now.Millisecond+ DateTime.Now.Second);
+        static Random random = new Random(DateTime.Now.Millisecond+ DateTime.Now.Second);
         SpriteFont fontPlayerLives;
         SpriteFont fontVictoryScreen;
 
@@ -91,6 +98,14 @@ namespace UltimatePong
         int selection = 0;
         double selectionTimer = 0;
         public bool restart = false;
+
+        //gameLogic for powerup
+        Instruction gameLogic =
+        new Repeat(
+          new For(0, 4, i =>
+                new Wait(() => i * 1f) +
+                new CreatePowerup()) +
+          new Wait(() => 1));
 
         public UltimatePong(int playerAmount, int livesAmount, bool powerup)
         {
@@ -305,9 +320,30 @@ namespace UltimatePong
 
                     default:
                         break;
-
                 }
+            }
+            //create powerup
+            List<PowerupController> newPowerups = new List<PowerupController>();
+            switch (gameLogic.Execute(deltaTime))
+            {
+                case InstructionResult.DoneAndCreatePowerup:
+                    newPowerups.Add(new GreenPowerupController(barTexture,spriteBatch));
+                    newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
+                    newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
+                    newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
+                    newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
 
+                    Console.WriteLine("newPowerup");
+                    break;
+                case InstructionResult.RunningAndCreatePowerup:
+                    newPowerups.Add(new GreenPowerupController(barTexture, spriteBatch));
+                    newPowerups.Add(new RedPowerupController(barTexture, spriteBatch));
+                    newPowerups.Add(new GoldPowerupController(barTexture, spriteBatch));
+                    newPowerups.Add(new PinkPowerupController(barTexture, spriteBatch));
+                    newPowerups.Add(new BluePowerupController(barTexture, spriteBatch));
+
+                    Console.WriteLine("newPowerup");
+                    break;
             }
             int playersAlive = 0;
             for (int i = 0; i < 4; i++)
@@ -335,20 +371,6 @@ namespace UltimatePong
                     tempBars.Insert(i, playerBars[i].CreateNewPos(new Point(900, 900)));
                     tempBars.RemoveAt(i+1);
                 }
-            /*
-            foreach (Entity player in playerBars)
-            {
-                foreach (Entity border in borders)
-                {
-                    if (player.rectangle.Intersects(border.rectangle))
-                    {
-                        tempBars.Insert(tempBars.Count, player.CreateNewPos(new Point(player.rectangle.X, player.rectangle.Y+50)));
-                        tempBars.RemoveAt(playerBars.IndexOf(player));
-                        Console.WriteLine("Collision with border");
-                    }
-                }
-            }
-            */
 
             //inputs for victory screen selection
             if (gameDone)
@@ -375,6 +397,7 @@ namespace UltimatePong
             //update Entities
             balls = updatedBalls;
             playerBars = tempBars;
+            powerupController = newPowerups;
 
             base.Update(gameTime);
         }
