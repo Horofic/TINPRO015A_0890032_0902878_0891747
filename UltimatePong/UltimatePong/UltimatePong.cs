@@ -85,10 +85,6 @@ namespace UltimatePong
         private bool gameDone;
         private int maxPowerupCount;
 
-
-        //powerup
-        Power_up power_up = new Power_up();
-
         //input
         InputManagement input;
 
