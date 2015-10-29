@@ -56,7 +56,6 @@
     <Compile Include="BallController.cs" />
     <Compile Include="Scripts\CreatePowerup.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="Scripts\For.cs" />
     <Compile Include="InputManagement.cs" />
     <Compile Include="Scripts\Instruction.cs" />
     <Compile Include="Launcher.cs">
