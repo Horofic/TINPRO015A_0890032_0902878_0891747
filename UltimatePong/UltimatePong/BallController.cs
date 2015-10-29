@@ -165,7 +165,7 @@ namespace UltimatePong
                         simpleBounce(i);
                         while (ball.rectangle.Intersects(borders[i].rectangle))
                             moveBall(deltaTime);
-                            bleepLow.Play();
+                        bleepLow.Play();
                         return BallMovementInstructionResult.Running;
                     }
                     else
