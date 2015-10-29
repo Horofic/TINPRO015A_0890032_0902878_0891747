@@ -237,20 +237,25 @@ namespace UltimatePong
                 newBall.spawnBall(spawnBallDirection(), elapsedTime);
             }
 
-
+           
 
             //BAR ENTITIES to be moved
-            List<Entity> tempBars = new List<Entity>();
+            List<Entity> tempBars = playerBars;
             for(int i=0;i<4;i++)
-                if(tempBars)
-                tempBars.Insert(i, playerBars[i].CreateMoved(input.moveBar(i, i)));
+            {
+                Entity tempBar = tempBars[i]; //temp bar to save previous pos
+                tempBars.Insert(i, tempBars[i].CreateMoved(input.moveBar(i, i))); //Move the bar
+                tempBars.RemoveAt(i + 1);
 
-
-
-
-
-
-
+                //check if the movement results in collision with border, then give the previous pos. back to the playerbar
+                foreach (Entity border in borders)
+                    if (tempBars[i].rectangle.Intersects(border.rectangle))
+                    {
+                        tempBars.Insert(i, tempBar);
+                        tempBars.RemoveAt(i + 1);
+                        break;
+                    }
+            }
 
             //creation of a new list of balls
             List<BallController> updatedBalls = new List<BallController>();
@@ -333,18 +338,7 @@ namespace UltimatePong
                     tempBars.Insert(i, playerBars[i].CreateNewPos(new Point(900, 900)));
                     tempBars.RemoveAt(i+1);
                 }
-
-
-
-            foreach(Entity player in playerBars)
-            {
-                if(player.rectangle.Y < 0)
-                {
-                    Console.WriteLine("COLLISION");
-                }
-            }
-
-            
+            /*
             foreach (Entity player in playerBars)
             {
                 foreach (Entity border in borders)
@@ -357,7 +351,7 @@ namespace UltimatePong
                     }
                 }
             }
-            
+            */
 
             //inputs for victory screen selection
             if (gameDone)
