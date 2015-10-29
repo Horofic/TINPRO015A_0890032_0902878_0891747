@@ -35,8 +35,10 @@
             this.PlayerAmountText = new System.Windows.Forms.Label();
             this.LivesAmountText = new System.Windows.Forms.Label();
             this.PlayerAmountBox = new System.Windows.Forms.ComboBox();
+            this.powerupCount = new System.Windows.Forms.NumericUpDown();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerupCount)).BeginInit();
             this.SuspendLayout();
             // 
             // StartButton
@@ -54,7 +56,7 @@
             this.PowerupsBox.AutoSize = true;
             this.PowerupsBox.Checked = true;
             this.PowerupsBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.PowerupsBox.Location = new System.Drawing.Point(18, 79);
+            this.PowerupsBox.Location = new System.Drawing.Point(18, 73);
             this.PowerupsBox.Name = "PowerupsBox";
             this.PowerupsBox.Size = new System.Drawing.Size(73, 17);
             this.PowerupsBox.TabIndex = 2;
@@ -63,6 +65,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.powerupCount);
             this.panel1.Controls.Add(this.LivesAmountBox);
             this.panel1.Controls.Add(this.PlayerAmountText);
             this.panel1.Controls.Add(this.LivesAmountText);
@@ -125,6 +128,23 @@
             this.PlayerAmountBox.Size = new System.Drawing.Size(100, 21);
             this.PlayerAmountBox.TabIndex = 5;
             // 
+            // powerupCount
+            // 
+            this.powerupCount.Location = new System.Drawing.Point(103, 73);
+            this.powerupCount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.powerupCount.Name = "powerupCount";
+            this.powerupCount.Size = new System.Drawing.Size(100, 20);
+            this.powerupCount.TabIndex = 9;
+            this.powerupCount.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -138,6 +158,7 @@
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.LivesAmountBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.powerupCount)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -151,5 +172,6 @@
         private System.Windows.Forms.Label LivesAmountText;
         private System.Windows.Forms.Label PlayerAmountText;
         private System.Windows.Forms.NumericUpDown LivesAmountBox;
+        private System.Windows.Forms.NumericUpDown powerupCount;
     }
 }

@@ -85,10 +85,6 @@ namespace UltimatePong
         private bool gameDone;
         private int maxPowerupCount;
 
-
-        //powerup
-        Power_up power_up = new Power_up();
-
         //input
         InputManagement input;
 
@@ -110,7 +106,7 @@ namespace UltimatePong
                 new CreatePowerup()) +
           new Wait(() => 1));
 
-        public UltimatePong(int playerAmount, int livesAmount, bool powerup)
+        public UltimatePong(int playerAmount, int livesAmount, bool powerup, int maxPowerupCount)
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = fieldSize;
@@ -121,6 +117,7 @@ namespace UltimatePong
             this.lives = livesAmount;
             this.powerupEnabled = powerup;
             this.gameDone = false;
+            this.maxPowerupCount = maxPowerupCount;
 
             //Printlines
             System.Console.WriteLine("players:" + players);
@@ -380,7 +377,7 @@ namespace UltimatePong
                 updatedBalls[0].spawnBall(spawnBallDirection(), elapsedTime);
             }
           
-           
+
             //inputs for victory screen selection
             if (gameDone)
             {

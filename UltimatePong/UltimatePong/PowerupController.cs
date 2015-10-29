@@ -35,12 +35,12 @@ namespace UltimatePong
         {
             Console.WriteLine("GREEN HIT");
             int difference = 30;
-            if(lastHitPlayer>1)
+            if(lastHitPlayer>1 && tempBars[lastHitPlayer].height<600)
             {
                 tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, difference).CreateMoved(new Point(0, -(difference / 2))));
                 tempBars.RemoveAt(lastHitPlayer + 1);
             }
-            else
+            else if (lastHitPlayer < 2 && tempBars[lastHitPlayer].height < 600)
             {
                 tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(difference, 0).CreateMoved(new Point(-(difference / 2),0 )));
                 tempBars.RemoveAt(lastHitPlayer + 1);
@@ -62,12 +62,12 @@ namespace UltimatePong
         {
             Console.WriteLine("RED HIT");
             int difference = 30;
-            if (lastHitPlayer > 1)
+            if (lastHitPlayer > 1 && tempBars[lastHitPlayer].height>40)
             {
                 tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(0, -difference).CreateMoved(new Point(0, -(difference / 2))));
                 tempBars.RemoveAt(lastHitPlayer + 1);
             }
-            else
+            else if (lastHitPlayer <2 && tempBars[lastHitPlayer].height > 40)
             {
                 tempBars.Insert(lastHitPlayer, tempBars[lastHitPlayer].CreateChangedProperties(-difference, 0).CreateMoved(new Point(-(difference / 2), 0)));
                 tempBars.RemoveAt(lastHitPlayer + 1);
